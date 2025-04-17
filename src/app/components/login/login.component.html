@@ -1,0 +1,42 @@
+<div class="form-container">
+  <form [formGroup]="loginForm" class="form">
+    <h1 class="title">Login</h1>
+    <mat-form-field hideRequiredMarker="true">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" name="email" formControlName="email" />
+      <mat-error *ngIf="loginForm.controls['email'].invalid">
+        Please check the validity of your email.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field
+      hideRequiredMarker="true"
+      appFloatingTooltip="The password must contain a capital letter, a lower case letter, a number, a special character (@$!%*?&amp;#) and should be at least 12 characters long."
+    >
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="password"
+        name="password"
+        formControlName="password"
+      />
+      <mat-error *ngIf="loginForm.controls['password'].invalid">
+        Invalid field, please try again.
+      </mat-error>
+    </mat-form-field>
+    <label class="radio-label">Account role: </label>
+    <div class="role-choice-container">
+      <mat-radio-group formControlName="role">
+        <mat-radio-button value="patient">Patient</mat-radio-button>
+        <mat-radio-button value="therapist">Therapist</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <button
+      mat-flat-button
+      type="submit"
+      class="submit-btn"
+      [disabled]="loginForm.invalid"
+    >
+      Submit
+    </button>
+  </form>
+</div>

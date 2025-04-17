@@ -1,0 +1,29 @@
+.list-of-patients-container {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.example-card {
+  width: 40%;
+  margin: 10px;
+  img {
+    border-radius: 100%;
+    padding: 5px;
+  }
+}
+.card {
+  width: 90vw;
+  padding: 5px;
+  .card-img {
+    width: 50vw;
+    img {
+      width: inherit;
+      border-radius: 100%;
+    }
+  }
+  .card-content {
+    width: 80vw;
+  }
+}

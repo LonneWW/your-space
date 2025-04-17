@@ -1,4 +1,118 @@
-/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+@use "sass:color";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* You can add global styles to this file, and also import other style files */
+$accent-color: #ff7850;
+$primary-color: #ff5032;
+$text-primary-color: #241103;
+$text-secondary-color: #fff9ec;
+$background-primary-color: #fff5ee;
+$background-secondary-color: #362321;
+
+:root {
+  @include mat.table-overrides(
+    (
+      background-color: $background-primary-color,
+      header-headline-color: $primary-color,
+      row-item-label-text-color: $accent-color,
+    )
+  );
+  @include mat.fab-overrides(
+    (
+      container-color: $accent-color,
+      foreground-color: $text-secondary-color,
+      state-layer-color: $primary-color,
+      ripple-color: color.scale($color: $accent-color, $lightness: 20%),
+      hover-state-layer-opacity: $primary-color,
+    )
+  );
+  @include mat.form-field-overrides(
+    (
+      filled-caret-color: $text-primary-color,
+      filled-focus-active-indicator-color:
+        color.scale($color: $accent-color, $lightness: 20%),
+      filled-focus-label-text-color: $text-primary-color,
+      filled-container-color: white,
+      filled-label-text-color: $text-primary-color,
+      filled-input-text-color: $text-primary-color,
+      filled-error-hover-label-text-color: red,
+      filled-error-focus-label-text-color: red,
+      filled-error-label-text-color: red,
+      filled-error-caret-color: red,
+      filled-error-active-indicator-color: red,
+    )
+  );
+  @include mat.radio-overrides(
+    (
+      selected-hover-icon-color: $primary-color,
+      selected-focus-icon-color: $accent-color,
+      selected-icon-color: $accent-color,
+      selected-pressed-icon-color:
+        color.scale($color: $accent-color, $lightness: 20%),
+      ripple-color: orange,
+      checked-ripple-color: orange,
+      label-text-color: $text-primary-color,
+    )
+  );
+  @include mat.button-overrides(
+    (
+      filled-container-color: $accent-color,
+      filled-label-text-color: $text-secondary-color,
+      filled-disabled-container-color: rgba(255, 120, 80, 0.5),
+    )
+  );
+}
+
+html,
+body {
+  height: 100%;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  .form {
+    background-color: $background-primary-color;
+    box-shadow: 0px 0px 3px lightgray;
+    color: $accent-color;
+    .title {
+      color: $accent-color;
+    }
+    .radio-label {
+      margin-top: 10px;
+      font-weight: 450;
+      color: $text-primary-color;
+    }
+    mat-error {
+      color: red;
+    }
+  }
+
+  .tooltip {
+    position: absolute;
+    bottom: 100%;
+    z-index: 10;
+    border-radius: 15px;
+    border-top: 2px solid $accent-color;
+    background-color: $background-primary-color;
+    color: $text-primary-color;
+    padding: 1rem;
+  }
+
+  .card {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 24px;
+    background-color: $background-primary-color;
+    box-shadow: 0px 0px 3px lightgray;
+    color: $accent-color;
+    .card-img {
+      margin: 5px;
+    }
+    .card-content {
+      margin: 5px;
+    }
+  }
+}

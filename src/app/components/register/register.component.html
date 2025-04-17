@@ -1,0 +1,74 @@
+<div class="form-container">
+  <form [formGroup]="registerForm" class="form">
+    <h1 class="title">Register</h1>
+    <mat-form-field
+      hideRequiredMarker="true"
+      appFloatingTooltip="The field's length should be between 3 and 20 characters."
+    >
+      <mat-label>Name</mat-label>
+      <input matInput type="text" name="name" formControlName="name" />
+      <mat-error *ngIf="registerForm.controls['name'].invalid">
+        Invalid field, please try again.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field
+      hideRequiredMarker="true"
+      appFloatingTooltip="The field's length should be between 3 and 20 characters."
+    >
+      <mat-label>Surname</mat-label>
+      <input matInput type="text" name="surname" formControlName="surname" />
+      <mat-error *ngIf="registerForm.controls['surname'].invalid">
+        Invalid field, please try again.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field hideRequiredMarker="true">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" name="email" formControlName="email" />
+      <mat-error *ngIf="registerForm.controls['email'].invalid">
+        Please check the validity of your email.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field
+      hideRequiredMarker="true"
+      appFloatingTooltip="The password must contain a capital letter, a lower case letter, a number, a special character (@$!%*?&amp;#) and should be at least 12 characters long."
+    >
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="password"
+        name="password"
+        formControlName="password"
+      />
+      <mat-error *ngIf="registerForm.controls['password'].invalid">
+        Invalid field, please try again.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field hideRequiredMarker="true">
+      <mat-label>Confirm Password</mat-label>
+      <input
+        matInput
+        type="password"
+        name="confirmPassword"
+        formControlName="confirmPassword"
+      />
+      <mat-error *ngIf="registerForm.controls['confirmPassword'].invalid">
+        The passowords do not match, please try again.
+      </mat-error>
+    </mat-form-field>
+    <label class="radio-label">Account role: </label>
+    <div class="role-choice-container">
+      <mat-radio-group formControlName="role">
+        <mat-radio-button value="patient">Patient</mat-radio-button>
+        <mat-radio-button value="therapist">Therapist</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <button
+      mat-flat-button
+      type="submit"
+      class="submit-btn"
+      [disabled]="registerForm.invalid"
+    >
+      Submit
+    </button>
+  </form>
+</div>
