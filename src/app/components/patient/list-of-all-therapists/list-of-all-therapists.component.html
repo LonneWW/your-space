@@ -1,0 +1,11 @@
+<div *ngIf="therapistsList.length > 0; else loading">
+  <div class="therapists-list">
+    <div *ngFor="let therapist of therapistsList" class="card-content">
+      <h2>
+        {{therapist ? `${therapist.name} ${therapist.surname}` : 'Unable to receive therapist data.'}}
+      </h2>
+      <button mat-flat-button>Select this therapist</button>
+    </div>
+  </div>
+</div>
+<ng-template #loading></ng-template>

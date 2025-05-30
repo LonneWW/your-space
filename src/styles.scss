@@ -1,5 +1,6 @@
 @use "@angular/material" as mat;
 @use "sass:color";
+@import "../node_modules/quill/dist/quill.snow.css";
 
 /* You can add global styles to this file, and also import other style files */
 $accent-color: #ff7850;
@@ -33,6 +34,8 @@ $background-secondary-color: #362321;
         color.scale($color: $accent-color, $lightness: 20%),
       filled-focus-label-text-color: $text-primary-color,
       filled-container-color: white,
+      filled-hover-label-text-color:
+        color.scale($color: $text-primary-color, $lightness: 20%),
       filled-label-text-color: $text-primary-color,
       filled-input-text-color: $text-primary-color,
       filled-error-hover-label-text-color: red,

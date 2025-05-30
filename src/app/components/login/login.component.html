@@ -1,5 +1,5 @@
 <div class="form-container">
-  <form [formGroup]="loginForm" class="form">
+  <form [formGroup]="loginForm" class="form" (submit)="loginUser()">
     <h1 class="title">Login</h1>
     <mat-form-field hideRequiredMarker="true">
       <mat-label>Email</mat-label>

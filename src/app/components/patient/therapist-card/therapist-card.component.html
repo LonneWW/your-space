@@ -1,0 +1,31 @@
+<div class="card-content">
+  <div *ngIf="therapist !== null; else therapistToSelect">
+    <h2>
+      {{therapist == undefined ? 'Unable to receive therapist data.' : `${therapist.name} ${therapist.surname}` }}
+    </h2>
+    <p>This is the therapist you selected. <br /></p>
+  </div>
+  <ng-template #therapistToSelect>
+    <h2>Choose a therapist</h2>
+    <p>To start sharing your notes, select a therapist first.</p>
+  </ng-template>
+  <p>
+    When you set a page "shared" it will be accessible to him/her as well.
+    <br />
+    You can change this page setting at any time. <br />
+    You will also be able to change your therapist if necessary. In this case,
+    the previous therapist will lose access to previously shared pages. <br />
+  </p>
+  <button mat-flat-button (click)="openTherapistsList()">
+    {{ therapist !== null ? "Change your therapist" : "Choose a therapist" }}
+  </button>
+</div>
+<app-overlay-container
+  *ngIf="this.toggleOverlayContainer"
+  [toggleOverlayContainer]="toggleOverlayContainer"
+  (toggleOverlayContainerVisibility)="
+    this.toggleOverlayContainer = !this.toggleOverlayContainer
+  "
+>
+  <app-list-of-all-therapists></app-list-of-all-therapists>
+</app-overlay-container>

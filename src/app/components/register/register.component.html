@@ -1,5 +1,5 @@
 <div class="form-container">
-  <form [formGroup]="registerForm" class="form">
+  <form [formGroup]="registerForm" class="form" (submit)="registerUser()">
     <h1 class="title">Register</h1>
     <mat-form-field
       hideRequiredMarker="true"

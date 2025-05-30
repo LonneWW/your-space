@@ -5,7 +5,10 @@ import { TherapistMainPageComponent } from './components/therapist/therapist-mai
 import { ListOfPatientsComponent } from './components/therapist/therapist-main-page/list-of-patients/list-of-patients.component';
 import { PatientPersonalPageComponent } from './components/therapist/therapist-main-page/patient-personal-page/patient-personal-page.component';
 import { PatientMainPageComponent } from './components/patient/patient-main-page/patient-main-page.component';
-import { ListOfFeaturesComponent } from './components/patient/patient-main-page/list-of-features/list-of-features.component';
+import { ListOfFeaturesComponent } from './components/patient/list-of-features/list-of-features.component';
+import { ListOfAllTherapistsComponent } from '../app/components/patient/list-of-all-therapists/list-of-all-therapists.component';
+import { QuillTextEditorComponent } from './components/utilities/quill-text-editor/quill-text-editor.component';
+import { isAuthenticatedGuard } from './guards/is-authenticated.guard';
 
 export const routes: Routes = [
   {
@@ -13,6 +16,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'therapist',
+        canActivate: [isAuthenticatedGuard],
         component: TherapistMainPageComponent,
         children: [
           { path: '', component: ListOfPatientsComponent },
@@ -22,13 +26,20 @@ export const routes: Routes = [
 
       {
         path: 'patient',
+        canActivate: [isAuthenticatedGuard],
         component: PatientMainPageComponent,
         children: [
           { path: '', component: ListOfFeaturesComponent },
+          { path: 'list', component: ListOfAllTherapistsComponent },
           // {path: 'diary', component:}
           // {path: 'calendar', component:}
           // {path: 'daily-note', component:}
         ],
+      },
+      {
+        path: 'editor',
+        canActivate: [isAuthenticatedGuard],
+        component: QuillTextEditorComponent,
       },
     ],
   },
