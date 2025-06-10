@@ -16,6 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { UserDataService } from '../../services/user-data.service';
+import { UserData } from '../../interfaces/IUserData';
 
 @Component({
   selector: 'app-login',
@@ -37,6 +39,7 @@ export class LoginComponent implements OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private authService: AuthService,
+    private userDataService: UserDataService,
     private router: Router,
     private snackbar: MatSnackBar
   ) {}
@@ -67,11 +70,10 @@ export class LoginComponent implements OnDestroy {
           therapist_id: number;
         }) => {
           console.log(r);
-          sessionStorage.setItem('id', `${r.id}`);
-          sessionStorage.setItem('name', r.name);
-          sessionStorage.setItem('surname', r.surname);
-          sessionStorage.setItem('role', form.role);
-          sessionStorage.setItem('therapist_id', `${r.therapist_id}`);
+          const data = r as UserData;
+          data.role = form.role;
+          this.userDataService.saveSessionUser(data);
+          this.userDataService.updateUserData(data);
           this.snackbar.open('Logged in successfully', 'Ok', {
             duration: 3000,
           });
@@ -84,7 +86,25 @@ export class LoginComponent implements OnDestroy {
               'Something went wrong while browsing the application',
             'Ok'
           );
-          this.loginForm.reset();
+          console.log(e);
+          switch (e.error.status) {
+            case 401:
+              this.loginForm.controls['password'].patchValue('');
+              this.loginForm.controls['password'].markAsUntouched();
+              this.loginForm.controls['password'].markAsPristine();
+              break;
+            case 404:
+              this.loginForm.controls['email'].patchValue('');
+              this.loginForm.controls['email'].markAsUntouched();
+              this.loginForm.controls['email'].markAsPristine();
+              this.loginForm.controls['password'].patchValue('');
+              this.loginForm.controls['password'].markAsUntouched();
+              this.loginForm.controls['password'].markAsPristine();
+              break;
+            default:
+              this.loginForm.reset();
+              break;
+          }
         },
       });
   }

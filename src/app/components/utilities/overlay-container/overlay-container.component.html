@@ -1,5 +1,5 @@
 <div class="screen-overlay" (click)="toggleVisibility()">
   <div class="container" (click)="$event.stopPropagation()">
-    <ng-content></ng-content>
+    <ng-content (toggleVisibility)="toggleVisibility()"></ng-content>
   </div>
 </div>

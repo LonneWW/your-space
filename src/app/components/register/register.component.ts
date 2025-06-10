@@ -18,6 +18,7 @@ import { FloatingTooltipDirective } from '../../directives/floating-tooltip.dire
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { UserDataService } from '../../services/user-data.service';
 @Component({
   selector: 'app-register',
   imports: [
@@ -40,7 +41,8 @@ export class RegisterComponent implements OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private userDataService: UserDataService
   ) {}
   public registerForm: FormGroup = new FormGroup(
     {
@@ -86,11 +88,10 @@ export class RegisterComponent implements OnDestroy {
       .subscribe({
         next: (r: any) => {
           console.log(r);
-          sessionStorage.setItem('id', r[0].id);
-          sessionStorage.setItem('name', r[0].name);
-          sessionStorage.setItem('surname', r[0].surname);
-          sessionStorage.setItem('therapist_id', 'null');
-          sessionStorage.setItem('role', form.role);
+          const data = r[0];
+          data.role = form.role;
+          this.userDataService.saveSessionUser(data);
+          this.userDataService.updateUserData(data);
           this.snackbar.open('Registration has been successful', 'Ok', {
             duration: 3000,
           });
@@ -98,6 +99,7 @@ export class RegisterComponent implements OnDestroy {
           this.router.navigate(['/' + form.role]);
         },
         error: (e) => {
+          console.log(e);
           this.snackbar.open(
             e.error.message ||
               'Something went wrong while browsing the application',

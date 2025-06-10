@@ -1,0 +1,20 @@
+.card-content {
+  display: flex;
+  flex-direction: column;
+  .img-container {
+    background-color: white;
+    border-radius: 50%;
+    align-self: center;
+    box-shadow: 2px 2px 3px lightgrey;
+    .tp-img {
+      width: 50vw;
+      height: 50vw;
+    }
+  }
+  .unlink-btn {
+    align-self: flex-end;
+  }
+  .select-btn {
+    align-self: flex-start;
+  }
+}

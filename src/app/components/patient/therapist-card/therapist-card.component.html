@@ -1,28 +1,57 @@
 <div class="card-content">
-  <div *ngIf="therapist !== null; else therapistToSelect">
-    <h2>
-      {{therapist == undefined ? 'Unable to receive therapist data.' : `${therapist.name} ${therapist.surname}` }}
-    </h2>
-    <p>This is the therapist you selected. <br /></p>
+  <div class="img-container">
+    <mat-icon
+      class="tp-img"
+      svgIcon="face"
+      aria-hidden="false"
+      aria-label="Example thumbs up SVG icon"
+    ></mat-icon>
   </div>
-  <ng-template #therapistToSelect>
-    <h2>Choose a therapist</h2>
-    <p>To start sharing your notes, select a therapist first.</p>
-  </ng-template>
+
+  <div [ngSwitch]="therapistId">
+    <div *ngSwitchCase="null">
+      <h2>Select a therapist</h2>
+      <span> To start sharing your notes, select a therapist first. </span>
+    </div>
+    <div *ngSwitchCase="undefined">
+      <h2>Unable to receive therapist data.</h2>
+    </div>
+    <div *ngSwitchCase="0">
+      <h2>Waiting for therapist response.</h2>
+    </div>
+    <div *ngSwitchDefault>
+      <h2>
+        {{`${therapist?.name} ${therapist?.surname}`}}
+      </h2>
+      <p>This is the therapist you selected. <br /></p>
+    </div>
+  </div>
   <p>
     When you set a page "shared" it will be accessible to him/her as well.
     <br />
     You can change this page setting at any time. <br />
-    You will also be able to change your therapist if necessary. In this case,
-    the previous therapist will lose access to previously shared pages. <br />
+    You will also be able to unlink your therapist if necessary. With that, all
+    access to previously shared pages will be lost and you will be able to
+    select a new one. <br />
   </p>
-  <button mat-flat-button (click)="openTherapistsList()">
-    {{ therapist !== null ? "Change your therapist" : "Choose a therapist" }}
+  <button
+    *ngIf="therapistId !== 0"
+    mat-flat-button
+    (click)="openTherapistsList()"
+    [ngClass]="[therapistId !== null ? 'unlink-btn' : 'select-btn']"
+  >
+    {{ therapistId !== null ? "Unlink your therapist" : "Select a therapist" }}
   </button>
 </div>
+<!--
+  The ngIf is a bit tricky. Since the overlay container and the list component
+  cannot communicate with each other easily I also set the condition 
+  "this.therapistId != 0", value that is changed when a therapist has been
+  selected using the already existing subscription to the userDataService
+  "userData$". It is not optimal but works.
+-->
 <app-overlay-container
-  *ngIf="this.toggleOverlayContainer"
-  [toggleOverlayContainer]="toggleOverlayContainer"
+  *ngIf="this.toggleOverlayContainer && this.therapistId != 0"
   (toggleOverlayContainerVisibility)="
     this.toggleOverlayContainer = !this.toggleOverlayContainer
   "

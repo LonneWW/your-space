@@ -24,7 +24,6 @@ export class FloatingTooltipDirective {
       this.tooltip.textContent = this.appFloatingTooltip;
     }
     this.element.nativeElement.appendChild(this.tooltip);
-    console.log(this.tooltip);
   }
 
   private deleteToolTip() {

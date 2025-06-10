@@ -64,6 +64,12 @@ $background-secondary-color: #362321;
       filled-disabled-container-color: rgba(255, 120, 80, 0.5),
     )
   );
+  @include mat.progress-bar-overrides(
+    (
+      active-indicator-color: orange,
+      track-color: $primary-color,
+    )
+  );
 }
 
 html,

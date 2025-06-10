@@ -7,8 +7,6 @@ import { EventEmitter, Output, Input } from '@angular/core';
   styleUrl: './overlay-container.component.scss',
 })
 export class OverlayContainerComponent implements OnInit, OnDestroy {
-  @Input() toggleOverlayContainer!: boolean;
-
   @Output() toggleOverlayContainerVisibility = new EventEmitter();
 
   ngOnInit(): void {
