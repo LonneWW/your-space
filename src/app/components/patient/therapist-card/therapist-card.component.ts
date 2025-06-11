@@ -107,9 +107,4 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  callback() {
-    console.log(this.therapistId);
-    console.log(this.toggleOverlayContainer);
-  }
 }

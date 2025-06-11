@@ -9,6 +9,13 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
   const userDataService = inject(UserDataService);
   const sessionUserData = userDataService.sessionStorageUser;
   console.log(sessionUserData);
+
+  function logout() {
+    alert('Could not recover the session. You will be reinderized at login.');
+    authservice.logout();
+    return false;
+  }
+
   if (
     sessionUserData &&
     sessionUserData.role &&
@@ -16,6 +23,9 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
     sessionUserData.name &&
     sessionUserData.surname
   ) {
+    if (sessionUserData.role == 'patient' && !sessionUserData.therapist_id) {
+      return logout();
+    }
     return authservice.isLoggedIn().pipe(
       map((r) => {
         console.log(r);
@@ -29,7 +39,5 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
       })
     );
   }
-  alert('Could not recover the session. You will be reinderized at login.');
-  authservice.logout();
-  return false;
+  return logout();
 };

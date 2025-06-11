@@ -1,12 +1,20 @@
-<button (click)="callback()" style="z-index: 20">BOIA</button>
 <div class="card-content">
   <div class="img-container">
     <mat-icon
+      *ngIf="therapistId && therapistId > 0; else searchBlock"
       class="tp-img"
       svgIcon="face"
       aria-hidden="false"
       aria-label="person icon"
     ></mat-icon>
+    <ng-template #searchBlock>
+      <mat-icon
+        class="tp-img"
+        svgIcon="person-search"
+        aria-hidden="false"
+        aria-label="person icon"
+      ></mat-icon>
+    </ng-template>
   </div>
 
   <div [ngSwitch]="therapistId">
