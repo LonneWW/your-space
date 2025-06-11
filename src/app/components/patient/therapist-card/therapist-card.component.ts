@@ -76,7 +76,8 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
             console.log(r);
             this.therapist = r[0];
           },
-          error: () => {
+          error: (e: any) => {
+            console.log(e);
             this.therapistId = undefined;
             this.therapist = undefined;
             console.log('bibi');

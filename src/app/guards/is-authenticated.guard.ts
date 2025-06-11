@@ -5,14 +5,14 @@ import { inject } from '@angular/core';
 import { map, catchError, of } from 'rxjs';
 
 export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
-  const authservice = inject(AuthService);
+  const authService = inject(AuthService);
   const userDataService = inject(UserDataService);
   const sessionUserData = userDataService.sessionStorageUser;
   console.log(sessionUserData);
 
   function logout() {
     alert('Could not recover the session. You will be reinderized at login.');
-    authservice.logout();
+    authService.logout();
     return false;
   }
 
@@ -26,7 +26,7 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
     if (sessionUserData.role == 'patient' && !sessionUserData.therapist_id) {
       return logout();
     }
-    return authservice.isLoggedIn().pipe(
+    return authService.isLoggedIn().pipe(
       map((r) => {
         console.log(r);
         return true;
@@ -34,7 +34,7 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
       catchError((error) => {
         console.log(error);
         alert(error.message);
-        authservice.logout();
+        authService.logout();
         return of(false);
       })
     );

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root',
 })
 export class TherapistHttpService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
   private url: string = 'http://localhost:3000';
 
   getPatients(therapist_id: Number) {
@@ -46,6 +46,7 @@ export class TherapistHttpService {
     therapist_id: Number;
     tags: JSON;
   }): any {
+    this.auth.checkCredentials();
     return this.http.post(this.url + '/therapist/notes', body);
   }
 
@@ -54,6 +55,7 @@ export class TherapistHttpService {
     patient_id: Number;
     therapist_id: Number;
   }): any {
+    this.auth.checkCredentials();
     return this.http.post(this.url + '/therapist/notifications', body);
   }
 
@@ -63,14 +65,17 @@ export class TherapistHttpService {
     tags: JSON;
     note_id: Number;
   }): any {
+    this.auth.checkCredentials();
     return this.http.put(this.url + '/therapist/notes', body);
   }
 
   acceptPatient(body: { patient_id: Number; therapist_id: Number }) {
+    this.auth.checkCredentials();
     return this.http.put(this.url + '/therapist/patient', body);
   }
 
   deleteNote(note_id: Number, therapist_id: Number) {
+    this.auth.checkCredentials();
     return this.http.delete(
       this.url +
         '/therapist/notes?therapist_id=' +
@@ -81,6 +86,7 @@ export class TherapistHttpService {
   }
 
   deleteNotification(notification_id: Number) {
+    this.auth.checkCredentials();
     return this.http.delete(
       this.url + '/therapist/notifications?notification_id=' + notification_id
     );

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
   private url: string = 'http://localhost:3000';
 
   getPatient(id: Number): any {
@@ -21,6 +22,7 @@ export class HttpService {
   }
 
   selectTherapist(body: { patient_id: number; therapist_id: number }): any {
+    this.auth.checkCredentials();
     return this.http.put(this.url + '/patient/therapist', body);
   }
 }

@@ -2,11 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserDataService } from './user-data.service';
+import { CredentialsMatchService } from './credentials-match.service';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private userData: UserDataService,
+    private credentialsMatch: CredentialsMatchService
+  ) {}
   private url: string = 'http://localhost:3000';
 
   registerUser(body: {
@@ -52,5 +59,19 @@ export class AuthService {
   logout() {
     sessionStorage.clear();
     this.router.navigate(['/login']);
+  }
+
+  checkCredentials(): void {
+    const sessionUserTString = this.userData.sessionStorageUser;
+    const serviceUserTString = this.userData.currentUserData;
+    const sessionUser = this.credentialsMatch.normalizeUser(sessionUserTString);
+    const serviceUser = this.credentialsMatch.normalizeUser(serviceUserTString);
+    const check = this.credentialsMatch.deepEqual(sessionUser, serviceUser);
+    if (!check) {
+      alert(
+        'Error with session credentials. You will be reinderized at login.'
+      );
+      this.logout();
+    }
   }
 }

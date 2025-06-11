@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root',
 })
 export class PatientHttpService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
   private url: string = 'http://localhost:3000';
 
   getNotes(id: Number): any {
@@ -21,18 +22,22 @@ export class PatientHttpService {
     patient_id: Number;
     shared: Number;
   }): any {
+    this.auth.checkCredentials();
     return this.http.post(this.url + '/patient/notes', body);
   }
 
   postNotification(body: { content: string; patient_id: Number }): any {
+    this.auth.checkCredentials();
     return this.http.post(this.url + '/patient/notifications', body);
   }
 
   selectTherapist(body: { patient_id: Number; therapist_id: Number }): any {
+    this.auth.checkCredentials();
     return this.http.put(this.url + '/patient/therapist', body);
   }
 
   dischargeTherapist(body: { patient_id: Number; therapist_id: Number }): any {
+    this.auth.checkCredentials();
     return this.http.put(this.url + '/patient/therapist-null', body);
   }
 
@@ -42,6 +47,7 @@ export class PatientHttpService {
     tags: JSON;
     patient_id: Number;
   }): any {
+    this.auth.checkCredentials();
     return this.http.put(this.url + '/patient/notes', body);
   }
 
@@ -50,10 +56,12 @@ export class PatientHttpService {
     shared: Number;
     patient_id: Number;
   }): any {
+    this.auth.checkCredentials();
     return this.http.put(this.url + '/patient/notes/visibility', body);
   }
 
   deleteNote(note_id: Number, patient_id: Number): any {
+    this.auth.checkCredentials();
     return this.http.delete(
       this.url +
         '/patient/notes?patient_id=' +
@@ -64,6 +72,7 @@ export class PatientHttpService {
   }
 
   deleteNotification(notification_id: Number): any {
+    this.auth.checkCredentials();
     return this.http.delete(
       this.url + '/patient/notifications?notification_id=' + notification_id
     );
