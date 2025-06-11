@@ -79,6 +79,7 @@ body {
 }
 body {
   margin: 0;
+  padding: 5px 15px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   .form {
     background-color: $background-primary-color;
@@ -113,15 +114,42 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 24px;
-    background-color: $background-primary-color;
-    box-shadow: 0px 0px 3px lightgray;
-    color: $accent-color;
+    // border-radius: 24px;
+    // background-color: $background-primary-color;
+    // border: none;
+    // box-shadow: 0px 0px 3px lightgray;
+    // color: $accent-color;
     .card-img {
       margin: 5px;
     }
     .card-content {
       margin: 5px;
     }
+  }
+
+  .card-theme {
+    border-radius: 24px;
+    background-color: $background-primary-color;
+    border: none;
+    box-shadow: 0px 0px 3px lightgray;
+    color: $accent-color;
+  }
+
+  //Quill text editor classes
+
+  .ql-toolbar {
+    background-color: $accent-color;
+    border-radius: 15px 15px 0 0;
+    border: 1px solid grey;
+    border-bottom: none;
+  }
+  .ql-formats {
+    margin: 8px 0;
+  }
+  .ql-container {
+    border-radius: 0 0 15px 15px;
+    min-height: 300px;
+    max-height: 90vh;
+    overflow-y: auto;
   }
 }

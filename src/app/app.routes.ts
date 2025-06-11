@@ -7,6 +7,7 @@ import { PatientPersonalPageComponent } from './components/therapist/therapist-m
 import { PatientMainPageComponent } from './components/patient/patient-main-page/patient-main-page.component';
 import { ListOfFeaturesComponent } from './components/patient/list-of-features/list-of-features.component';
 import { ListOfAllTherapistsComponent } from '../app/components/patient/list-of-all-therapists/list-of-all-therapists.component';
+import { DiaryComponent } from './components/patient/diary/diary.component';
 import { QuillTextEditorComponent } from './components/utilities/quill-text-editor/quill-text-editor.component';
 import { isAuthenticatedGuard } from './guards/is-authenticated.guard';
 
@@ -31,7 +32,7 @@ export const routes: Routes = [
         children: [
           { path: '', component: ListOfFeaturesComponent },
           { path: 'list', component: ListOfAllTherapistsComponent },
-          // {path: 'diary', component:}
+          { path: 'diary', component: DiaryComponent },
           // {path: 'calendar', component:}
           // {path: 'daily-note', component:}
         ],

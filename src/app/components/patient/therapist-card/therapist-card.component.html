@@ -1,10 +1,11 @@
+<button (click)="callback()" style="z-index: 20">BOIA</button>
 <div class="card-content">
   <div class="img-container">
     <mat-icon
       class="tp-img"
       svgIcon="face"
       aria-hidden="false"
-      aria-label="Example thumbs up SVG icon"
+      aria-label="person icon"
     ></mat-icon>
   </div>
 
@@ -51,9 +52,9 @@
   "userData$". It is not optimal but works.
 -->
 <app-overlay-container
-  *ngIf="this.toggleOverlayContainer && this.therapistId != 0"
+  *ngIf="toggleOverlayContainer && therapistId != 0"
   (toggleOverlayContainerVisibility)="
-    this.toggleOverlayContainer = !this.toggleOverlayContainer
+    toggleOverlayContainer = !toggleOverlayContainer
   "
 >
   <app-list-of-all-therapists></app-list-of-all-therapists>

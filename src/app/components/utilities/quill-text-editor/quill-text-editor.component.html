@@ -1,9 +1,80 @@
 <div class="container">
-  <quill-editor
-    class="text-editor"
-    format="json"
-    [(ngModel)]="jsonFormat"
-    [modules]="modules"
-  >
+  <quill-editor format="json" [(ngModel)]="noteContentJSON">
+    <div above-quill-editor-toolbar class="editor-hint">
+      If you need help using the editor, please press the 3 vertical dots in the
+      editor toolbar below and select the "Help" option in the drop-down menu.
+    </div>
+    <div quill-editor-toolbar class="ql-toolbar">
+      <span class="ql-formats">
+        <button class="ql-bold"></button>
+        <button class="ql-italic"></button>
+        <button class="ql-underline"></button>
+        <button class="ql-strike"></button>
+      </span>
+      <span class="ql-formats">
+        <select class="ql-header">
+          <option value="1"></option>
+          <option value="2"></option>
+          <option value="3"></option>
+          <option value="4"></option>
+          <option value="false" selected></option>
+        </select>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-list" value="ordered"></button>
+        <button class="ql-list" value="bullet"></button>
+        <button class="ql-list" value="check"></button>
+      </span>
+      <span class="ql-formats">
+        <select class="ql-color"></select>
+        <select class="ql-background"></select>
+      </span>
+      <span class="ql-formats">
+        <select class="ql-font">
+          <option selected></option>
+          <option value="serif"></option>
+          <option value="monospace"></option>
+        </select>
+        <select class="ql-size">
+          <option value="small"></option>
+          <option selected></option>
+          <option value="large"></option>
+          <option value="huge"></option>
+        </select>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-clean"></button>
+      </span>
+      <span class="ql-formats">
+        <button
+          matIconButton
+          [matMenuTriggerFor]="menu"
+          aria-label="Example icon-button with a menu"
+          id="note-options"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>save</mat-icon>
+            <span>Save</span>
+          </button>
+          <button
+            mat-menu-item
+            [disabled]="!sharable"
+            *ngIf="role == 'patient'"
+          >
+            <mat-icon>visibility</mat-icon>
+            <span>Share</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>help</mat-icon>
+            <span>Help</span>
+          </button>
+        </mat-menu>
+      </span>
+    </div>
   </quill-editor>
 </div>
+
+<button (click)="click()">Cliccamii!</button>

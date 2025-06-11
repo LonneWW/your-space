@@ -1,35 +1,59 @@
-<section class="card">
+<section class="card tp-card card-theme">
   <app-therapist-card></app-therapist-card>
 </section>
 <div class="list-of-patients-container">
-  <mat-card class="example-card" appearance="outlined">
-    <img
-      mat-card-image
-      src="https://placehold.co/400"
-      alt="Photo of a Shiba Inu"
-    />
+  <mat-card
+    class="feature-card card-theme"
+    appearance="outlined"
+    [routerLink]="['diary']"
+    routerLinkActive="router-link-active"
+  >
+    <div class="icon-container">
+      <mat-icon
+        class="feature-icon"
+        svgIcon="diary"
+        aria-hidden="false"
+        aria-label="person icon"
+      ></mat-icon>
+    </div>
     <mat-card-content>
-      <mat-card-title style="color: white">Diary</mat-card-title>
+      <mat-card-title>Diary</mat-card-title>
     </mat-card-content>
   </mat-card>
-  <mat-card class="example-card" appearance="outlined">
-    <img
-      mat-card-image
-      src="https://placehold.co/400"
-      alt="Photo of a Shiba Inu"
-    />
+  <mat-card
+    class="feature-card card-theme"
+    appearance="outlined"
+    [routerLink]="['calendar']"
+    routerLinkActive="router-link-active"
+  >
+    <div class="icon-container">
+      <mat-icon
+        class="feature-icon"
+        svgIcon="calendar"
+        aria-hidden="false"
+        aria-label="person icon"
+      ></mat-icon>
+    </div>
     <mat-card-content>
-      <mat-card-title style="color: white">Calendar</mat-card-title>
+      <mat-card-title>Calendar</mat-card-title>
     </mat-card-content>
   </mat-card>
-  <mat-card class="example-card" appearance="outlined">
-    <img
-      mat-card-image
-      src="https://placehold.co/400"
-      alt="Photo of a Shiba Inu"
-    />
+  <mat-card
+    class="feature-card card-theme"
+    appearance="outlined"
+    [routerLink]="['daily-note']"
+    routerLinkActive="router-link-active"
+  >
+    <div class="icon-container">
+      <mat-icon
+        class="feature-icon"
+        svgIcon="calendar-daily"
+        aria-hidden="false"
+        aria-label="person icon"
+      ></mat-icon>
+    </div>
     <mat-card-content>
-      <mat-card-title style="color: white">Daily Note</mat-card-title>
+      <mat-card-title>Daily Note</mat-card-title>
     </mat-card-content>
   </mat-card>
 </div>

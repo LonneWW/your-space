@@ -1,6 +1,17 @@
-.container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
+.ql-toolbar {
+  .ql-formats {
+    margin: 8px 0;
+  }
+}
+
+#note-options > mat-icon {
+  font-size: 1.2rem;
+  color: rgb(68, 68, 68);
+}
+
+.editor-hint {
+  font-size: 0.8rem;
+  color: lightgray;
+  font-style: italic;
+  margin-bottom: 8px;
 }

@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  ChangeDetectorRef,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +33,8 @@ import { UserData } from '../../../interfaces/IUserData';
 export class TherapistCardComponent implements OnInit, OnDestroy {
   constructor(
     private httpService: HttpService,
-    private userDataService: UserDataService
+    private userDataService: UserDataService,
+    private cdr: ChangeDetectorRef
   ) {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
@@ -35,6 +42,10 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     iconRegistry.addSvgIcon(
       'face',
       sanitizer.bypassSecurityTrustResourceUrl('/assets/face-icon.svg')
+    );
+    iconRegistry.addSvgIcon(
+      'person-search',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/person-search-icon.svg')
     );
   }
 
@@ -50,40 +61,40 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     let therapistIdString = sessionStorage.getItem('therapist_id');
-    switch (therapistIdString) {
-      case 'null':
-        this.therapistId = null;
-        return;
-      case 'undefined':
-        this.therapistId = undefined;
-        return;
-      default:
-        this.therapistId = Number(therapistIdString);
+    if (therapistIdString === 'null') {
+      this.therapistId = null;
+    } else {
+      this.therapistId = Number(therapistIdString);
     }
-    this.httpService
-      .getTherapist(this.therapistId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (r: any) => {
-          console.log(r);
-          this.therapist = r[0];
-        },
-        error: () => {
-          this.therapistId = undefined;
-          this.therapist = undefined;
-          console.log('bibi');
-          // DA COMPLETARE
-        },
-      });
-    this.userDataService.userData$.pipe(takeUntil(this.destroy$)).subscribe({
+    console.log(this.therapistId);
+    if (this.therapistId && this.therapistId > 0) {
+      this.httpService
+        .getTherapist(this.therapistId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (r: any) => {
+            console.log(r);
+            this.therapist = r[0];
+          },
+          error: () => {
+            this.therapistId = undefined;
+            this.therapist = undefined;
+            console.log('bibi');
+            // DA COMPLETARE
+          },
+        });
+    }
+    this.userDataService.userData$.subscribe({
       next: (r: any) => {
-        console.log('AAAAAAH');
         const data = r as UserData;
         console.log(data);
+        const tp_id = data.therapist_id;
+        this.therapistId = tp_id === 'null' ? null : Number(tp_id);
+        this.toggleOverlayContainer = false;
+        console.log('cambio');
         console.log(this.therapistId);
-        if (data.therapist_id != this.therapistId)
-          this.therapistId = data.therapist_id;
-        console.log(this.therapistId);
+        console.log(this.toggleOverlayContainer);
+        this.cdr.detectChanges();
       },
     });
   }
@@ -95,5 +106,10 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  callback() {
+    console.log(this.therapistId);
+    console.log(this.toggleOverlayContainer);
   }
 }

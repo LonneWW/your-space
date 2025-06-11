@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntil, Subject } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -26,8 +26,6 @@ export class ListOfAllTherapistsComponent implements OnInit {
     private snackbar: MatSnackBar,
     private userDataService: UserDataService
   ) {}
-
-  @Output() toggleVisibility = new EventEmitter();
 
   protected therapistsList: { id: number; name: string; surname: string }[] =
     [];
@@ -66,7 +64,7 @@ export class ListOfAllTherapistsComponent implements OnInit {
           const data = this.userDataService.currentUserData;
           data!.therapist_id = 0;
           this.userDataService.updateUserData(data as UserData);
-          this.toggleVisibility.emit();
+          console.log(this.userDataService.currentUserData);
           this.snackbar.open(r.message, 'Ok');
         },
         error: (e: any) => {
@@ -79,5 +77,3 @@ export class ListOfAllTherapistsComponent implements OnInit {
       });
   }
 }
-
-//EVENT EMITTER PER CHIUDERE L'OVERLAY
