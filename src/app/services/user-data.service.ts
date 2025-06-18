@@ -23,7 +23,13 @@ export class UserDataService {
     this._userDataSubject.next(updatedData as UserData);
   }
 
-  public saveSessionUser(data: UserData): void {
+  public saveSessionUser(data: {
+    id: string;
+    name: string;
+    surname: string;
+    role: 'patient' | 'therapist';
+    therapist_id: string;
+  }): void {
     Object.entries(data).forEach(([key, value]) => {
       sessionStorage.setItem(key, value);
     });
@@ -31,14 +37,14 @@ export class UserDataService {
 
   public get sessionStorageUser(): UserData {
     const sessionUser: any = {};
-    sessionUser.id = sessionStorage.getItem('id');
+    sessionUser.id = JSON.parse(sessionStorage.getItem('id')!);
     sessionUser.name = sessionStorage.getItem('name');
     sessionUser.surname = sessionStorage.getItem('surname');
     sessionUser.role = sessionStorage.getItem('role');
-    let therapist_id = sessionStorage.getItem('therapist_id');
-    if (therapist_id) {
-      sessionUser.therapist_id = therapist_id;
-    }
+    sessionUser.therapist_id = JSON.parse(
+      sessionStorage.getItem('therapist_id')!
+    );
+
     return sessionUser;
   }
 }

@@ -23,8 +23,14 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
     sessionUserData.name &&
     sessionUserData.surname
   ) {
-    if (sessionUserData.role == 'patient' && !sessionUserData.therapist_id) {
-      return logout();
+    const sessionTherapistId = sessionStorage.getItem('therapist_id');
+    if (sessionUserData.role == 'patient' && !sessionTherapistId) {
+      const serviceData = userDataService.currentUserData;
+      if (serviceData?.therapist_id) {
+        sessionUserData.therapist_id = serviceData.therapist_id;
+      } else {
+        return logout();
+      }
     }
     return authService.isLoggedIn().pipe(
       map((r) => {

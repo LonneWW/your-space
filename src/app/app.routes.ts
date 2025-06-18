@@ -8,7 +8,9 @@ import { PatientMainPageComponent } from './components/patient/patient-main-page
 import { ListOfFeaturesComponent } from './components/patient/list-of-features/list-of-features.component';
 import { ListOfAllTherapistsComponent } from '../app/components/patient/list-of-all-therapists/list-of-all-therapists.component';
 import { DiaryComponent } from './components/patient/diary/diary.component';
-import { QuillTextEditorComponent } from './components/utilities/quill-text-editor/quill-text-editor.component';
+import { CalendarComponent } from './components/patient/calendar/calendar.component';
+import { DailyNoteComponent } from './components/patient/daily-note/daily-note.component';
+import { NoteViewerComponent } from './components/utilities/note-viewer/note-viewer.component';
 import { isAuthenticatedGuard } from './guards/is-authenticated.guard';
 
 export const routes: Routes = [
@@ -33,15 +35,16 @@ export const routes: Routes = [
           { path: '', component: ListOfFeaturesComponent },
           { path: 'list', component: ListOfAllTherapistsComponent },
           { path: 'diary', component: DiaryComponent },
-          // {path: 'calendar', component:}
-          // {path: 'daily-note', component:}
+          { path: 'calendar', component: CalendarComponent },
+          { path: 'daily-note', component: DailyNoteComponent },
+          { path: 'note/:id', component: NoteViewerComponent },
         ],
       },
-      {
-        path: 'editor',
-        canActivate: [isAuthenticatedGuard],
-        component: QuillTextEditorComponent,
-      },
+      // {
+      //   path: 'editor',
+      //   canActivate: [isAuthenticatedGuard],
+      //   component: QuillTextEditorComponent,
+      // },
     ],
   },
   { path: 'register', component: RegisterComponent },

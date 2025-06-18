@@ -18,6 +18,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { UserDataService } from '../../services/user-data.service';
 import { UserData } from '../../interfaces/IUserData';
+import { CredentialsMatchService } from '../../services/credentials-match.service';
 
 @Component({
   selector: 'app-login',
@@ -41,11 +42,12 @@ export class LoginComponent implements OnDestroy {
     private authService: AuthService,
     private userDataService: UserDataService,
     private router: Router,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private credMatchService: CredentialsMatchService
   ) {}
 
   public loginForm: FormGroup = new FormGroup({
-    email: new FormControl<string>('pr@va.com', [
+    email: new FormControl<string>('nu@va.it', [
       Validators.required,
       Validators.email,
     ]),
@@ -72,7 +74,18 @@ export class LoginComponent implements OnDestroy {
           console.log(r);
           const data = r as UserData;
           data.role = form.role;
-          this.userDataService.saveSessionUser(data);
+          let sessionData = {
+            id: JSON.stringify(data.id),
+            name: data.name,
+            surname: data.surname,
+            role: data.role as 'patient' | 'therapist',
+            therapist_id: JSON.stringify(undefined),
+          };
+          if (form.role == 'patient') {
+            sessionData.therapist_id = JSON.stringify(data.therapist_id);
+          }
+          this.userDataService.saveSessionUser(sessionData);
+          console.log(this.userDataService.sessionStorageUser);
           this.userDataService.updateUserData(data);
           this.snackbar.open('Logged in successfully', 'Ok', {
             duration: 3000,

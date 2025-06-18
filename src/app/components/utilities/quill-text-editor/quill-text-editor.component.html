@@ -1,5 +1,39 @@
 <div class="container">
-  <quill-editor format="json" [(ngModel)]="noteContentJSON">
+  <form [formGroup]="titleForm" class="form note-form">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput type="text" name="title" formControlName="title" />
+    </mat-form-field>
+    <mat-error *ngIf="titleForm.controls['title'].invalid">
+      Title max length is 50 characters.
+    </mat-error>
+    <mat-form-field>
+      <mat-label>Tags</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Enter tags">
+        @for (tag of tags(); track tag) {
+        <mat-chip-row
+          (removed)="removeTag(tag)"
+          [editable]="true"
+          (edited)="editTag(tag, $event)"
+          [aria-description]="'press enter to edit ' + tag.name"
+        >
+          {{ tag.name }}
+          <button matChipRemove [attr.aria-label]="'remove ' + tag.name">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+        }
+        <input
+          placeholder="New tag..."
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addTag($event)"
+        />
+      </mat-chip-grid>
+    </mat-form-field>
+  </form>
+  <quill-editor format="json" [(ngModel)]="note.content">
     <div above-quill-editor-toolbar class="editor-hint">
       If you need help using the editor, please press the 3 vertical dots in the
       editor toolbar below and select the "Help" option in the drop-down menu.
@@ -55,19 +89,15 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>
+          <button mat-menu-item (click)="save()">
             <mat-icon>save</mat-icon>
             <span>Save</span>
           </button>
-          <button
-            mat-menu-item
-            [disabled]="!sharable"
-            *ngIf="role == 'patient'"
-          >
-            <mat-icon>visibility</mat-icon>
-            <span>Share</span>
+          <button mat-menu-item [disabled]="note_id == 1" (click)="delete()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item (click)="help()">
             <mat-icon>help</mat-icon>
             <span>Help</span>
           </button>
@@ -76,5 +106,3 @@
     </div>
   </quill-editor>
 </div>
-
-<button (click)="click()">Cliccamii!</button>

@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventEmitter, Output, Input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'app-overlay-container',
-  imports: [],
+  imports: [MatButtonModule, MatIconModule],
   templateUrl: './overlay-container.component.html',
   styleUrl: './overlay-container.component.scss',
 })

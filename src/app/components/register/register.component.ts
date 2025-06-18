@@ -56,7 +56,7 @@ export class RegisterComponent implements OnDestroy {
         Validators.minLength(3),
         Validators.maxLength(20),
       ]),
-      email: new FormControl<string>('pr@va.com', [
+      email: new FormControl<string>('nu@va.it', [
         Validators.required,
         Validators.email,
       ]),
@@ -90,7 +90,17 @@ export class RegisterComponent implements OnDestroy {
           console.log(r);
           const data = r[0];
           data.role = form.role;
-          this.userDataService.saveSessionUser(data);
+          let sessionData = {
+            id: JSON.stringify(data.id),
+            name: data.name,
+            surname: data.surname,
+            role: data.role as 'patient' | 'therapist',
+            therapist_id: JSON.stringify(undefined),
+          };
+          if (form.role == 'patient') {
+            sessionData.therapist_id = JSON.stringify(data.therapist_id);
+          }
+          this.userDataService.saveSessionUser(sessionData);
           this.userDataService.updateUserData(data);
           this.snackbar.open('Registration has been successful', 'Ok', {
             duration: 3000,

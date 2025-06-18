@@ -90,7 +90,11 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
         const data = r as UserData;
         console.log(data);
         const tp_id = data.therapist_id;
-        this.therapistId = tp_id === 'null' ? null : Number(tp_id);
+        if (tp_id === 'null' || tp_id === null) {
+          this.therapistId = null;
+        } else {
+          this.therapistId = Number(tp_id);
+        }
         this.toggleOverlayContainer = false;
         console.log('cambio');
         console.log(this.therapistId);

@@ -41,6 +41,7 @@ export class TherapistHttpService {
   }
 
   postNote(body: {
+    title: string;
     content: JSON;
     patient_id: Number;
     therapist_id: Number;
@@ -60,6 +61,7 @@ export class TherapistHttpService {
   }
 
   modifyNote(body: {
+    title: string;
     content: JSON;
     therapist_id: Number;
     tags: JSON;
@@ -71,7 +73,12 @@ export class TherapistHttpService {
 
   acceptPatient(body: { patient_id: Number; therapist_id: Number }) {
     this.auth.checkCredentials();
-    return this.http.put(this.url + '/therapist/patient', body);
+    return this.http.put(this.url + '/therapist/accept-patient', body);
+  }
+
+  dischargePatient(body: { patient_id: Number; therapist_id: Number }) {
+    this.auth.checkCredentials();
+    return this.http.put(this.url + '/therapist/discharge-patient', body);
   }
 
   deleteNote(note_id: Number, therapist_id: Number) {

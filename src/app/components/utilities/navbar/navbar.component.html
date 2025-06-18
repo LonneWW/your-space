@@ -1,0 +1,96 @@
+<section>
+  <div class="nav-container">
+    <button
+      mat-fab
+      aria-label="Example icon button with a delete icon"
+      (click)="toggleOverlayContainer = !toggleOverlayContainer"
+    >
+      <mat-icon
+        [matBadge]="notifications.length"
+        [matBadgeHidden]="notifications.length < 1"
+        aria-hidden="false"
+        >notifications</mat-icon
+      >
+    </button>
+    <button
+      mat-fab
+      aria-label="Example icon button with a delete icon"
+      [matMenuTriggerFor]="menu"
+      style="margin-left: auto"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item [routerLink]="['/patient']">
+        <mat-icon>home</mat-icon>
+        <span>Main page</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/patient/diary']">
+        <mat-icon svgIcon="diary"></mat-icon>
+        <span>Diary</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/patient/calendar']">
+        <mat-icon svgIcon="calendar"></mat-icon>
+        <span>Calendar</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+</section>
+<app-overlay-container
+  *ngIf="toggleOverlayContainer && notifications.length > 0"
+  (toggleOverlayContainerVisibility)="
+    toggleOverlayContainer = !toggleOverlayContainer
+  "
+>
+  <div class="notifications-list">
+    <div class="notification" *ngFor="let notification of notifications">
+      <div class="notification-body">
+        {{ notification.content }}
+        <!--ngIf role == therapist-->
+        <button
+          mat-icon-button
+          class="close-btn"
+          *ngIf="role == 'patient'; else controls"
+          (click)="closeNotification(notification.id)"
+        >
+          <!--(click)="close()"-->
+          <mat-icon>close</mat-icon>
+        </button>
+        <ng-template #controls>
+          <button
+            mat-icon-button
+            class="accept-btn"
+            (click)="
+              acceptPatient(
+                notification.patient_id,
+                notification.therapist_id,
+                notification.id
+              )
+            "
+          >
+            <!--(click)="close()"-->
+            <mat-icon>person_add</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            class="reject-btn"
+            (click)="
+              rejectPatient(
+                notification.patient_id,
+                notification.therapist_id,
+                notification.id
+              )
+            "
+          >
+            <!--(click)="accept()" -->
+            <mat-icon>person_remove</mat-icon>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</app-overlay-container>

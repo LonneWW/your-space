@@ -1,5 +1,5 @@
 export interface UserData {
-  role: string;
+  role: 'patient' | 'therapist';
   id: number;
   name: string;
   surname: string;

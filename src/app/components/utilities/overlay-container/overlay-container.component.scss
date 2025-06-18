@@ -12,6 +12,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  #overlay-close-btn {
+    z-index: 12;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
   .container {
     z-index: 11;
     width: 80vw;
@@ -19,6 +25,6 @@
     padding-left: 5px;
     background-color: white;
     overflow-y: auto;
-    border-radius: 15px 0 0 15px;
+    border-radius: 15px;
   }
 }

@@ -1,0 +1,64 @@
+<p>search-bar works!</p>
+<h4>Search by</h4>
+<form [formGroup]="searchForm">
+  <mat-tab-group animationDuration="500ms" dynamicHeight>
+    <mat-tab label="Title">
+      <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input matInput type="text" name="title" formControlName="title" />
+      </mat-form-field>
+      <button
+        mat-stroked-button
+        type="submit"
+        (click)="makeFilteredSearch('title')"
+      >
+        Search
+      </button>
+    </mat-tab>
+    <mat-tab label="Tag">
+      <mat-form-field>
+        <mat-label>Tag</mat-label>
+        <input matInput type="text" name="tag" formControlName="tag" />
+      </mat-form-field>
+      <button
+        mat-stroked-button
+        type="submit"
+        (click)="makeFilteredSearch('tag')"
+      >
+        Search
+      </button>
+    </mat-tab>
+    <mat-tab label="Date">
+      <div formGroupName="dateRange">
+        <mat-form-field>
+          <mat-label>Date range:</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input
+              matStartDate
+              formControlName="start"
+              placeholder="Start date"
+            />
+            <input matEndDate formControlName="end" placeholder="End date" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        </mat-form-field>
+        <p>Selected range: {{ searchForm.get("dateRange")?.value | json }}</p>
+      </div>
+      <button
+        mat-stroked-button
+        type="submit"
+        (click)="makeFilteredSearch('date')"
+      >
+        Search
+      </button>
+    </mat-tab>
+  </mat-tab-group>
+  <button mat-stroked-button type="submit" (click)="resetFilterSearch()">
+    Reset Filters
+  </button>
+</form>

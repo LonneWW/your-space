@@ -1,0 +1,28 @@
+.nav-container {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.notifications-list {
+  .notification {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 10px;
+    .close-btn {
+      display: inline;
+    }
+    .notification-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .refuse-btn {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}

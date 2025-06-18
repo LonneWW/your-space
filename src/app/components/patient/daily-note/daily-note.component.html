@@ -1,0 +1,109 @@
+<p>
+  Welcome to the daily note section.<br />
+  Every time you access this section of the app a new note will be created.
+  <br />
+  You can find and edit the notes created in the "calendar" section.
+</p>
+
+<form [formGroup]="noteForm" class="form note-form">
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput type="text" name="title" formControlName="title" />
+  </mat-form-field>
+  <mat-error *ngIf="noteForm.controls['title'].invalid">
+    Title max length is 50 characters.
+  </mat-error>
+  <mat-form-field>
+    <mat-label>Tags</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Enter tags">
+      @for (tag of tags(); track tag) {
+      <mat-chip-row
+        (removed)="removeTag(tag)"
+        [editable]="true"
+        (edited)="editTag(tag, $event)"
+        [aria-description]="'press enter to edit ' + tag.name"
+      >
+        {{ tag.name }}
+        <button matChipRemove [attr.aria-label]="'remove ' + tag.name">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+      }
+      <input
+        placeholder="New tag..."
+        [matChipInputFor]="chipGrid"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="addTag($event)"
+      />
+    </mat-chip-grid>
+  </mat-form-field>
+</form>
+
+{{ tagsArray | json }}
+
+<app-quill-text-editor
+  [sharable]="true"
+  [note_id]="note.id"
+  [id]="user!.id"
+  [role]="user!.role"
+  (saveNote)="updateNote($event)"
+  (deleteNote)="delete()"
+  [noteContentJSON]="note.content | json"
+  (openHelpDialog)="toggleOverlayContainer = !toggleOverlayContainer"
+></app-quill-text-editor>
+
+{{ note.id }}
+
+<mat-spinner class="spinner" [diameter]="50" *ngIf="saving"></mat-spinner>
+
+<app-overlay-container
+  *ngIf="toggleOverlayContainer"
+  (toggleOverlayContainerVisibility)="
+    toggleOverlayContainer = !toggleOverlayContainer
+  "
+>
+  <div class="help-paragraph overlay-text">
+    <p>
+      Here is a short guide on how to use the text editor.<br />
+
+      In the toolbar, you’ll find buttons and dropdown menus for formatting
+      text. When an option is active, it will be highlighted in blue.
+    </p>
+
+    <p>
+      From left to right, the toolbar includes: <br /><br />
+
+      B – Bold: Applies bold formatting to the selected text. <br /><br />
+
+      I – Italic: Italicizes the selected text. <br /><br />
+
+      U – Underline: Underlines the selected text. <br /><br />
+
+      S – Overline: Adds an overline to the selected text. <br /><br />
+
+      Next, there is a dropdown for selecting a title for the page (choose from
+      Heading 1 to Heading 4). <br /><br />
+
+      Following that, you’ll see the list section, which lets you create ordered
+      lists, unordered lists, and checklists. <br /><br />
+
+      There are also buttons for changing the text color or highlighting it with
+      a specific color. <br /><br />
+
+      Additionally, you have controls for selecting the font and text size.
+      <br /><br />
+
+      Tx – Reset: Removes all formatting from the selected text. <br /><br />
+
+      Finally, the options button allows you to save notes, change their
+      visibility (whether to make them available to your therapist), delete a
+      note, and open the help dialog.
+
+      <br />
+      <br />
+
+      The first line of text will be used as note title.
+    </p>
+  </div>
+</app-overlay-container>

@@ -1,4 +1,7 @@
 <div class="screen-overlay" (click)="toggleVisibility()">
+  <button mat-mini-fab id="overlay-close-btn" aria-label="close icon">
+    <mat-icon>close</mat-icon>
+  </button>
   <div class="container" (click)="$event.stopPropagation()">
     <ng-content (toggleVisibility)="toggleVisibility()"></ng-content>
   </div>

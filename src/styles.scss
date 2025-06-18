@@ -3,7 +3,7 @@
 @import "../node_modules/quill/dist/quill.snow.css";
 
 /* You can add global styles to this file, and also import other style files */
-$accent-color: #ff7850;
+$accent-color: oklch(72.497% 0.17402 37.191);
 $primary-color: #ff5032;
 $text-primary-color: #241103;
 $text-secondary-color: #fff9ec;
@@ -62,12 +62,48 @@ $background-secondary-color: #362321;
       filled-container-color: $accent-color,
       filled-label-text-color: $text-secondary-color,
       filled-disabled-container-color: rgba(255, 120, 80, 0.5),
+      outlined-outline-color: $accent-color,
+      outlined-state-layer-color: $primary-color,
+      outlined-focus-state-layer-opacity: $primary-color,
+      outlined-label-text-color: $primary-color,
+      outlined-ripple-color: rgba(255, 120, 80, 0.5),
     )
   );
   @include mat.progress-bar-overrides(
     (
       active-indicator-color: orange,
       track-color: $primary-color,
+    )
+  );
+
+  @include mat.progress-spinner-overrides(
+    (
+      active-indicator-color: orange,
+    )
+  );
+  @include mat.chips-overrides(
+    (
+      outline-color: $primary-color,
+      label-text-color: $text-secondary-color,
+      elevated-container-color: $accent-color,
+    )
+  );
+  @include mat.tabs-overrides(
+    (
+      active-focus-label-text-color: $primary-color,
+      active-hover-label-text-color: $primary-color,
+      active-label-text-color: $primary-color,
+      active-indicator-color: $primary-color,
+      inactive-label-text-color: lightgray,
+      active-focus-indicator-color: $accent-color,
+      active-hover-indicator-color: $accent-color,
+      divider-color: lightgray,
+    )
+  );
+  @include mat.snack-bar-overrides(
+    (
+      button-color: $accent-color,
+      supporting-text-color: $primary-color,
     )
   );
 }
@@ -135,6 +171,22 @@ body {
     color: $accent-color;
   }
 
+  .screen-overlay {
+    @include mat.icon-overrides(
+      (
+        color: white,
+      )
+    );
+    #overlay-close-btn {
+      background-color: $accent-color;
+    }
+    .overlay-text {
+      font-size: 1rem;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      //DA CAMBIARE!
+    }
+  }
+
   //Quill text editor classes
 
   .ql-toolbar {
@@ -151,5 +203,42 @@ body {
     min-height: 300px;
     max-height: 90vh;
     overflow-y: auto;
+  }
+
+  .spinner {
+    position: fixed;
+    bottom: 5vh;
+    right: 5vh;
+  }
+
+  .notifications-list {
+    .notification {
+      background-color: $background-primary-color;
+      color: $primary-color;
+      .notification-body {
+        color: $text-primary-color;
+      }
+    }
+    .close-btn {
+      @include mat.icon-overrides(
+        (
+          color: red,
+        )
+      );
+    }
+    .accept-btn {
+      @include mat.icon-overrides(
+        (
+          color: green,
+        )
+      );
+    }
+    .reject-btn {
+      @include mat.icon-overrides(
+        (
+          color: red,
+        )
+      );
+    }
   }
 }

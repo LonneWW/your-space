@@ -1,15 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatIconModule, MatButtonModule, MatCardModule],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  constructor() {
+    const iconRegistry = inject(MatIconRegistry);
+    const sanitizer = inject(DomSanitizer);
+
+    iconRegistry.addSvgIcon(
+      'diary',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/diary-icon.svg')
+    );
+
+    iconRegistry.addSvgIcon(
+      'calendar',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/calendar-icon.svg')
+    );
+
+    iconRegistry.addSvgIcon(
+      'calendar-daily',
+      sanitizer.bypassSecurityTrustResourceUrl(
+        '/assets/calendar-today-icon.svg'
+      )
+    );
+    iconRegistry.addSvgIcon(
+      'person_cancel',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/person_cancel.svg')
+    );
+  }
   title = 'your-space';
 }

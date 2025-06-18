@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-import { MatIconRegistry, MatIconModule } from '@angular/material/icon';
+import { Component } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { TherapistCardComponent } from '../therapist-card/therapist-card.component';
@@ -18,25 +17,14 @@ import { TherapistCardComponent } from '../therapist-card/therapist-card.compone
   styleUrl: './list-of-features.component.scss',
 })
 export class ListOfFeaturesComponent {
-  constructor() {
-    const iconRegistry = inject(MatIconRegistry);
-    const sanitizer = inject(DomSanitizer);
+  constructor(private router: Router) {}
 
-    iconRegistry.addSvgIcon(
-      'diary',
-      sanitizer.bypassSecurityTrustResourceUrl('/assets/diary-icon.svg')
+  dailyNoteConfirm() {
+    const pass = confirm(
+      'By entering the "Daily Note" section a new note will be created. \nDo you wish to continue?'
     );
-
-    iconRegistry.addSvgIcon(
-      'calendar',
-      sanitizer.bypassSecurityTrustResourceUrl('/assets/calendar-icon.svg')
-    );
-
-    iconRegistry.addSvgIcon(
-      'calendar-daily',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '/assets/calendar-today-icon.svg'
-      )
-    );
+    if (pass) {
+      this.router.navigate(['patient/daily-note']);
+    }
   }
 }

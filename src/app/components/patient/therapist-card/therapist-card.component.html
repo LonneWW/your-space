@@ -16,7 +16,6 @@
       ></mat-icon>
     </ng-template>
   </div>
-
   <div [ngSwitch]="therapistId">
     <div *ngSwitchCase="null">
       <h2>Select a therapist</h2>
@@ -52,13 +51,7 @@
     {{ therapistId !== null ? "Unlink your therapist" : "Select a therapist" }}
   </button>
 </div>
-<!--
-  The ngIf is a bit tricky. Since the overlay container and the list component
-  cannot communicate with each other easily I also set the condition 
-  "this.therapistId != 0", value that is changed when a therapist has been
-  selected using the already existing subscription to the userDataService
-  "userData$". It is not optimal but works.
--->
+
 <app-overlay-container
   *ngIf="toggleOverlayContainer && therapistId != 0"
   (toggleOverlayContainerVisibility)="

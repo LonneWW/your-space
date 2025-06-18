@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
-import { OverlayContainerComponent } from '../../utilities/overlay-container/overlay-container.component'; //DA ELIMINARE!
+import { NavbarComponent } from '../../utilities/navbar/navbar.component';
 import { UserDataService } from '../../../services/user-data.service';
 
 @Component({
   selector: 'app-patient-main-page',
-  imports: [RouterOutlet, OverlayContainerComponent],
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: './patient-main-page.component.html',
   styleUrl: './patient-main-page.component.scss',
 })
