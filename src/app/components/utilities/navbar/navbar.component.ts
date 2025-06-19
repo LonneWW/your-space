@@ -44,22 +44,40 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.auth.logout();
   }
 
-  closeNotification(id: number) {
-    this.pHttp
-      .deleteNotification(id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (r: any) => {
-          console.log(r);
-          this.notifications = this.notifications.filter(
-            (item) => item.id !== id
-          );
-          console.log(this.notifications);
-        },
-        error: (e: any) => {
-          console.log(e);
-        },
-      });
+  closeNotification(id: number, role: string = 'patient') {
+    if (role == 'patient') {
+      this.pHttp
+        .deleteNotification(id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (r: any) => {
+            console.log(r);
+            this.notifications = this.notifications.filter(
+              (item) => item.id !== id
+            );
+            console.log(this.notifications);
+          },
+          error: (e: any) => {
+            console.log(e);
+          },
+        });
+    } else {
+      this.tHttp
+        .deleteNotification(id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (r: any) => {
+            console.log(r);
+            this.notifications = this.notifications.filter(
+              (item) => item.id !== id
+            );
+            console.log(this.notifications);
+          },
+          error: (e: any) => {
+            console.log(e);
+          },
+        });
+    }
   }
 
   acceptPatient(
@@ -74,7 +92,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (r: any) => {
           console.log(r);
-          this.closeNotification(notificationId);
+          this.closeNotification(notificationId, 'therapist');
         },
         error: (e: any) => {
           console.log(e);
@@ -94,7 +112,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (r: any) => {
           console.log(r);
-          this.closeNotification(notificationId);
+          this.closeNotification(notificationId, 'therapist');
         },
         error: (e: any) => {
           console.log(e);
