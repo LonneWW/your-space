@@ -1,8 +1,8 @@
-.list-of-patients-container {
+.list-of-patients {
   padding: 10px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
 }
 .example-card {

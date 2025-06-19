@@ -104,6 +104,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const user = this.userData.currentUserData;
+    console.log(user);
     if (user) {
       this.role = user.role;
       console.log(user);

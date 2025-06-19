@@ -105,7 +105,7 @@ export class RegisterComponent implements OnDestroy {
           this.snackbar.open('Registration has been successful', 'Ok', {
             duration: 3000,
           });
-
+          console.log(form.role);
           this.router.navigate(['/' + form.role]);
         },
         error: (e) => {

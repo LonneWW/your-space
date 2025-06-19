@@ -3,7 +3,7 @@
 @import "../node_modules/quill/dist/quill.snow.css";
 
 /* You can add global styles to this file, and also import other style files */
-$accent-color: oklch(72.497% 0.17402 37.191);
+$accent-color: #ff7850;
 $primary-color: #ff5032;
 $text-primary-color: #241103;
 $text-secondary-color: #fff9ec;
@@ -239,6 +239,36 @@ body {
           color: red,
         )
       );
+    }
+  }
+
+  .feature-card {
+    width: 40%;
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    cursor: pointer;
+    .icon-container {
+      margin: 15px;
+      background-color: white;
+      width: 30vw;
+      height: 30vw;
+      border-radius: 50%;
+      align-self: center;
+      box-shadow: 2px 2px 3px lightgrey;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .feature-icon {
+        width: 22vw;
+        height: 22vw;
+      }
+    }
+    img {
+      border-radius: 100%;
+      padding: 5px;
     }
   }
 }

@@ -7,16 +7,21 @@ import { UserData } from '../interfaces/IUserData';
 })
 export class CredentialsMatchService {
   normalizeUser(sessionObj: any): UserData {
-    return {
+    let obj: UserData = {
       id: Number(sessionObj.id),
       name: sessionObj.name,
       role: sessionObj.role,
       surname: sessionObj.surname,
-      therapist_id:
+      therapist_id: null,
+    };
+
+    if (sessionObj.role == 'patient') {
+      obj.therapist_id =
         sessionObj.therapist_id !== null
           ? Number(sessionObj.therapist_id)
-          : null,
-    };
+          : null;
+    }
+    return obj;
   }
   deepEqual(obj1: any, obj2: any): boolean {
     // Controlla se sono strettamente uguali

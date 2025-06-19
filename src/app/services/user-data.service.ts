@@ -41,9 +41,13 @@ export class UserDataService {
     sessionUser.name = sessionStorage.getItem('name');
     sessionUser.surname = sessionStorage.getItem('surname');
     sessionUser.role = sessionStorage.getItem('role');
-    sessionUser.therapist_id = JSON.parse(
-      sessionStorage.getItem('therapist_id')!
-    );
+    if (sessionUser.role == 'patient') {
+      sessionUser.therapist_id = JSON.parse(
+        sessionStorage.getItem('therapist_id')!
+      );
+    } else {
+      sessionUser.therapist_id = undefined;
+    }
 
     return sessionUser;
   }

@@ -155,10 +155,15 @@ export class QuillTextEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(this.note);
     if (this.note.tags) {
       this.restoreTagsFromSessionStorage(this.note.tags);
     }
     this.titleForm.patchValue({ title: this.note.title });
+  }
+
+  ua() {
+    console.log(this.note);
   }
 
   ngOnDestroy(): void {

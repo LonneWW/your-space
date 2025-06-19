@@ -30,9 +30,15 @@ export class AppComponent {
         '/assets/calendar-today-icon.svg'
       )
     );
+
     iconRegistry.addSvgIcon(
       'person_cancel',
       sanitizer.bypassSecurityTrustResourceUrl('/assets/person_cancel.svg')
+    );
+
+    iconRegistry.addSvgIcon(
+      'account-circle',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/account-circle.svg')
     );
   }
   title = 'your-space';

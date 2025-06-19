@@ -55,7 +55,7 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
   updateNote(body: any) {
     console.log(body);
     this.note.content = body.content;
-    this.note.tags = body.tags;
+    this.note.tags = JSON.parse(body.tags);
     this.note.title = body.title;
     sessionStorage.setItem(
       `selectedNote_${this.note.id}`,
