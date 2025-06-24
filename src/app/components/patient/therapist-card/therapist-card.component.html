@@ -1,4 +1,4 @@
-<div class="card-content">
+<div class="tp-card">
   <div class="img-container">
     <mat-icon
       *ngIf="therapistId && therapistId > 0; else searchBlock"
@@ -16,32 +16,34 @@
       ></mat-icon>
     </ng-template>
   </div>
-  <div [ngSwitch]="therapistId">
-    <div *ngSwitchCase="null">
-      <h2>Select a therapist</h2>
-      <span> To start sharing your notes, select a therapist first. </span>
+  <section>
+    <div [ngSwitch]="therapistId">
+      <div *ngSwitchCase="null">
+        <h3>Select a therapist</h3>
+        <span> To start sharing your notes, select a therapist first. </span>
+      </div>
+      <div *ngSwitchCase="undefined">
+        <h3>Unable to receive therapist data.</h3>
+      </div>
+      <div *ngSwitchCase="0">
+        <h3>Waiting for therapist response.</h3>
+      </div>
+      <div *ngSwitchDefault>
+        <h3>
+          {{`${therapist?.name} ${therapist?.surname}`}}
+        </h3>
+        <p>This is the therapist you selected.</p>
+      </div>
     </div>
-    <div *ngSwitchCase="undefined">
-      <h2>Unable to receive therapist data.</h2>
-    </div>
-    <div *ngSwitchCase="0">
-      <h2>Waiting for therapist response.</h2>
-    </div>
-    <div *ngSwitchDefault>
-      <h2>
-        {{`${therapist?.name} ${therapist?.surname}`}}
-      </h2>
-      <p>This is the therapist you selected. <br /></p>
-    </div>
-  </div>
-  <p>
-    When you set a page "shared" it will be accessible to him/her as well.
-    <br />
-    You can change this page setting at any time. <br />
-    You will also be able to unlink your therapist if necessary. With that, all
-    access to previously shared pages will be lost and you will be able to
-    select a new one. <br />
-  </p>
+    <p>
+      When you set a page "shared" it will be accessible to him/her as well.
+      <br />
+      You can change this page setting at any time. <br />
+      You will also be able to unlink your therapist if necessary. With that,
+      all access to previously shared pages will be lost and you will be able to
+      select a new one. <br />
+    </p>
+  </section>
   <button
     *ngIf="therapistId !== 0"
     mat-flat-button

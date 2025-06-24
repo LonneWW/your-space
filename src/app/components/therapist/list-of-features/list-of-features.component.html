@@ -1,0 +1,46 @@
+<h3 class="text-accent">Main page</h3>
+<p class="hint">
+  Welcome to your personal working area. <br />
+  Here you can write your private notes or open the list of your patients to
+  consult their shared notes or take from yours. <br />
+  Note: you cannot get patients directly; they will have to select you first and
+  then you can choose whether or not to accept them.
+</p>
+<div class="list-of-features">
+  <mat-card
+    class="feature-card card-theme"
+    appearance="outlined"
+    routerLinkActive="router-link-active"
+    [routerLink]="['diary']"
+  >
+    <div class="icon-container">
+      <mat-icon
+        class="feature-icon"
+        svgIcon="diary"
+        aria-hidden="false"
+        aria-label="person icon"
+      ></mat-icon>
+    </div>
+    <mat-card-content>
+      <mat-card-title><h4>Personal Notes</h4></mat-card-title>
+    </mat-card-content>
+  </mat-card>
+  <mat-card
+    class="feature-card card-theme"
+    appearance="outlined"
+    routerLinkActive="router-link-active"
+    [routerLink]="['patients-list']"
+  >
+    <div class="icon-container">
+      <mat-icon
+        class="feature-icon"
+        svgIcon="group"
+        aria-hidden="false"
+        aria-label="person icon"
+      ></mat-icon>
+    </div>
+    <mat-card-content>
+      <mat-card-title><h4>List of Patients</h4></mat-card-title>
+    </mat-card-content>
+  </mat-card>
+</div>

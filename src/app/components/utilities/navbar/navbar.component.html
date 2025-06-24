@@ -1,8 +1,9 @@
-<section>
+<nav>
   <div class="nav-container">
     <button
+      id="notifications-fab"
       mat-fab
-      aria-label="Example icon button with a delete icon"
+      aria-label="Notifications button"
       (click)="toggleOverlayContainer = !toggleOverlayContainer"
     >
       <mat-icon
@@ -13,14 +14,17 @@
       >
     </button>
     <button
+      id="nav-fab"
       mat-fab
-      aria-label="Example icon button with a delete icon"
-      [matMenuTriggerFor]="menu"
+      aria-label="Menu button"
+      [matMenuTriggerFor]="role === 'patient' ? patientMenu : therapistMenu"
       style="margin-left: auto"
     >
       <mat-icon>menu</mat-icon>
     </button>
-    <mat-menu #menu="matMenu">
+
+    <!-- Menu per patient (sempre presente ma nascosto se non rilevante) -->
+    <mat-menu #patientMenu="matMenu" [hidden]="role !== 'patient'">
       <button mat-menu-item [routerLink]="['/patient']">
         <mat-icon>home</mat-icon>
         <span>Main page</span>
@@ -38,59 +42,80 @@
         <span>Logout</span>
       </button>
     </mat-menu>
-  </div>
-</section>
-<app-overlay-container
-  *ngIf="toggleOverlayContainer && notifications.length > 0"
-  (toggleOverlayContainerVisibility)="
-    toggleOverlayContainer = !toggleOverlayContainer
-  "
->
-  <div class="notifications-list">
-    <div class="notification" *ngFor="let notification of notifications">
-      <div class="notification-body">
-        {{ notification.content }}
-        <!--ngIf role == therapist-->
-        <button
-          mat-icon-button
-          class="close-btn"
-          *ngIf="role == 'patient'; else controls"
-          (click)="closeNotification(notification.id)"
-        >
-          <!--(click)="close()"-->
-          <mat-icon>close</mat-icon>
-        </button>
-        <ng-template #controls>
-          <button
-            mat-icon-button
-            class="accept-btn"
-            (click)="
-              acceptPatient(
-                notification.patient_id,
-                notification.therapist_id,
-                notification.id
-              )
-            "
-          >
-            <!--(click)="close()"-->
-            <mat-icon>person_add</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            class="reject-btn"
-            (click)="
-              rejectPatient(
-                notification.patient_id,
-                notification.therapist_id,
-                notification.id
-              )
-            "
-          >
-            <!--(click)="accept()" -->
-            <mat-icon>person_remove</mat-icon>
-          </button>
-        </ng-template>
+
+    <!-- Menu per therapist (sempre presente ma nascosto se non rilevante) -->
+    <mat-menu #therapistMenu="matMenu" [hidden]="role !== 'therapist'">
+      <button mat-menu-item [routerLink]="['/therapist']">
+        <mat-icon>home</mat-icon>
+        <span>Main page</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/therapist/diary']">
+        <mat-icon svgIcon="diary"></mat-icon>
+        <span>Personal notes</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/therapist/patients-list']">
+        <mat-icon svgIcon="calendar"></mat-icon>
+        <span>List of patients</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+
+    <app-overlay-container
+      *ngIf="toggleOverlayContainer"
+      (toggleOverlayContainerVisibility)="
+        toggleOverlayContainer = !toggleOverlayContainer
+      "
+    >
+      <div class="notifications-list">
+        <div *ngIf="notifications.length < 1" class="notification text-black">
+          There are no notifications to show.
+        </div>
+        <div class="notification" *ngFor="let notification of notifications">
+          <div class="notification-body">
+            {{ notification.content }}
+            <!-- Se il ruolo è "patient" mostra un bottone per chiudere, altrimenti mostra controlli per il therapist -->
+            <button
+              mat-icon-button
+              class="close-btn"
+              *ngIf="role === 'patient'; else therapistControls"
+              (click)="closeNotification(notification.id)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            <ng-template #therapistControls>
+              <button
+                mat-icon-button
+                class="accept-btn"
+                (click)="
+                  acceptPatient(
+                    notification.patient_id,
+                    notification.therapist_id,
+                    notification.id
+                  )
+                "
+              >
+                <mat-icon>person_add</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="reject-btn"
+                (click)="
+                  rejectPatient(
+                    notification.patient_id,
+                    notification.therapist_id,
+                    notification.id
+                  )
+                "
+              >
+                <mat-icon>person_remove</mat-icon>
+              </button>
+            </ng-template>
+          </div>
+        </div>
       </div>
-    </div>
+    </app-overlay-container>
   </div>
-</app-overlay-container>
+</nav>

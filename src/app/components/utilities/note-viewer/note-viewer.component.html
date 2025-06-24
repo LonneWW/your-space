@@ -9,8 +9,6 @@
   (openHelpDialog)="toggleOverlayContainer = !toggleOverlayContainer"
 ></app-quill-text-editor>
 
-{{ note.id }}
-
 <mat-spinner class="spinner" [diameter]="50" *ngIf="saving"></mat-spinner>
 
 <app-overlay-container
@@ -19,7 +17,7 @@
     toggleOverlayContainer = !toggleOverlayContainer
   "
 >
-  <div class="help-paragraph overlay-text">
+  <div class="help-paragraph overlay-text hint">
     <p>
       Here is a short guide on how to use the text editor.<br />
 
@@ -52,14 +50,10 @@
 
       Tx – Reset: Removes all formatting from the selected text. <br /><br />
 
-      Finally, the options button allows you to save notes, change their
-      visibility (whether to make them available to your therapist), delete a
-      note, and open the help dialog.
+      Finally, the options button allows you to save notes and open the help
+      dialog.
 
       <br />
-      <br />
-
-      The first line of text will be used as note title.
     </p>
   </div>
 </app-overlay-container>

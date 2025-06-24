@@ -1,0 +1,74 @@
+<div class="page-container">
+  <h1 class="title-screen text-accent">Your Space</h1>
+  <p class="disclaimer text-black hint">
+    This mockup application was created as the final project of the Master in
+    Full Stack Development at start2Impact University. <br />
+    Its purpose is to simulate a digital environment for writing and sharing
+    notes between patient and therapist, in order to improve mutual
+    coordination. <br />
+    To test the application you need to use or create a demo account. <br />
+    Please do not enter any personal or sensitive data, as this is a test
+    environment. <br />
+    The credentials provided at registration will only be used for demonstration
+    and local testing purposes. <br />
+    It is advisable to use a fictitious email address and without real
+    references.
+  </p>
+
+  <h4 class="text-accent">If you prefer, you can use this mockup accounts</h4>
+  <div class="demo-credentials-container">
+    <div class="account-container">
+      <mat-form-field (click)="copyText(patientDemoAccount.email)">
+        <mat-label>Email</mat-label>
+        <input
+          type="tel"
+          matInput
+          [value]="patientDemoAccount.email"
+          readonly
+        />
+        <mat-icon matSuffix>file_copy</mat-icon>
+      </mat-form-field>
+      <mat-form-field (click)="copyText(patientDemoAccount.password)">
+        <mat-label>Password</mat-label>
+        <input
+          type="tel"
+          matInput
+          [value]="patientDemoAccount.password"
+          readonly
+        />
+        <mat-icon matSuffix>file_copy</mat-icon>
+      </mat-form-field>
+    </div>
+    <div class="account-container">
+      <mat-form-field (click)="copyText(therapistDemoAccount.email)">
+        <mat-label>Email</mat-label>
+        <input
+          type="tel"
+          matInput
+          [value]="therapistDemoAccount.email"
+          readonly
+        />
+        <mat-icon matSuffix>file_copy</mat-icon>
+      </mat-form-field>
+      <mat-form-field (click)="copyText(therapistDemoAccount.password)">
+        <mat-label>Password</mat-label>
+        <input
+          type="tel"
+          matInput
+          [value]="therapistDemoAccount.password"
+          readonly
+        />
+        <mat-icon matSuffix>file_copy</mat-icon>
+      </mat-form-field>
+    </div>
+  </div>
+  <h4 class="text-accent">
+    To start browsing, please register or login with a mockup account
+  </h4>
+  <div class="nav-btns-container">
+    <button mat-flat-button class="nav-btn" routerLink="/register">
+      Register
+    </button>
+    <button mat-flat-button class="nav-btn" routerLink="/login">Login</button>
+  </div>
+</div>

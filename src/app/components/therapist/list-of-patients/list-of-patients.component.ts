@@ -23,7 +23,7 @@ export class ListOfPatientsComponent implements OnInit, OnDestroy {
   protected patientsList: any[] = [];
   private destroy$: Subject<void> = new Subject<void>();
   navigateToUserPage(patient: any) {
-    this.router.navigate([`therapist/${patient.id}`], {
+    this.router.navigate([`therapist/patient/${patient.id}`], {
       state: { data: patient },
     });
   }

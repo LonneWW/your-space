@@ -63,7 +63,7 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
       console.log('yoshikage');
       const body = {
         title: 'New Note',
-        content: '{}' as unknown as JSON,
+        content: '{"ops":[{"insert":"New note\\n"}]}' as unknown as JSON,
         tags: null,
         patient_id: this.user!.id,
       };

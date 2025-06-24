@@ -7,6 +7,7 @@ import { UserData } from '../../../interfaces/IUserData';
 import { PatientHttpService } from '../../../services/patient-http.service';
 import { NoteViewerComponent } from '../../utilities/note-viewer/note-viewer.component';
 import { Note } from '../../../interfaces/INote';
+import { TherapistHttpService } from '../../../services/therapist-http.service';
 
 @Component({
   selector: 'app-diary',
@@ -17,7 +18,8 @@ import { Note } from '../../../interfaces/INote';
 export class DiaryComponent implements OnInit, OnDestroy {
   constructor(
     private userData: UserDataService,
-    private pHttp: PatientHttpService
+    private pHttp: PatientHttpService,
+    private tHttp: TherapistHttpService
   ) {}
   protected user!: UserData | null;
   protected note!: Note;
@@ -26,22 +28,36 @@ export class DiaryComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.userData.currentUserData;
-    this.pHttp
-      .getNotes(this.user!.id, { note_id: 1 })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (r: any) => {
-          console.log(r);
-          this.note = r[0];
-        },
-        error: (e: any) => {
-          console.log(e);
-        },
-      });
+    if (this.user && this.user.role == 'patient') {
+      this.pHttp
+        .getNotes(this.user!.id, { note_id: 1 })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (r: any) => {
+            console.log(r);
+            this.note = r[0];
+          },
+          error: (e: any) => {
+            console.log(e);
+          },
+        });
+    } else {
+      this.tHttp
+        .getNotes(this.user!.id, { note_id: 1 })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (r: any) => {
+            console.log(r);
+            this.note = r[0];
+          },
+          error: (e: any) => {
+            console.log(e);
+          },
+        });
+    }
   }
 
   ngOnDestroy(): void {
-    sessionStorage.removeItem('note');
     this.destroy$.next();
     this.destroy$.complete();
   }

@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../../services/auth.service';
 import { UserDataService } from '../../../services/user-data.service';
 import { PatientHttpService } from '../../../services/patient-http.service';
@@ -20,6 +21,7 @@ import { OverlayContainerComponent } from '../overlay-container/overlay-containe
     MatButtonModule,
     MatMenuModule,
     MatBadgeModule,
+    MatSnackBarModule,
     OverlayContainerComponent,
   ],
   templateUrl: './navbar.component.html',
@@ -30,7 +32,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private userData: UserDataService,
     private pHttp: PatientHttpService,
-    private tHttp: TherapistHttpService
+    private tHttp: TherapistHttpService,
+    private _snackbar: MatSnackBar
   ) {}
 
   protected role!: string;
@@ -92,10 +95,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (r: any) => {
           console.log(r);
+          this._snackbar.open('Patient accepted successfully', 'Ok', {
+            duration: 2500,
+          });
           this.closeNotification(notificationId, 'therapist');
         },
         error: (e: any) => {
           console.log(e);
+          this._snackbar.open(e.message, 'Ok');
         },
       });
   }
@@ -112,10 +119,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (r: any) => {
           console.log(r);
+          this._snackbar.open(r.message, 'Ok', { duration: 2500 });
           this.closeNotification(notificationId, 'therapist');
         },
         error: (e: any) => {
           console.log(e);
+          this._snackbar.open(e.message, 'Ok');
         },
       });
   }
@@ -138,6 +147,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             },
             error: (e: any) => {
               console.log(e);
+              this._snackbar.open(e.message, 'Ok');
             },
           });
       } else if (this.role == 'therapist') {
@@ -151,6 +161,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             },
             error: (e: any) => {
               console.log(e);
+              this._snackbar.open(e.message, 'Ok');
             },
           });
       } else {

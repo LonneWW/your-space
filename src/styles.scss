@@ -10,6 +10,374 @@ $text-secondary-color: #fff9ec;
 $background-primary-color: #fff5ee;
 $background-secondary-color: #362321;
 
+//sizing and shapes
+body {
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 5px 15px;
+  font-family: "Inter", sans-serif;
+  .form {
+    .radio-label {
+      margin-top: 10px;
+      font-weight: 450;
+    }
+  }
+
+  .tooltip {
+    position: absolute;
+    bottom: 100%;
+    z-index: 10;
+    border-radius: 15px;
+    padding: 1rem;
+  }
+
+  .card {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .card-img {
+      margin: 5px;
+    }
+    .card-content {
+      margin: 5px;
+    }
+  }
+
+  .card-theme {
+    border-radius: 24px;
+    border: none;
+  }
+
+  .screen-overlay {
+    .overlay-text {
+      font-size: 1rem;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      //DA CAMBIARE!
+    }
+  }
+
+  //Quill text editor classes
+
+  .ql-toolbar {
+    border-radius: 15px 15px 0 0;
+    border-bottom: none;
+  }
+  .ql-formats {
+    margin: 8px 0;
+  }
+  .ql-container {
+    border-radius: 0 0 15px 15px;
+    min-height: 300px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: white;
+  }
+
+  .spinner {
+    position: fixed;
+    bottom: 5vh;
+    right: 5vh;
+  }
+
+  .feature-card {
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    cursor: pointer;
+    > * {
+      margin: auto;
+      width: 45%;
+    }
+    .icon-container {
+      border-radius: 50%;
+      align-self: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
+      border-radius: 100%;
+      padding: 5px;
+    }
+  }
+
+  .form-container {
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .form {
+      border-radius: 25px;
+      box-shadow: 2px 2px 3px lightgrey;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      mat-form-field,
+      mat-radio-group {
+        width: 60%;
+        padding: 0.6rem;
+        position: relative;
+      }
+      .submit-btn {
+        margin: 24px 0;
+      }
+    }
+  }
+  .text-editor-container {
+    padding: 1rem;
+    .text-editor {
+      color: $text-primary-color;
+    }
+  }
+}
+
+//responsive sizing
+@media only screen and (max-width: 1024px) {
+  body {
+    width: 100vw;
+
+    //general styles
+    p {
+      font-size: 1.2rem;
+    }
+
+    h1 {
+      font-size: 6.5rem;
+      text-align: center;
+      text-shadow: 2px 2px 3px lightgrey;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    h3 {
+      font-size: 4rem;
+      text-shadow: 2px 2px 3px lightgrey;
+      text-align: center;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    h4 {
+      font-size: 1.8rem;
+      // min-height: 58px;
+      text-align: center;
+      margin: 1rem 0;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    //landing page
+    .page-container {
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      .demo-credentials-container {
+        width: 60%;
+        flex-direction: column;
+        .account-container {
+          margin-top: 20px;
+        }
+      }
+      .nav-btns-container {
+        justify-content: space-between;
+        .nav-btn {
+          font-size: 1rem;
+          padding: 1rem 1.5rem;
+        }
+      }
+    }
+    //register page
+    .form-container {
+      padding: 5vh 0;
+    }
+
+    //patient-main-page
+    // > therapist-card
+    .tp-card {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      .img-container {
+        .tp-img {
+          width: 50vw;
+          height: 50vw;
+        }
+      }
+    }
+
+    .card-content {
+      button {
+        font-size: 1rem;
+        padding: 1rem 1.5rem;
+      }
+    }
+
+    //note-viewer
+    .text-editor-container {
+      .text-editor {
+        max-width: 100%;
+      }
+    }
+
+    // > list-of-features
+    .feature-card {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      vertical-align: middle;
+      cursor: pointer;
+      .icon-container {
+        width: 30vw;
+        height: 30vw;
+        .feature-icon {
+          width: 22vw;
+          height: 22vw;
+        }
+      }
+      > * {
+        margin: auto;
+        width: 45%;
+      }
+    }
+
+    //navbar
+    .nav-container {
+      min-height: 80px;
+    }
+
+    .note-list {
+      overflow-x: scroll;
+    }
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  body {
+    width: 60vw;
+    min-height: 100vh;
+    margin: 5vh auto;
+
+    //general styles
+    p {
+      font-size: 1.2rem;
+    }
+
+    h1 {
+      font-size: 6.5rem;
+      text-align: center;
+      text-shadow: 2px 2px 3px lightgrey;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    h3 {
+      font-size: 3rem;
+      text-shadow: 2px 2px 3px lightgrey;
+      text-align: center;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    h4 {
+      font-size: 1.8rem;
+      // min-height: 58px;
+      text-align: center;
+      text-shadow: 2px 2px 3px lightgrey;
+      margin: 1rem 0;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    .feature-card {
+      width: 40%;
+      min-height: 300px;
+      cursor: pointer;
+      .icon-container {
+        min-width: 200px;
+        height: 200px;
+        .feature-icon {
+          width: 150px;
+          height: 150px;
+        }
+      }
+    }
+
+    .p-card {
+      width: 60%;
+      .icon-container {
+        width: 20vw;
+        height: 20vw;
+        .feature-icon {
+          width: 15vw;
+          height: 15vw;
+        }
+      }
+    }
+
+    //navbar
+    .nav-container {
+      height: 30px;
+    }
+
+    //landing-page
+    .page-container {
+      border: 2px solid #ff5032;
+      border-radius: 25px;
+      box-shadow: 2px 2px 3px lightgray;
+      .nav-btns-container {
+        justify-content: space-between;
+        margin: 2rem;
+        .nav-btn {
+          font-size: 2rem;
+          padding: 1.5rem 2rem;
+        }
+      }
+    }
+
+    //patient-main-page
+    // > therapist-card
+    .tp-card {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      padding: 2rem;
+      > * {
+        margin: 1rem;
+      }
+      .img-container {
+        .tp-img {
+          width: 250px;
+          height: 250px;
+        }
+      }
+      .unlink-btn {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+      }
+      .select-btn {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+      }
+    }
+
+    // > note-viewer
+    .text-editor-container {
+      // margin-bottom: 50px;
+      .text-editor {
+        width: 100%;
+      }
+    }
+    //therapist-main-page
+    // > patient-personal-page
+  }
+}
+
+//colors
 :root {
   @include mat.table-overrides(
     (
@@ -21,6 +389,8 @@ $background-secondary-color: #362321;
   @include mat.fab-overrides(
     (
       container-color: $accent-color,
+      disabled-state-container-color:
+        color.scale($color: $accent-color, $lightness: 40%),
       foreground-color: $text-secondary-color,
       state-layer-color: $primary-color,
       ripple-color: color.scale($color: $accent-color, $lightness: 20%),
@@ -94,7 +464,8 @@ $background-secondary-color: #362321;
       active-hover-label-text-color: $primary-color,
       active-label-text-color: $primary-color,
       active-indicator-color: $primary-color,
-      inactive-label-text-color: lightgray,
+      inactive-label-text-color:
+        color.scale($color: $text-primary-color, $lightness: 10%),
       active-focus-indicator-color: $accent-color,
       active-hover-indicator-color: $accent-color,
       divider-color: lightgray,
@@ -106,27 +477,56 @@ $background-secondary-color: #362321;
       supporting-text-color: $primary-color,
     )
   );
+  @include mat.menu-overrides(
+    (
+      container-shape: orange,
+      divider-color: red,
+      item-label-text-color: $text-secondary-color,
+      item-icon-color: $text-secondary-color,
+      container-color: $accent-color,
+      // item-label-text-font: "Courier New",
+    )
+  );
+
+  @include mat.dialog-overrides(
+    (
+      container-color: $accent-color,
+      subhead-color: $text-secondary-color,
+      supporting-text-color: $text-secondary-color,
+      subhead-size: 1.5rem,
+    )
+  );
+  @include mat.datepicker-overrides(
+    (
+      calendar-body-label-text-color: $text-primary-color,
+      calendar-container-background-color: $accent-color,
+      calendar-container-text-color: $text-primary-color,
+      calendar-date-in-range-state-background-color:
+        color.scale($color: $accent-color, $lightness: 20%),
+      calendar-date-preview-state-outline-color:
+        color.scale($color: $text-secondary-color, $lightness: -20%),
+      calendar-date-selected-state-background-color: $text-secondary-color,
+      calendar-date-selected-state-text-color: $text-primary-color,
+      calendar-date-today-outline-color: $text-secondary-color,
+      calendar-date-today-selected-state-outline-color: $text-primary-color,
+      calendar-header-divider-color: $text-secondary-color,
+      calendar-container-elevation-shadow: 2px 2px 4px grey,
+      toggle-icon-color: $accent-color,
+    )
+  );
 }
 
 html,
 body {
-  height: 100%;
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  padding: 5px 15px;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
   .form {
     background-color: $background-primary-color;
     box-shadow: 0px 0px 3px lightgray;
     color: $accent-color;
+    border-radius: 25px;
     .title {
       color: $accent-color;
     }
     .radio-label {
-      margin-top: 10px;
-      font-weight: 450;
       color: $text-primary-color;
     }
     mat-error {
@@ -135,39 +535,14 @@ body {
   }
 
   .tooltip {
-    position: absolute;
-    bottom: 100%;
-    z-index: 10;
-    border-radius: 15px;
     border-top: 2px solid $accent-color;
     background-color: $background-primary-color;
     color: $text-primary-color;
-    padding: 1rem;
-  }
-
-  .card {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    // border-radius: 24px;
-    // background-color: $background-primary-color;
-    // border: none;
-    // box-shadow: 0px 0px 3px lightgray;
-    // color: $accent-color;
-    .card-img {
-      margin: 5px;
-    }
-    .card-content {
-      margin: 5px;
-    }
   }
 
   .card-theme {
-    border-radius: 24px;
     background-color: $background-primary-color;
-    border: none;
-    box-shadow: 0px 0px 3px lightgray;
+    box-shadow: 2px 2px 3px lightgray;
     color: $accent-color;
   }
 
@@ -180,35 +555,37 @@ body {
     #overlay-close-btn {
       background-color: $accent-color;
     }
-    .overlay-text {
-      font-size: 1rem;
-      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-      //DA CAMBIARE!
+  }
+
+  .list-of-features {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .feature-card {
+    .icon-container {
+      background-color: white;
+      box-shadow: 2px 2px 3px lightgrey;
     }
+  }
+
+  .mat-dialog-actions button {
+    background-color: darken($background-primary-color, 10%);
+    color: $primary-color !important;
+    transition: background-color 0.3s ease;
+  }
+
+  .mat-dialog-actions button:hover {
+    background-color: darken($background-primary-color, 5%);
   }
 
   //Quill text editor classes
 
   .ql-toolbar {
     background-color: $accent-color;
-    border-radius: 15px 15px 0 0;
     border: 1px solid grey;
-    border-bottom: none;
-  }
-  .ql-formats {
-    margin: 8px 0;
-  }
-  .ql-container {
-    border-radius: 0 0 15px 15px;
-    min-height: 300px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .spinner {
-    position: fixed;
-    bottom: 5vh;
-    right: 5vh;
   }
 
   .notifications-list {
@@ -241,34 +618,52 @@ body {
       );
     }
   }
+}
 
-  .feature-card {
-    width: 40%;
-    margin: 10px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    cursor: pointer;
-    .icon-container {
-      margin: 15px;
-      background-color: white;
-      width: 30vw;
-      height: 30vw;
-      border-radius: 50%;
-      align-self: center;
-      box-shadow: 2px 2px 3px lightgrey;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .feature-icon {
-        width: 22vw;
-        height: 22vw;
-      }
-    }
-    img {
-      border-radius: 100%;
-      padding: 5px;
-    }
+//styles
+body {
+  // p {
+  //   font-size: 1.2rem;
+  // }
+
+  // h1 {
+  //   font-size: 6.5rem;
+  //   text-align: center;
+  // }
+
+  // h3 {
+  //   font-size: 4rem;
+  // }
+
+  // h4 {
+  //   font-size: 1.8rem;
+  //   min-height: 58px;
+  //   text-align: center;
+  // }
+
+  .two-lined-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .text-black {
+    color: $text-primary-color !important;
+  }
+
+  .text-accent {
+    color: $accent-color;
+  }
+
+  .hint {
+    background-color: $background-primary-color;
+    color: $text-primary-color;
+    border: 5px dashed color.scale($color: $accent-color, $lightness: 20%);
+    border-radius: 15px;
+    margin: 1.2rem;
+    padding: 1.5rem;
   }
 }

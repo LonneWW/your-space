@@ -33,12 +33,24 @@ export class AppComponent {
 
     iconRegistry.addSvgIcon(
       'person_cancel',
-      sanitizer.bypassSecurityTrustResourceUrl('/assets/person_cancel.svg')
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/person_cancel-icon.svg')
     );
 
     iconRegistry.addSvgIcon(
       'account-circle',
-      sanitizer.bypassSecurityTrustResourceUrl('/assets/account-circle.svg')
+      sanitizer.bypassSecurityTrustResourceUrl(
+        '/assets/account-circle-icon.svg'
+      )
+    );
+
+    iconRegistry.addSvgIcon(
+      'group',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/group-icon.svg')
+    );
+
+    iconRegistry.addSvgIcon(
+      'person-off',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/person-off-icon.svg')
     );
   }
   title = 'your-space';

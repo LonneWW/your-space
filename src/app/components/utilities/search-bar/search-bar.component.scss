@@ -1,0 +1,17 @@
+.search-bar {
+  margin-bottom: 1rem;
+  .search-form-control {
+    width: 100%;
+  }
+
+  mat-tab-header {
+    margin-bottom: 10px;
+  }
+}
+.search-bar-btns {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: -0.5rem;
+  margin-bottom: 1.2rem;
+}

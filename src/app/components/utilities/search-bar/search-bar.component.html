@@ -1,36 +1,26 @@
-<p>search-bar works!</p>
-<h4>Search by</h4>
+<h4 class="text-accent">Search by</h4>
 <form [formGroup]="searchForm">
-  <mat-tab-group animationDuration="500ms" dynamicHeight>
+  <mat-tab-group
+    animationDuration="500ms"
+    dynamicHeight
+    class="search-bar"
+    (selectedTabChange)="selectTab($event)"
+  >
     <mat-tab label="Title">
-      <mat-form-field>
+      <mat-form-field class="search-form-control">
         <mat-label>Title</mat-label>
         <input matInput type="text" name="title" formControlName="title" />
       </mat-form-field>
-      <button
-        mat-stroked-button
-        type="submit"
-        (click)="makeFilteredSearch('title')"
-      >
-        Search
-      </button>
     </mat-tab>
     <mat-tab label="Tag">
-      <mat-form-field>
+      <mat-form-field class="search-form-control">
         <mat-label>Tag</mat-label>
         <input matInput type="text" name="tag" formControlName="tag" />
       </mat-form-field>
-      <button
-        mat-stroked-button
-        type="submit"
-        (click)="makeFilteredSearch('tag')"
-      >
-        Search
-      </button>
     </mat-tab>
     <mat-tab label="Date">
       <div formGroupName="dateRange">
-        <mat-form-field>
+        <mat-form-field class="search-form-control">
           <mat-label>Date range:</mat-label>
           <mat-date-range-input [rangePicker]="picker">
             <input
@@ -45,20 +35,20 @@
             [for]="picker"
           ></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
-          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+          <mat-hint
+            >You can click on the calendar icon to view the full
+            calendar</mat-hint
+          >
         </mat-form-field>
-        <p>Selected range: {{ searchForm.get("dateRange")?.value | json }}</p>
       </div>
-      <button
-        mat-stroked-button
-        type="submit"
-        (click)="makeFilteredSearch('date')"
-      >
-        Search
-      </button>
     </mat-tab>
   </mat-tab-group>
-  <button mat-stroked-button type="submit" (click)="resetFilterSearch()">
-    Reset Filters
-  </button>
+  <div class="search-bar-btns">
+    <button mat-stroked-button type="submit" (click)="makeFilteredSearch()">
+      Search
+    </button>
+    <button mat-stroked-button type="submit" (click)="resetFilterSearch()">
+      Reset Filters
+    </button>
+  </div>
 </form>

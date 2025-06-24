@@ -43,7 +43,28 @@ export class SearchBarComponent {
     }),
   });
 
-  makeFilteredSearch(field: string) {
+  protected currentTab: string = 'title';
+
+  selectTab(event: any) {
+    const tabIndex = event.index;
+    switch (tabIndex) {
+      case 0:
+        this.searchForm.reset();
+        this.searchForm.markAsUntouched;
+        this.currentTab = 'title';
+        break;
+      case 1:
+        this.currentTab = 'tag';
+        break;
+      case 2:
+        this.currentTab = 'date';
+        break;
+    }
+    console.log(this.currentTab);
+  }
+
+  makeFilteredSearch() {
+    const field = this.currentTab;
     switch (field) {
       case 'title':
         const title = this.searchForm.controls['title'].value;

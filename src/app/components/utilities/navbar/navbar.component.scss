@@ -1,10 +1,22 @@
 .nav-container {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 10px 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  // box-sizing: border-box;
+  // position: relative;
+  // width: 100vw;
+  // padding: 10px 5px;
+  // margin-bottom: 1rem;
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: center;
+  > * {
+    position: absolute;
+    top: 1rem;
+  }
+  #nav-fab {
+    right: 1rem;
+  }
+  #notifications-fab {
+    left: 1rem;
+  }
 }
 .notifications-list {
   .notification {

@@ -16,7 +16,7 @@ import { TherapistCardComponent } from '../therapist-card/therapist-card.compone
   templateUrl: './list-of-features.component.html',
   styleUrl: './list-of-features.component.scss',
 })
-export class ListOfFeaturesComponent {
+export class ListOfPatientFeaturesComponent {
   constructor(private router: Router) {}
 
   dailyNoteConfirm() {

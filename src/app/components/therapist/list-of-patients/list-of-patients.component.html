@@ -1,14 +1,10 @@
-ao
-<div class="list-of-patients">
+<div class="list-of-patients" *ngIf="patientsList.length > 0; else noPatients">
   <mat-card
     *ngFor="let patient of patientsList"
     class="feature-card card-theme"
     appearance="outlined"
     (click)="navigateToUserPage(patient)"
   >
-    <!-- class="feature-card card-theme"
-    [routerLink]="['diary']"
-    routerLinkActive="router-link-active" -->
     <div class="icon-container">
       <mat-icon
         class="feature-icon"
@@ -18,7 +14,25 @@ ao
       ></mat-icon>
     </div>
     <mat-card-content>
-      <mat-card-title>{{ patient.name }} {{ patient.surname }}</mat-card-title>
+      <mat-card-title
+        ><h4>{{ patient.name }} {{ patient.surname }}</h4></mat-card-title
+      >
     </mat-card-content>
   </mat-card>
 </div>
+<ng-template #noPatients>
+  <mat-card class="feature-card card-theme" appearance="outlined">
+    <div class="icon-container">
+      <mat-icon
+        class="feature-icon"
+        svgIcon="person-off"
+        aria-hidden="false"
+        aria-label="person off icon"
+      >
+      </mat-icon>
+    </div>
+    <mat-card-content>
+      <mat-card-title>No patients to show</mat-card-title>
+    </mat-card-content>
+  </mat-card>
+</ng-template>

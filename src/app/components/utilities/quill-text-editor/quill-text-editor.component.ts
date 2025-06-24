@@ -6,7 +6,6 @@ import {
   inject,
   signal,
   OnInit,
-  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -48,7 +47,7 @@ import { QuillEditorComponent } from 'ngx-quill';
   templateUrl: './quill-text-editor.component.html',
   styleUrl: './quill-text-editor.component.scss',
 })
-export class QuillTextEditorComponent implements OnInit, OnDestroy {
+export class QuillTextEditorComponent implements OnInit {
   @Input() note!: any;
   @Input() sharable: boolean = false;
   @Input() role: 'patient' | 'therapist' = 'patient';
@@ -137,12 +136,6 @@ export class QuillTextEditorComponent implements OnInit, OnDestroy {
     this.saveNote.emit(body);
   }
 
-  delete() {
-    const pass = confirm(
-      'Do you really wish to delete this note? This action is irreversible?'
-    );
-    if (pass) this.deleteNote.emit();
-  }
   help() {
     this.openHelpDialog.emit();
   }
@@ -160,13 +153,5 @@ export class QuillTextEditorComponent implements OnInit, OnDestroy {
       this.restoreTagsFromSessionStorage(this.note.tags);
     }
     this.titleForm.patchValue({ title: this.note.title });
-  }
-
-  ua() {
-    console.log(this.note);
-  }
-
-  ngOnDestroy(): void {
-    // sessionStorage.removeItem(`selectedNote_${this.note.id}`);
   }
 }

@@ -8,13 +8,41 @@ export class TherapistHttpService {
   constructor(private http: HttpClient, private auth: AuthService) {}
   private url: string = 'http://localhost:3000';
 
-  getPatients(therapist_id: Number) {
+  getPatients(therapist_id: number) {
     return this.http.get(
       this.url + '/therapist/patients?therapist_id=' + therapist_id
     );
   }
 
-  getPatientNotes(therapist_id: Number, patient_id: Number): any {
+  getNotes(
+    id: number,
+    filters?: {
+      note_id?: number;
+      title?: string;
+      tag?: string;
+      dateFrom?: number;
+      dateTo?: number;
+    }
+  ): any {
+    let endpoint = this.url + '/therapist/notes?therapist_id=' + id;
+
+    if (filters) {
+      // Itera sulle chiavi dell'oggetto filters
+      Object.keys(filters).forEach((key) => {
+        // Castiamo key al tipo delle chiavi presenti in filters
+        const value = filters[key as keyof typeof filters];
+        // Controlla che il valore non sia undefined, null o una stringa vuota
+        if (value !== undefined && value !== null && value !== '') {
+          endpoint += `&${encodeURIComponent(key)}=${encodeURIComponent(
+            value
+          )}`;
+        }
+      });
+    }
+    return this.http.get(endpoint);
+  }
+
+  getPatientNotes(therapist_id: number, patient_id: number): any {
     return this.http.get(
       this.url +
         '/therapist/patient-notes?therapist_id=' +
@@ -24,7 +52,7 @@ export class TherapistHttpService {
     );
   }
 
-  getNotesAboutPatient(patient_id: Number, therapist_id: Number): any {
+  getNotesAboutPatient(patient_id: number, therapist_id: number): any {
     return this.http.get(
       this.url +
         '/therapist/notes-about-patient?therapist_id=' +
@@ -34,7 +62,7 @@ export class TherapistHttpService {
     );
   }
 
-  getNotifications(id: Number): any {
+  getNotifications(id: number): any {
     return this.http.get(
       this.url + '/therapist/notifications?therapist_id=' + id
     );
@@ -43,8 +71,8 @@ export class TherapistHttpService {
   postNote(body: {
     title: string;
     content: JSON;
-    patient_id: Number;
-    therapist_id: Number;
+    patient_id: number;
+    therapist_id: number;
     tags: JSON;
   }): any {
     this.auth.checkCredentials();
@@ -53,8 +81,8 @@ export class TherapistHttpService {
 
   postNotification(body: {
     content: string;
-    patient_id: Number;
-    therapist_id: Number;
+    patient_id: number;
+    therapist_id: number;
   }): any {
     this.auth.checkCredentials();
     return this.http.post(this.url + '/therapist/notifications', body);
@@ -63,25 +91,25 @@ export class TherapistHttpService {
   modifyNote(body: {
     title: string;
     content: JSON;
-    therapist_id: Number;
-    tags: JSON;
-    note_id: Number;
+    therapist_id: number;
+    tags?: JSON;
+    note_id: number;
   }): any {
     this.auth.checkCredentials();
     return this.http.put(this.url + '/therapist/notes', body);
   }
 
-  acceptPatient(body: { patient_id: Number; therapist_id: Number }) {
+  acceptPatient(body: { patient_id: number; therapist_id: number }) {
     this.auth.checkCredentials();
     return this.http.put(this.url + '/therapist/accept-patient', body);
   }
 
-  dischargePatient(body: { patient_id: Number; therapist_id: Number }) {
+  dischargePatient(body: { patient_id: number; therapist_id: number }) {
     this.auth.checkCredentials();
     return this.http.put(this.url + '/therapist/discharge-patient', body);
   }
 
-  deleteNote(note_id: Number, therapist_id: Number) {
+  deleteNote(note_id: number, therapist_id: number) {
     this.auth.checkCredentials();
     return this.http.delete(
       this.url +
@@ -92,7 +120,7 @@ export class TherapistHttpService {
     );
   }
 
-  deleteNotification(notification_id: Number) {
+  deleteNotification(notification_id: number) {
     this.auth.checkCredentials();
     return this.http.delete(
       this.url + '/therapist/notifications?notification_id=' + notification_id

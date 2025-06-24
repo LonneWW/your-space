@@ -1,0 +1,26 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .demo-credentials-container {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .account-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      mat-icon {
+        color: #ff7850;
+      }
+    }
+  }
+  .nav-btns-container {
+    width: 80%;
+    display: flex;
+    align-items: center;
+  }
+}

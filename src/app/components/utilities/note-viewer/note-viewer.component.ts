@@ -7,14 +7,16 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { takeUntil, Subject } from 'rxjs';
+import { takeUntil, Subject, config } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { QuillTextEditorComponent } from '../../utilities/quill-text-editor/quill-text-editor.component';
 import { OverlayContainerComponent } from '../overlay-container/overlay-container.component';
 import { PatientHttpService } from '../../../services/patient-http.service';
+import { TherapistHttpService } from '../../../services/therapist-http.service';
 import { UserDataService } from '../../../services/user-data.service';
 import { Note } from '../../../interfaces/INote';
 
@@ -23,6 +25,7 @@ import { Note } from '../../../interfaces/INote';
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     QuillTextEditorComponent,
     OverlayContainerComponent,
   ],
@@ -34,7 +37,9 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private pHttp: PatientHttpService,
-    protected userData: UserDataService
+    private tHttp: TherapistHttpService,
+    protected userData: UserDataService,
+    private _snackbar: MatSnackBar
   ) {}
 
   protected user: any;
@@ -53,7 +58,7 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
 
   updateNote(body: any) {
-    console.log(body);
+    this.saving = true;
     this.note.content = body.content;
     this.note.tags = JSON.parse(body.tags);
     this.note.title = body.title;
@@ -61,21 +66,44 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
       `selectedNote_${this.note.id}`,
       JSON.stringify(this.note)
     );
-    this.pHttp
-      .modifyNote(body)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (r: any) => {
-          console.log(r);
-          setTimeout(() => {
+    if (this.user.role == 'patient') {
+      this.pHttp
+        .modifyNote(body)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (r: any) => {
+            console.log(r);
+            setTimeout(() => {
+              this.saving = false;
+            }, 1000);
+            this._snackbar.open(r.message, 'Ok', { duration: 2500 });
+          },
+          error: (e: any) => {
+            console.log(e);
             this.saving = false;
-          }, 1000);
-        },
-        error: (e: any) => {
-          console.log(e);
-          this.saving = false;
-        },
-      });
+            this._snackbar.open(e.message, 'Ok');
+          },
+        });
+    } else {
+      body.therapist_id = this.user.id;
+      this.tHttp
+        .modifyNote(body)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (r: any) => {
+            console.log(r);
+            setTimeout(() => {
+              this.saving = false;
+            }, 1000);
+            this._snackbar.open(r.message, 'Ok', { duration: 2500 });
+          },
+          error: (e: any) => {
+            console.log(e);
+            this.saving = false;
+            this._snackbar.open(e.message, 'Ok');
+          },
+        });
+    }
   }
 
   delete(note_id: number): void {

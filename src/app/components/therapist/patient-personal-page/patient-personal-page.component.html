@@ -1,4 +1,11 @@
-<section class="card card-theme">
+<section class="card card-theme p-card">
+  <button
+    mat-icon-button
+    (click)="dischargePatient()"
+    id="discharge-patient-btn"
+  >
+    <mat-icon>person_remove</mat-icon>
+  </button>
   <div class="icon-container">
     <mat-icon
       class="feature-icon"
@@ -13,16 +20,11 @@
 </section>
 <section class="card" style="margin-top: 10px">
   <div class="patient-notes card-content">
-    <h2>Notes</h2>
-    <h3>Click to open the notes' tab.</h3>
+    <h2>Note</h2>
+    <app-note-viewer [note]="note"></app-note-viewer>
   </div>
 </section>
 <section style="margin-top: 10px">
-  <p>
-    Welcome to your calendar.<br />
-    Here you can see all the notes taken so far. It is possible to sort them by
-    title or date.
-  </p>
   <table mat-table [dataSource]="patientNotes" matSort>
     <!-- Title Column -->
     <ng-container matColumnDef="title">
@@ -69,7 +71,7 @@
       </td></ng-container
     >
 
-    <!-- Modify Column -->
+    <!-- View Column -->
     <ng-container matColumnDef="view">
       <th mat-header-cell *matHeaderCellDef>Open</th>
       <td mat-cell *matCellDef="let note">
@@ -77,8 +79,8 @@
           mat-icon-button
           aria-label="Edit icon"
           [disabled]="note.id == 1"
+          (click)="openNote(note)"
         >
-          <!-- (click)="openNote(note)" -->
           <mat-icon>article</mat-icon>
         </button>
       </td></ng-container
@@ -88,3 +90,11 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 </section>
+<app-overlay-container
+  *ngIf="toggleOverlayContainer"
+  (toggleOverlayContainerVisibility)="
+    toggleOverlayContainer = !toggleOverlayContainer
+  "
+>
+  <div [innerHTML]="noteContent" class="note-content"></div>
+</app-overlay-container>
