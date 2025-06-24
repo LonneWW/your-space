@@ -52,6 +52,21 @@ export class AppComponent {
       'person-off',
       sanitizer.bypassSecurityTrustResourceUrl('/assets/person-off-icon.svg')
     );
+
+    iconRegistry.addSvgIcon(
+      'face',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/face-icon.svg')
+    );
+
+    iconRegistry.addSvgIcon(
+      'person-search',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/person-search-icon.svg')
+    );
+
+    iconRegistry.addSvgIcon(
+      'person-remove',
+      sanitizer.bypassSecurityTrustResourceUrl('/assets/person-remove-icon.svg')
+    );
   }
   title = 'your-space';
 }

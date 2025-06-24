@@ -20,6 +20,7 @@ import {
   MatChipInputEvent,
   MatChipsModule,
 } from '@angular/material/chips';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PatientHttpService } from '../../../services/patient-http.service';
 import { UserDataService } from '../../../services/user-data.service';
@@ -37,6 +38,7 @@ import { NoteViewerComponent } from '../../utilities/note-viewer/note-viewer.com
     MatIconModule,
     MatListModule,
     MatChipsModule,
+    MatSnackBarModule,
     MatProgressSpinnerModule,
     NoteViewerComponent,
   ],
@@ -47,7 +49,8 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
   constructor(
     private userData: UserDataService,
     private pHttp: PatientHttpService,
-    private router: Router
+    private router: Router,
+    private _snackbar: MatSnackBar
   ) {}
 
   protected user!: UserData | null;
@@ -56,11 +59,15 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
+  //on init
   ngOnInit(): void {
+    //save the user data locally
     this.user = this.userData.currentUserData;
+    //check if the note is saved in the session storage
     const noteId = sessionStorage.getItem('note_id');
+    //If there isnt
     if (!noteId) {
-      console.log('yoshikage');
+      //create a new note in the database
       const body = {
         title: 'New Note',
         content: '{"ops":[{"insert":"New note\\n"}]}' as unknown as JSON,
@@ -72,7 +79,7 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            console.log(r);
+            //once posted, request its data
             this.pHttp
               .getNotes(this.user!.id)
               .pipe(takeUntil(this.destroy$))
@@ -80,24 +87,32 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
                 next: (r: any) => {
                   this.note = r[r.length - 1];
                   sessionStorage.setItem('note_id', this.note.id);
-                  console.log(r.length);
-                  console.log(r);
-                  console.log(this.note);
                 },
                 error: (e: any) => {
                   console.log(e);
+                  this._snackbar.open(
+                    'Serverside error: unable to save note.',
+                    'Ok'
+                  );
                 },
               });
           },
           error: (e: any) => {
             console.log(e);
+            this._snackbar.open(
+              'Serverside error: unable to create note.',
+              'Ok'
+            );
           },
         });
     } else {
       const note = sessionStorage.getItem(`selectedNote_${noteId}`);
+      //if a note is saved in the session storage
       if (note) {
+        //recover note data and save them locally
         this.note = JSON.parse(note);
       } else {
+        //otherwise request note data remotely
         this.pHttp
           .getNotes(this.user!.id)
           .pipe(takeUntil(this.destroy$))
@@ -105,12 +120,13 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
             next: (r: any) => {
               this.note = r[r.length - 1];
               sessionStorage.setItem('note_id', this.note.id);
-              console.log(r.length);
-              console.log(r);
-              console.log(this.note);
             },
             error: (e: any) => {
               console.log(e);
+              this._snackbar.open(
+                'Serverside error: unable to save note.',
+                'Ok'
+              );
             },
           });
       }

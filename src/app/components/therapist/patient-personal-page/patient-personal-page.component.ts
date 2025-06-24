@@ -65,39 +65,45 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
   protected noteContent: string = '';
   protected destroy$: Subject<void> = new Subject();
 
+  //opens a note to be viewed in an overlay container
   openNote(note: any) {
     let delta;
     try {
       delta = JSON.parse(note.content);
     } catch (error) {
-      console.error('Errore nel parsing del Delta:', error);
+      console.error('Error while parsing:', error);
+      this._snackbar.open("Error while parsing, couldn't open note.", 'Ok');
       return;
     }
     if (!delta || !delta.ops) {
-      console.error('Invalid note format');
-      //SNACKBAR CHE SPECIFICA CHE LA NOTA È VUOTA?
+      this._snackbar.open(
+        "Error with the note format; couldn't open note.",
+        'Ok'
+      );
       return;
     }
     const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
     this.noteContent = converter.convert();
-    console.log(this.noteContent);
     this.toggleOverlayContainer = true;
   }
-
+  //discharge patient
   dischargePatient() {
-    console.log('gino');
+    //ask permission to discharge the patienteì
     const pass = confirm('Do you wish to discharge this patient?');
+    //if given
     if (!pass) return;
+    //prepares the body of the request
     const body = {
       patient_id: this.patient.id,
       therapist_id: this.user.id,
     };
+    //makes the request
     this.tHttp
       .dischargePatient(body)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
-          console.log(r);
+          //if successfull notifies the user and goes to the main page
           this._snackbar.open(
             r.message ? r.message : 'Patient discharged successfully',
             'Ok',
@@ -106,21 +112,25 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         },
         error: (e: any) => {
+          //otherwise it shows the error and notifies the user
           console.log(e);
           this._snackbar.open(e.message, 'Ok');
         },
       });
   }
 
+  //on init
   ngOnInit(): void {
+    //save the data taken from the list-of-patients' navigateToUserPage
     this.patient = history.state.data;
+    //save user data locally
     this.user = this.userData.currentUserData;
+    //request all the notes shared by the patient
     this.tHttp
       .getPatientNotes(this.user.id, this.patient.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
-          console.log(r);
           this.patientNotes = new MatTableDataSource(r);
           this.patientNotes.sort = this.sort;
         },
@@ -129,9 +139,9 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
           this._snackbar.open('The patient has no notes to share', 'Ok');
         },
       });
+    //request all the notes about the patient
     this.tHttp.getNotesAboutPatient(this.patient.id, this.user.id).subscribe({
       next: (r: any) => {
-        console.log(r);
         this.note = r[0];
       },
       error: (e: any) => {

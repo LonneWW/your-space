@@ -5,6 +5,7 @@ import { takeUntil, Subject } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserDataService } from '../../../services/user-data.service';
 import { TherapistHttpService } from '../../../services/therapist-http.service';
 @Component({
@@ -17,30 +18,39 @@ export class ListOfPatientsComponent implements OnInit, OnDestroy {
   constructor(
     private userData: UserDataService,
     private tHttp: TherapistHttpService,
-    private router: Router
+    private router: Router,
+    private _snackbar: MatSnackBar
   ) {}
   protected user!: any;
   protected patientsList: any[] = [];
   private destroy$: Subject<void> = new Subject<void>();
+
+  //navigate to user page taking the specific 'patient' data
   navigateToUserPage(patient: any) {
     this.router.navigate([`therapist/patient/${patient.id}`], {
       state: { data: patient },
     });
   }
 
+  //on init
   ngOnInit(): void {
+    //save the user data locally
     this.user = this.userData.currentUserData;
+    //make the request
     if (this.user) {
       this.tHttp
         .getPatients(this.user.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            console.log(r);
             this.patientsList = r.patients;
           },
           error: (e: any) => {
             console.log(e);
+            this._snackbar.open(
+              "Serverside error: couldn't get any patient.",
+              'Ok'
+            );
           },
         });
     }

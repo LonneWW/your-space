@@ -57,7 +57,10 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  updateNote(body: any) {
+  // Updates the note with the given body (content, tags, title). Depending on
+  // the user's role (patient or therapist), it will call the correct service
+  // (PatientHttpService or TherapistHttpService) to persist the changes.
+  updateNote(body: any): void {
     this.saving = true;
     this.note.content = body.content;
     this.note.tags = JSON.parse(body.tags);
@@ -72,7 +75,6 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            console.log(r);
             setTimeout(() => {
               this.saving = false;
             }, 1000);
@@ -91,7 +93,6 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            console.log(r);
             setTimeout(() => {
               this.saving = false;
             }, 1000);
@@ -114,30 +115,63 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
         next: (r: any) => {
           console.log(r);
           this.router.navigate(['patient/calendar']);
-          alert('Note deleted successfully');
+          this._snackbar.open('Note deleted successfully', 'Ok', {
+            duration: 2500,
+          });
         },
       });
   }
 
-  clack() {
-    console.log(this.note);
-  }
-
   ngOnInit(): void {
     this.user = this.userData.currentUserData;
-    console.log(this.user);
-    // Legge l'id dalla rotta
+    //get note id from the route
     const noteId = this.route.snapshot.paramMap.get('id');
     if (noteId) {
-      // Recupera la nota usando la chiave univoca
+      // if exists recover data from session storage
       const storedNote = sessionStorage.getItem(`selectedNote_${noteId}`);
       if (storedNote) {
-        console.log(storedNote);
         const note = JSON.parse(storedNote);
         this.note = note;
-        console.log(note);
       } else {
-        // In alternativa, effettua una chiamata al backend per recuperarla
+        //otherwise makes a request based on the user role
+        const id = Number(noteId);
+        if (this.user.role == 'patient') {
+          this.pHttp
+            .getNotes(id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (r: any) => {
+                this.note = r[0];
+              },
+              error: (e: any) => {
+                console.error(e);
+                this._snackbar.open(
+                  e.message
+                    ? e.message
+                    : "Serverside error, couldn't recover note",
+                  'Ok'
+                );
+              },
+            });
+        } else {
+          this.tHttp
+            .getNotes(id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (r: any) => {
+                this.note = r[0];
+              },
+              error: (e: any) => {
+                console.error(e);
+                this._snackbar.open(
+                  e.message
+                    ? e.message
+                    : "Serverside error, couldn't recover note",
+                  'Ok'
+                );
+              },
+            });
+        }
       }
     }
   }

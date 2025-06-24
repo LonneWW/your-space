@@ -14,9 +14,7 @@ export class TherapistMainPageComponent implements OnInit {
   ngOnInit(): void {
     if (!this.userDataService.currentUserData) {
       const data = this.userDataService.sessionStorageUser;
-      console.log(data);
       if (data) {
-        console.log('entrato patient');
         this.userDataService.updateUserData(data);
       }
     }

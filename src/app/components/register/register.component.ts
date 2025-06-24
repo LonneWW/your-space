@@ -67,7 +67,6 @@ export class RegisterComponent implements OnDestroy {
           '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#]).+$'
         ),
       ]),
-      //CAPIAMO STO VALIDATORS PATTERN
       confirmPassword: new FormControl<string>('IoSonoLaPasswordDiProva11!', [
         Validators.required,
         Validators.minLength(12),
@@ -80,14 +79,17 @@ export class RegisterComponent implements OnDestroy {
     { validators: passwordMatchValidator }
   );
 
+  //register user
   registerUser() {
+    //takes the values from the form
     const form = this.registerForm.value;
+    //make the request
     this.authService
       .registerUser(form)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
-          console.log(r);
+          //if successfull, save the data locally and navigate to the main page (based on role)
           const data = r[0];
           data.role = form.role;
           let sessionData = {
@@ -105,7 +107,6 @@ export class RegisterComponent implements OnDestroy {
           this.snackbar.open('Registration has been successful', 'Ok', {
             duration: 3000,
           });
-          console.log(form.role);
           this.router.navigate(['/' + form.role]);
         },
         error: (e) => {

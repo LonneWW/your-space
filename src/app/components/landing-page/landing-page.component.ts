@@ -23,16 +23,20 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class LandingPageComponent {
   constructor(private clipboard: Clipboard, private _snackBar: MatSnackBar) {}
+
+  //patient-demo account credentials
   protected patientDemoAccount = {
     email: 'patient-demo@mail.it',
     password: 'PatientZero1!',
   };
 
+  //therapist-demo account credentials
   protected therapistDemoAccount = {
     email: 'therapist-demo@mail.it',
     password: 'TherapistZero1!',
   };
 
+  //coping the credential field on the clipboard
   copyText(text: string): void {
     this.clipboard.copy(text);
     this._snackBar.open(`"${text}" has been copied on your clipboard.`, 'Ok', {

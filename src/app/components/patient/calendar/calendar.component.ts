@@ -47,6 +47,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private _snackbar: MatSnackBar,
     private dialog: MatDialog
   ) {}
+
   displayedColumns: string[] = [
     'title',
     'tags',
@@ -63,12 +64,16 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const id = this.userData.currentUserData?.id;
+    //on init, request the notes from the db
     if (id) {
       this.getNotesDecorator(id);
     }
   }
 
-  filterSearch(event: any) {
+  //listening to the event emitted from the searchbar,
+  //the filterSeach function request the notes from the db
+  //adding the filters of the query like title, tag and date range
+  filterSearch(event: any): void {
     const id = this.userData.currentUserData?.id;
     if (id) {
       this.getNotesDecorator(id, event);
@@ -84,13 +89,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
       dateFrom?: number;
       dateTo?: number;
     } = {}
-  ) {
+  ): void {
     this.pHttp
       .getNotes(id, filters)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: Note[]) => {
-          console.log(r);
           if (r.length < 1) {
             this._snackbar.open(
               'No results were obtained from the search.',
@@ -108,7 +112,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
       });
   }
 
-  changeNoteVisibility(note: Note) {
+  //change note visibility function
+  changeNoteVisibility(note: Note): void {
+    //asks the user for permission
     const dialogData: ConfirmDialogData = {
       message: 'Do you wish to change this note visibility?',
     };
@@ -119,26 +125,29 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      // result sarà true se l'utente ha scelto "Accetta" oppure false se "Rifiuta"
+      //if given
       if (result) {
+        //prepares the body of the update request
         const body = {
           note_id: note.id,
           patient_id: note.patient_id,
           shared: note.shared === 1 ? 0 : 1,
         };
-
+        //make the request
         this.pHttp
           .changeNoteVisibility(body)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (r: any) => {
-              console.log(r);
+              //if the result is positive, changes the view
               note.shared = !note.shared;
+              //and notifies the user
               this._snackbar.open('Note visibility changed.', 'Ok', {
                 duration: 2500,
               });
             },
             error: (e: any) => {
+              //if some error occurs, shows it in the console and notifies the user
               console.log(e);
               this._snackbar.open(e.message, 'Ok');
             },
@@ -147,12 +156,16 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
+  //open note function is used form navigation and sets an item in the session storage to
+  //recover the session if the page is refreshed
   openNote(note: Note): void {
     sessionStorage.setItem(`selectedNote_${note.id}`, JSON.stringify(note));
     this.router.navigate(['patient/note/' + note.id]);
   }
 
-  deleteNote(note: Note) {
+  //delete note function
+  deleteNote(note: Note): void {
+    //asks permission from the user
     const dialogData: ConfirmDialogData = {
       message:
         'Do you really wish to delete this note? This action is irreversible.',
@@ -164,13 +177,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      //if given
       if (result) {
+        //make the request to the server
         this.pHttp
           .deleteNote(note.id, note.patient_id)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (r: any) => {
-              console.log(r);
+              //if successfull updates the local data and notifies the user
               this.notesList.data = this.notesList.data.filter(
                 (n: Note) => n.id !== note.id
               );
@@ -180,6 +195,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
               });
             },
             error: (e: any) => {
+              //otherwise shows the error in the console and notifies the user
               console.log(e);
               this._snackbar.open(e.message, 'Ok');
             },
@@ -202,6 +218,7 @@ export interface ConfirmDialogData {
   message: string;
 }
 
+//mat dialog component, used for deleting a note or update its visibility
 @Component({
   selector: 'app-confirm-dialog',
   imports: [MatDialogModule, MatButtonModule],
@@ -223,12 +240,10 @@ export class ConfirmDialogComponent {
   ) {}
 
   onConfirm(): void {
-    // Chiusura del dialog restituendo "true"
     this.dialogRef.close(true);
   }
 
   onCancel(): void {
-    // Chiusura del dialog restituendo "false"
     this.dialogRef.close(false);
   }
 }

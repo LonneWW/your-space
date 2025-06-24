@@ -30,13 +30,15 @@ export class ListOfAllTherapistsComponent implements OnInit {
   protected therapistsList: { id: number; name: string; surname: string }[] =
     [];
   private destroy$: Subject<void> = new Subject<void>();
+
+  //on init
   ngOnInit(): void {
+    //get the list of all therapists
     this.http
       .getAllTherapists()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
-          console.log(r);
           this.therapistsList = r;
         },
         error: (e: any) => {
@@ -49,22 +51,27 @@ export class ListOfAllTherapistsComponent implements OnInit {
       });
   }
 
+  //select therapist function
   selectTherapist(therapist_id: number) {
+    //if the user confirms
     const allow = confirm('Do you wish to select this therapist?');
     if (!allow) return;
+    //get the user id
     const patient_id_string = sessionStorage.getItem('id');
     const patient_id = Number(patient_id_string);
+    //prepare the body for the request
     const body = { patient_id: patient_id, therapist_id: therapist_id };
+    //make the request
     this.http
       .selectTherapist(body)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
+          //if the request is successfull, update the local data
           sessionStorage.setItem('therapist_id', '0');
           const data = this.userDataService.currentUserData;
           data!.therapist_id = 0;
           this.userDataService.updateUserData(data as UserData);
-          console.log(this.userDataService.currentUserData);
           this.snackbar.open(r.message, 'Ok');
         },
         error: (e: any) => {

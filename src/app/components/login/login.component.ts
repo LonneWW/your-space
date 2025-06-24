@@ -58,9 +58,11 @@ export class LoginComponent implements OnDestroy {
     role: new FormControl<string>('', [Validators.required]),
   });
 
-  loginUser() {
+  //login user function
+  loginUser(): void {
+    //takes the values from the form
     const form = this.loginForm.value;
-    console.log(form);
+    //calls the service to make the authentication
     this.authService
       .loginUser(form)
       .pipe(takeUntil(this.destroy$))
@@ -71,7 +73,8 @@ export class LoginComponent implements OnDestroy {
           surname: string;
           therapist_id: number;
         }) => {
-          console.log(r);
+          //if the login is successfull, save the obtained data
+          //in the session storage and in the user data service
           const data = r as UserData;
           data.role = form.role;
           let sessionData = {
@@ -85,7 +88,6 @@ export class LoginComponent implements OnDestroy {
             sessionData.therapist_id = JSON.stringify(data.therapist_id);
           }
           this.userDataService.saveSessionUser(sessionData);
-          console.log(this.userDataService.sessionStorageUser);
           this.userDataService.updateUserData(data);
           this.snackbar.open('Logged in successfully', 'Ok', {
             duration: 3000,
@@ -94,6 +96,7 @@ export class LoginComponent implements OnDestroy {
           this.router.navigate(['/' + form.role]);
         },
         error: (e) => {
+          //if the login results unsuccessfull, alert the user with the error message
           this.snackbar.open(
             e.error.message ||
               'Something went wrong while browsing the application',

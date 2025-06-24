@@ -45,6 +45,7 @@ export class SearchBarComponent {
 
   protected currentTab: string = 'title';
 
+  //the select tab function triggers when a tab is chosen. Used to make the right "makeFilteredSearch" requests
   selectTab(event: any) {
     const tabIndex = event.index;
     switch (tabIndex) {
@@ -60,9 +61,8 @@ export class SearchBarComponent {
         this.currentTab = 'date';
         break;
     }
-    console.log(this.currentTab);
   }
-
+  //based on the field, emits the 'filterSearch' event bringing the correct filter
   makeFilteredSearch() {
     const field = this.currentTab;
     switch (field) {

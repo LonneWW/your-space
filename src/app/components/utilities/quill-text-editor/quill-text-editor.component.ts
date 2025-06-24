@@ -75,6 +75,7 @@ export class QuillTextEditorComponent implements OnInit {
     title: new FormControl<string>('New Note', [Validators.maxLength(50)]),
   });
 
+  //methods to handle tags, taken from the official documentation
   addTag(event: MatChipInputEvent) {
     const value = (event.value || '').trim();
 
@@ -87,7 +88,6 @@ export class QuillTextEditorComponent implements OnInit {
   }
 
   removeTag(tag: any) {
-    console.log(tag);
     const newArray = this.tagsArray.filter((item) => item != tag.name);
     this.tagsArray = newArray;
     this.tags.update((tags) => {
@@ -121,6 +121,7 @@ export class QuillTextEditorComponent implements OnInit {
     });
   }
 
+  //on save, prepares the body for the request and emits the 'saveNote' event
   save() {
     let title = this.titleForm.value.title
       ? this.titleForm.value.title
@@ -136,10 +137,12 @@ export class QuillTextEditorComponent implements OnInit {
     this.saveNote.emit(body);
   }
 
+  //opens the help dialog
   help() {
     this.openHelpDialog.emit();
   }
 
+  //restores tags from the session storage
   restoreTagsFromSessionStorage(array: any[]) {
     for (let i = 0; array.length > i; i++) {
       const tag = array[i];

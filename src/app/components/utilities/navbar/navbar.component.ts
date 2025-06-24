@@ -47,6 +47,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.auth.logout();
   }
 
+  //deletes the notification based on the user role
   closeNotification(id: number, role: string = 'patient') {
     if (role == 'patient') {
       this.pHttp
@@ -54,7 +55,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            console.log(r);
             this.notifications = this.notifications.filter(
               (item) => item.id !== id
             );
@@ -62,6 +62,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
           },
           error: (e: any) => {
             console.log(e);
+            this._snackbar.open(
+              "Serverside error: couldn't delete notification.",
+              'Ok'
+            );
           },
         });
     } else {
@@ -70,7 +74,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            console.log(r);
             this.notifications = this.notifications.filter(
               (item) => item.id !== id
             );
@@ -78,6 +81,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
           },
           error: (e: any) => {
             console.log(e);
+            this._snackbar.open(
+              "Serverside error: couldn't delete notification.",
+              'Ok'
+            );
           },
         });
     }
@@ -94,7 +101,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
-          console.log(r);
           this._snackbar.open('Patient accepted successfully', 'Ok', {
             duration: 2500,
           });
@@ -118,7 +124,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
-          console.log(r);
           this._snackbar.open(r.message, 'Ok', { duration: 2500 });
           this.closeNotification(notificationId, 'therapist');
         },
@@ -129,20 +134,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
       });
   }
 
+  //on init
   ngOnInit(): void {
+    //saves user data locally
     const user = this.userData.currentUserData;
-    console.log(user);
     if (user) {
       this.role = user.role;
-      console.log(user);
-      console.log(this.role);
+      //get notifications based on role
       if (this.role == 'patient') {
         this.pHttp
           .getNotifications(user.id)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (r: any) => {
-              console.log(r);
               this.notifications = r;
             },
             error: (e: any) => {
@@ -156,7 +160,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (r: any) => {
-              console.log(r);
               this.notifications = r;
             },
             error: (e: any) => {
