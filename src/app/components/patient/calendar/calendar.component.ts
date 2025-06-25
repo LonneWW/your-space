@@ -57,7 +57,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     'delete',
   ];
   protected user!: UserData;
-  protected notesList: any;
+  public notesList: any;
   private destroy$: Subject<void> = new Subject<void>();
 
   @ViewChild(MatSort) sort!: MatSort;

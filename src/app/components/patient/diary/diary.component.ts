@@ -24,7 +24,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
     private _snackbar: MatSnackBar
   ) {}
   protected user!: UserData | null;
-  protected note!: Note;
+  public note!: Note;
 
   private destroy$: Subject<void> = new Subject<void>();
 

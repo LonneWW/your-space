@@ -87,8 +87,6 @@ export class SearchBarComponent {
           endDateValue,
           'yyyy-MM-ddTHH:mm:ss.SSS'
         );
-        console.log(startDate);
-        console.log(endDate);
         if (!startDate) break;
         if (!endDate) break;
         this.filterSearch.emit({

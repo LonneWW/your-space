@@ -42,7 +42,7 @@ export class PatientHttpService {
 
   postNote(body: {
     title: string;
-    content: JSON;
+    content: JSON | string;
     tags: JSON | null;
     patient_id: number;
   }): any {
@@ -68,8 +68,8 @@ export class PatientHttpService {
   modifyNote(body: {
     title: string;
     note_id: number;
-    content: JSON;
-    tags?: JSON | null;
+    content: JSON | string;
+    tags?: any | null;
     patient_id: number;
   }): any {
     this.auth.checkCredentials();

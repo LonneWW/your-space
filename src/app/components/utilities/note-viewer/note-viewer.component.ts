@@ -44,7 +44,7 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
 
   protected user: any;
   @Input() note!: Note;
-  protected saving: boolean = false;
+  public saving: boolean = false;
 
   protected tagsArray: string[] = [];
 
@@ -176,7 +176,7 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(): void {
-    sessionStorage.removeItem(`selectedNote_${this.note.id}`);
+    sessionStorage.removeItem(`selectedNote_${this.note?.id}`);
     this.destroy$.next();
     this.destroy$.complete();
   }

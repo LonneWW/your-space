@@ -64,7 +64,7 @@ export class QuillTextEditorComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {}
 
-  protected tagsArray: string[] = [];
+  public tagsArray: string[] = [];
 
   readonly addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;

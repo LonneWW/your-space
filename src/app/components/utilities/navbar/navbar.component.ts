@@ -37,8 +37,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   protected role!: string;
-  protected notifications: any[] = [];
-  protected toggleOverlayContainer: boolean = false;
+  public notifications: any[] = [];
+  public toggleOverlayContainer: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
 
   logout() {

@@ -25,13 +25,13 @@ export class LandingPageComponent {
   constructor(private clipboard: Clipboard, private _snackBar: MatSnackBar) {}
 
   //patient-demo account credentials
-  protected patientDemoAccount = {
+  public patientDemoAccount = {
     email: 'patient-demo@mail.it',
     password: 'PatientZero1!',
   };
 
   //therapist-demo account credentials
-  protected therapistDemoAccount = {
+  public therapistDemoAccount = {
     email: 'therapist-demo@mail.it',
     password: 'TherapistZero1!',
   };

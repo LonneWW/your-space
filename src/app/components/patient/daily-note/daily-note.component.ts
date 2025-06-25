@@ -53,8 +53,8 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
     private _snackbar: MatSnackBar
   ) {}
 
-  protected user!: UserData | null;
-  protected note!: any;
+  public user!: UserData | null;
+  public note!: any;
   protected saving: boolean = false;
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -86,7 +86,7 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
               .subscribe({
                 next: (r: any) => {
                   this.note = r[r.length - 1];
-                  sessionStorage.setItem('note_id', this.note.id);
+                  sessionStorage.setItem('note_id', this.note.id.toString());
                 },
                 error: (e: any) => {
                   console.log(e);
@@ -119,7 +119,7 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
           .subscribe({
             next: (r: any) => {
               this.note = r[r.length - 1];
-              sessionStorage.setItem('note_id', this.note.id);
+              sessionStorage.setItem('note_id', this.note.id.toString());
             },
             error: (e: any) => {
               console.log(e);
@@ -134,8 +134,8 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    sessionStorage.removeItem(`selectedNote_${this.note.id}`);
-    sessionStorage.removeItem(`note_id`);
+    sessionStorage.removeItem(`selectedNote_${this.note?.id}`);
+    sessionStorage.removeItem('note_id');
     this.destroy$.next();
     this.destroy$.complete();
   }

@@ -39,7 +39,7 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     | null = null;
   protected therapistId: number | undefined | null = null;
 
-  protected toggleOverlayContainer: boolean = false;
+  public toggleOverlayContainer: boolean = false;
 
   private destroy$: Subject<void> = new Subject<void>();
 

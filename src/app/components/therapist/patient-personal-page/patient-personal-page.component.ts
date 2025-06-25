@@ -59,9 +59,9 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
     title: 'Patient note',
   };
 
-  protected patientNotes!: any;
+  protected patientNotes: any = new MatTableDataSource([]);
 
-  protected toggleOverlayContainer: boolean = false;
+  public toggleOverlayContainer: boolean = false;
   protected noteContent: string = '';
   protected destroy$: Subject<void> = new Subject();
 
@@ -122,12 +122,12 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
   //on init
   ngOnInit(): void {
     //save the data taken from the list-of-patients' navigateToUserPage
-    this.patient = history.state.data;
+    this.patient = history.state?.data;
     //save user data locally
     this.user = this.userData.currentUserData;
     //request all the notes shared by the patient
     this.tHttp
-      .getPatientNotes(this.user.id, this.patient.id)
+      .getPatientNotes(this.user?.id, this.patient?.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
@@ -140,7 +140,7 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
         },
       });
     //request all the notes about the patient
-    this.tHttp.getNotesAboutPatient(this.patient.id, this.user.id).subscribe({
+    this.tHttp.getNotesAboutPatient(this.patient?.id, this.user?.id).subscribe({
       next: (r: any) => {
         this.note = r[0];
       },
