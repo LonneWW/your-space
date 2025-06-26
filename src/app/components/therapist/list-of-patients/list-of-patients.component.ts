@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserDataService } from '../../../services/user-data.service';
 import { TherapistHttpService } from '../../../services/therapist-http.service';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-list-of-patients',
   imports: [CommonModule, MatIconModule, MatButtonModule, MatCardModule],
@@ -19,8 +20,11 @@ export class ListOfPatientsComponent implements OnInit, OnDestroy {
     private userData: UserDataService,
     private tHttp: TherapistHttpService,
     private router: Router,
-    private _snackbar: MatSnackBar
-  ) {}
+    private _snackbar: MatSnackBar,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Your Space - List of Patients');
+  }
   protected user!: any;
   protected patientsList: any[] = [];
   private destroy$: Subject<void> = new Subject<void>();

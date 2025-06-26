@@ -18,7 +18,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { UserDataService } from '../../services/user-data.service';
 import { UserData } from '../../interfaces/IUserData';
-import { CredentialsMatchService } from '../../services/credentials-match.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -43,8 +43,10 @@ export class LoginComponent implements OnDestroy {
     private userDataService: UserDataService,
     private router: Router,
     private snackbar: MatSnackBar,
-    private credMatchService: CredentialsMatchService
-  ) {}
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Your Space - Login');
+  }
 
   public loginForm: FormGroup = new FormGroup({
     email: new FormControl<string>('nu@va.it', [

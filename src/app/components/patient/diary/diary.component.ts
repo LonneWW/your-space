@@ -9,6 +9,7 @@ import { PatientHttpService } from '../../../services/patient-http.service';
 import { NoteViewerComponent } from '../../utilities/note-viewer/note-viewer.component';
 import { Note } from '../../../interfaces/INote';
 import { TherapistHttpService } from '../../../services/therapist-http.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-diary',
@@ -21,8 +22,11 @@ export class DiaryComponent implements OnInit, OnDestroy {
     private userData: UserDataService,
     private pHttp: PatientHttpService,
     private tHttp: TherapistHttpService,
-    private _snackbar: MatSnackBar
-  ) {}
+    private _snackbar: MatSnackBar,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Your Space - Diary');
+  }
   protected user!: UserData | null;
   public note!: Note;
 

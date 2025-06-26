@@ -20,6 +20,7 @@ import { OverlayContainerComponent } from '../../utilities/overlay-container/ove
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import { NoteViewerComponent } from '../../utilities/note-viewer/note-viewer.component';
 import { Note } from '../../../interfaces/INote';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-patient-personal-page',
   imports: [
@@ -47,7 +48,8 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
     private tHttp: TherapistHttpService,
     private userData: UserDataService,
     private router: Router,
-    private _snackbar: MatSnackBar
+    private _snackbar: MatSnackBar,
+    private titleService: Title
   ) {}
 
   protected user: any;
@@ -123,6 +125,13 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     //save the data taken from the list-of-patients' navigateToUserPage
     this.patient = history.state?.data;
+    let title;
+    if (this.patient && this.patient.name && this.patient.surname) {
+      title = `${this.patient.name} ${this.patient.surname}`;
+    } else {
+      title = 'Patient';
+    }
+    this.titleService.setTitle('Your Space - ' + title + ' Page');
     //save user data locally
     this.user = this.userData.currentUserData;
     //request all the notes shared by the patient

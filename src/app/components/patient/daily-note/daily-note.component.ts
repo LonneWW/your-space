@@ -26,6 +26,7 @@ import { PatientHttpService } from '../../../services/patient-http.service';
 import { UserDataService } from '../../../services/user-data.service';
 import { UserData } from '../../../interfaces/IUserData';
 import { NoteViewerComponent } from '../../utilities/note-viewer/note-viewer.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-daily-note',
@@ -50,8 +51,11 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
     private userData: UserDataService,
     private pHttp: PatientHttpService,
     private router: Router,
-    private _snackbar: MatSnackBar
-  ) {}
+    private _snackbar: MatSnackBar,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Your Space - Daily Note');
+  }
 
   public user!: UserData | null;
   public note!: any;

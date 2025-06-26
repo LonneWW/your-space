@@ -19,6 +19,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { UserDataService } from '../../services/user-data.service';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-register',
   imports: [
@@ -42,8 +43,11 @@ export class RegisterComponent implements OnDestroy {
     private authService: AuthService,
     private router: Router,
     private snackbar: MatSnackBar,
-    private userDataService: UserDataService
-  ) {}
+    private userDataService: UserDataService,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Your Space - Register');
+  }
   public registerForm: FormGroup = new FormGroup(
     {
       name: new FormControl<string>('Test', [

@@ -22,6 +22,7 @@ import { PatientHttpService } from '../../../services/patient-http.service';
 import { UserDataService } from '../../../services/user-data.service';
 import { Note } from '../../../interfaces/INote';
 import { UserData } from '../../../interfaces/IUserData';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-calendar',
@@ -45,8 +46,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private userData: UserDataService,
     private router: Router,
     private _snackbar: MatSnackBar,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Your Space - Calendar');
+  }
 
   displayedColumns: string[] = [
     'title',

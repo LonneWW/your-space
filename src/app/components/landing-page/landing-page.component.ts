@@ -7,6 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-landing-page',
   imports: [
@@ -22,7 +24,13 @@ import { Clipboard } from '@angular/cdk/clipboard';
   styleUrl: './landing-page.component.scss',
 })
 export class LandingPageComponent {
-  constructor(private clipboard: Clipboard, private _snackBar: MatSnackBar) {}
+  constructor(
+    private clipboard: Clipboard,
+    private _snackBar: MatSnackBar,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle('Your Space - Landing Page');
+  }
 
   //patient-demo account credentials
   public patientDemoAccount = {
