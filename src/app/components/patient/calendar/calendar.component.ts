@@ -111,7 +111,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
           this.notesList.sort = this.sort;
         },
         error: (e: any) => {
-          console.log(e);
+          console.error(e);
+          this._snackbar.open(
+            "Serverside error: couldn't get notes from database.",
+            'Ok'
+          );
         },
       });
   }
@@ -152,8 +156,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
             },
             error: (e: any) => {
               //if some error occurs, shows it in the console and notifies the user
-              console.log(e);
-              this._snackbar.open(e.message, 'Ok');
+              console.error(e);
+              this._snackbar.open(
+                e.message
+                  ? e.message
+                  : "Serverside error: couldn't change note visibility",
+                'Ok'
+              );
             },
           });
       }
@@ -200,8 +209,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
             },
             error: (e: any) => {
               //otherwise shows the error in the console and notifies the user
-              console.log(e);
-              this._snackbar.open(e.message, 'Ok');
+              console.error(e);
+              this._snackbar.open(
+                e.message
+                  ? e.message
+                  : "Serverside error: couldn't delete note.",
+                'Ok'
+              );
             },
           });
       }

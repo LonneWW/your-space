@@ -114,7 +114,7 @@ export class RegisterComponent implements OnDestroy {
           this.router.navigate(['/' + form.role]);
         },
         error: (e) => {
-          console.log(e);
+          console.error(e);
           this.snackbar.open(
             e.error.message ||
               'Something went wrong while browsing the application',

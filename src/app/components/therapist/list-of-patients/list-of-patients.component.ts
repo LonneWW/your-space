@@ -50,7 +50,7 @@ export class ListOfPatientsComponent implements OnInit, OnDestroy {
             this.patientsList = r.patients;
           },
           error: (e: any) => {
-            console.log(e);
+            console.error(e);
             this._snackbar.open(
               "Serverside error: couldn't get any patient.",
               'Ok'

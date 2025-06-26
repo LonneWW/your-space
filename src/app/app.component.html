@@ -1,1 +1,6 @@
+<mat-progress-bar
+  *ngIf="loader.loading$ | async"
+  mode="query"
+  color="accent"
+></mat-progress-bar>
 <router-outlet></router-outlet>

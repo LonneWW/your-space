@@ -104,7 +104,7 @@ export class LoginComponent implements OnDestroy {
               'Something went wrong while browsing the application',
             'Ok'
           );
-          console.log(e);
+          console.error(e);
           switch (e.error.status) {
             case 401:
               this.loginForm.controls['password'].patchValue('');

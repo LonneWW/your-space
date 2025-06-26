@@ -47,7 +47,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
             this.note = r[0];
           },
           error: (e: any) => {
-            console.log(e);
+            console.error(e);
             this._snackbar.open('Serverside error: unable to save note.', 'Ok');
           },
         });
@@ -61,7 +61,7 @@ export class DiaryComponent implements OnInit, OnDestroy {
             this.note = r[0];
           },
           error: (e: any) => {
-            console.log(e);
+            console.error(e);
             this._snackbar.open('Serverside error: unable to save note.', 'Ok');
           },
         });

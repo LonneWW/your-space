@@ -115,8 +115,13 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
         },
         error: (e: any) => {
           //otherwise it shows the error and notifies the user
-          console.log(e);
-          this._snackbar.open(e.message, 'Ok');
+          console.error(e);
+          this._snackbar.open(
+            e.message
+              ? e.message
+              : "Serverside error: couldn't discharge patient correctly.",
+            'Ok'
+          );
         },
       });
   }
@@ -144,7 +149,7 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
           this.patientNotes.sort = this.sort;
         },
         error: (e: any) => {
-          console.log(e);
+          console.error(e);
           this._snackbar.open('The patient has no notes to share', 'Ok');
         },
       });
@@ -154,7 +159,7 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
         this.note = r[0];
       },
       error: (e: any) => {
-        console.log(e);
+        console.error(e);
         this._snackbar.open("Couldn't get note about the patient", 'Ok');
         // this.router.navigate(['/therapist/patients-list']);
       },

@@ -64,11 +64,11 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
             this.therapist = r[0];
           },
           error: (e: any) => {
-            console.log(e);
+            console.error(e);
             this.therapistId = undefined;
             this.therapist = undefined;
             this._snackbar.open(
-              "Serverside error: couldn't get therapist details",
+              "Serverside error: couldn't get therapist details.",
               'Ok'
             );
           },

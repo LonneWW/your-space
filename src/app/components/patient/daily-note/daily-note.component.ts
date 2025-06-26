@@ -93,7 +93,7 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
                   sessionStorage.setItem('note_id', this.note.id.toString());
                 },
                 error: (e: any) => {
-                  console.log(e);
+                  console.error(e);
                   this._snackbar.open(
                     'Serverside error: unable to save note.',
                     'Ok'
@@ -102,7 +102,7 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
               });
           },
           error: (e: any) => {
-            console.log(e);
+            console.error(e);
             this._snackbar.open(
               'Serverside error: unable to create note.',
               'Ok'
@@ -126,7 +126,7 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
               sessionStorage.setItem('note_id', this.note.id.toString());
             },
             error: (e: any) => {
-              console.log(e);
+              console.error(e);
               this._snackbar.open(
                 'Serverside error: unable to save note.',
                 'Ok'

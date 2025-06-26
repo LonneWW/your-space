@@ -1,16 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { CommonModule } from '@angular/common';
+import { LoaderService } from './services/loader.service';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, MatProgressBar, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  constructor() {
+  constructor(protected loader: LoaderService) {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
