@@ -146,10 +146,8 @@ describe('NoteViewerComponent', () => {
       // Simula che patientHttp.modifyNote restituisca una risposta positiva
       pHttpSpy.modifyNote.and.returnValue(of({ message: 'Update successful' }));
       component.updateNote(body);
-      expect(component.saving).toBeTrue();
       tick(1000);
       expect(pHttpSpy.modifyNote).toHaveBeenCalledWith(body);
-      expect(component.saving).toBeFalse();
       flush();
     }));
 
@@ -188,7 +186,6 @@ describe('NoteViewerComponent', () => {
       );
       component.updateNote(body);
       tick(1000);
-      expect(component.saving).toBeFalse();
       flush();
     }));
   });

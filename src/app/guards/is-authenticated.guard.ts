@@ -8,7 +8,6 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const userDataService = inject(UserDataService);
   const sessionUserData = userDataService.sessionStorageUser;
-  console.log(sessionUserData);
 
   function logout() {
     alert('Could not recover the session. You will be reinderized at login.');
@@ -34,11 +33,10 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
     }
     return authService.isLoggedIn().pipe(
       map((r) => {
-        console.log(r);
         return true;
       }),
       catchError((error) => {
-        console.log(error);
+        console.error(error);
         alert(error.message);
         authService.logout();
         return of(false);

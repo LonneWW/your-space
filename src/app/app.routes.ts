@@ -12,10 +12,9 @@ import { CalendarComponent } from './components/patient/calendar/calendar.compon
 import { DailyNoteComponent } from './components/patient/daily-note/daily-note.component';
 import { NoteViewerComponent } from './components/utilities/note-viewer/note-viewer.component';
 import { ListOfTherapistFeaturesComponent } from './components/therapist/list-of-features/list-of-features.component';
-import { isAuthenticatedGuard } from './guards/is-authenticated.guard';
-import { roleGuard } from './guards/role.guard';
-import { confirmChangePageGuard } from './guards/confirm-change-page.guard';
+// import { confirmChangePageGuard } from './guards/confirm-change-page.guard';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { isAuthenticatedGuard } from './guards/is-authenticated.guard';
 
 export const routes: Routes = [
   {
@@ -31,30 +30,30 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: 'therapist',
-    canActivate: [isAuthenticatedGuard, roleGuard],
-    canDeactivate: [confirmChangePageGuard],
+    canActivate: [isAuthenticatedGuard],
+    // canDeactivate: [confirmChangePageGuard],
     component: TherapistMainPageComponent,
     children: [
       { path: '', component: ListOfTherapistFeaturesComponent },
-      { path: 'diary', component: DiaryComponent },
+      { path: 'personal-notes', component: DiaryComponent },
       { path: 'patients-list', component: ListOfPatientsComponent },
       { path: 'patient/:id', component: PatientPersonalPageComponent },
     ],
   },
   {
     path: 'patient',
-    canActivate: [isAuthenticatedGuard, roleGuard],
-    canDeactivate: [confirmChangePageGuard],
+    canActivate: [isAuthenticatedGuard],
+    // canDeactivate: [confirmChangePageGuard],
     component: PatientMainPageComponent,
     children: [
       { path: '', component: ListOfPatientFeaturesComponent },
       { path: 'list', component: ListOfAllTherapistsComponent },
-      { path: 'diary', component: DiaryComponent },
+      { path: 'personal-notes', component: DiaryComponent },
       { path: 'calendar', component: CalendarComponent },
       {
         path: 'daily-note',
         component: DailyNoteComponent,
-        canDeactivate: [confirmChangePageGuard],
+        // canDeactivate: [confirmChangePageGuard],
       },
       { path: 'note/:id', component: NoteViewerComponent },
     ],

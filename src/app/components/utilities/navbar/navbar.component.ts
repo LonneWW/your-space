@@ -129,7 +129,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
         },
         error: (e: any) => {
           console.log(e);
-          this._snackbar.open(e.message, 'Ok');
+          this._snackbar.open(
+            e.error.message
+              ? e.error.message
+              : 'Serverside error: something went wrong with your request.',
+            'Ok'
+          );
         },
       });
   }
@@ -148,10 +153,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
           .subscribe({
             next: (r: any) => {
               this.notifications = r;
+              if (this.notifications.length > 0) {
+                this._snackbar.open(
+                  `You have ${this.notifications.length} new notifications.`,
+                  'Ok',
+                  { duration: 2500 }
+                );
+              }
             },
             error: (e: any) => {
               console.log(e);
-              this._snackbar.open(e.message, 'Ok');
+              e.error.message
+                ? e.error.message
+                : 'Serverside error: something went wrong with your request.';
             },
           });
       } else if (this.role == 'therapist') {
@@ -161,14 +175,32 @@ export class NavbarComponent implements OnInit, OnDestroy {
           .subscribe({
             next: (r: any) => {
               this.notifications = r;
+              if (this.notifications.length > 0) {
+                this._snackbar.open(
+                  `You have ${this.notifications.length} new notifications.`,
+                  'Ok',
+                  { duration: 2500 }
+                );
+              }
+              //truly a bad way to label the notes to change the controls
+              for (let notification of this.notifications) {
+                const text = notification.content as string;
+                if (text.includes('interrupt')) {
+                  notification.closeable = true;
+                }
+              }
+              console.log(this.notifications);
             },
             error: (e: any) => {
               console.log(e);
-              this._snackbar.open(e.message, 'Ok');
+              this._snackbar.open(
+                e.error.message
+                  ? e.error.message
+                  : 'Serverside error: something went wrong with your request.',
+                'Ok'
+              );
             },
           });
-      } else {
-        console.log('role mancante');
       }
     }
   }

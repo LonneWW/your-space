@@ -52,7 +52,9 @@ export class ListOfPatientsComponent implements OnInit, OnDestroy {
           error: (e: any) => {
             console.error(e);
             this._snackbar.open(
-              "Serverside error: couldn't get any patient.",
+              e.error.message
+                ? e.error.message
+                : 'Serverside error: something went wrong with your request.',
               'Ok'
             );
           },

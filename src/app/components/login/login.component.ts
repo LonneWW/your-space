@@ -100,8 +100,9 @@ export class LoginComponent implements OnDestroy {
         error: (e) => {
           //if the login results unsuccessfull, alert the user with the error message
           this.snackbar.open(
-            e.error.message ||
-              'Something went wrong while browsing the application',
+            e.error.message
+              ? e.error.message
+              : 'Serverside error: something went wrong with your request.',
             'Ok'
           );
           console.error(e);

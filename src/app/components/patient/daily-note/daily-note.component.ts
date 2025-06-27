@@ -95,7 +95,9 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
                 error: (e: any) => {
                   console.error(e);
                   this._snackbar.open(
-                    'Serverside error: unable to save note.',
+                    e.error.message
+                      ? e.error.message
+                      : 'Serverside error: something went wrong with your request.',
                     'Ok'
                   );
                 },
@@ -104,7 +106,9 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
           error: (e: any) => {
             console.error(e);
             this._snackbar.open(
-              'Serverside error: unable to create note.',
+              e.error.message
+                ? e.error.message
+                : 'Serverside error: something went wrong with your request.',
               'Ok'
             );
           },
@@ -128,7 +132,9 @@ export class DailyNoteComponent implements OnInit, OnDestroy {
             error: (e: any) => {
               console.error(e);
               this._snackbar.open(
-                'Serverside error: unable to save note.',
+                e.error.message
+                  ? e.error.message
+                  : 'Serverside error: something went wrong with your request.',
                 'Ok'
               );
             },

@@ -11,7 +11,6 @@ import { takeUntil, Subject, config } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { QuillTextEditorComponent } from '../../utilities/quill-text-editor/quill-text-editor.component';
 import { OverlayContainerComponent } from '../overlay-container/overlay-container.component';
@@ -24,7 +23,6 @@ import { Note } from '../../../interfaces/INote';
   selector: 'app-note-viewer',
   imports: [
     CommonModule,
-    MatProgressSpinnerModule,
     MatSnackBarModule,
     QuillTextEditorComponent,
     OverlayContainerComponent,
@@ -44,7 +42,6 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
 
   protected user: any;
   @Input() note!: Note;
-  public saving: boolean = false;
 
   protected tagsArray: string[] = [];
 
@@ -61,7 +58,6 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
   // the user's role (patient or therapist), it will call the correct service
   // (PatientHttpService or TherapistHttpService) to persist the changes.
   updateNote(body: any): void {
-    this.saving = true;
     this.note.content = body.content;
     this.note.tags = JSON.parse(body.tags);
     this.note.title = body.title;
@@ -75,15 +71,16 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            setTimeout(() => {
-              this.saving = false;
-            }, 1000);
             this._snackbar.open(r.message, 'Ok', { duration: 2500 });
           },
           error: (e: any) => {
-            console.log(e);
-            this.saving = false;
-            this._snackbar.open(e.message, 'Ok');
+            console.error(e);
+            this._snackbar.open(
+              e.error.message
+                ? e.error.message
+                : 'Serverside error: something went wrong with your request.',
+              'Ok'
+            );
           },
         });
     } else {
@@ -93,15 +90,16 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            setTimeout(() => {
-              this.saving = false;
-            }, 1000);
             this._snackbar.open(r.message, 'Ok', { duration: 2500 });
           },
           error: (e: any) => {
             console.log(e);
-            this.saving = false;
-            this._snackbar.open(e.message, 'Ok');
+            this._snackbar.open(
+              e.error.message
+                ? e.error.message
+                : 'Serverside error: something went wrong with your request.',
+              'Ok'
+            );
           },
         });
     }
@@ -119,12 +117,23 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
             duration: 2500,
           });
         },
+        error: (e: any) => {
+          console.error(e);
+          this._snackbar.open(
+            e.error.message
+              ? e.error.message
+              : 'Serverside error: something went wrong with your request.',
+            'Ok'
+          );
+        },
       });
   }
 
   ngOnInit(): void {
     this.user = this.userData.currentUserData;
     //get note id from the route
+    const urlSegments = this.route.snapshot.url;
+    if (urlSegments[0].path === 'patient') return;
     const noteId = this.route.snapshot.paramMap.get('id');
     if (noteId) {
       // if exists recover data from session storage

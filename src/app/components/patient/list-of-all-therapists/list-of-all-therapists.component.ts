@@ -44,8 +44,9 @@ export class ListOfAllTherapistsComponent implements OnInit {
         error: (e: any) => {
           console.error(e);
           this.snackbar.open(
-            e.error.message ||
-              "Serverside error: couldn't obtain list of therapists.",
+            e.error.message
+              ? e.error.message
+              : 'Serverside error: something went wrong with your request.',
             'Ok'
           );
         },
@@ -78,8 +79,9 @@ export class ListOfAllTherapistsComponent implements OnInit {
         error: (e: any) => {
           console.error(e);
           this.snackbar.open(
-            e.error.message ||
-              "Serverside error: couldn't select therapist correctly.",
+            e.error.message
+              ? e.error.message
+              : 'Serverside error: something went wrong with your request.',
             'Ok'
           );
         },

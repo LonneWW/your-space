@@ -29,9 +29,9 @@
         <mat-icon>home</mat-icon>
         <span>Main page</span>
       </button>
-      <button mat-menu-item [routerLink]="['/patient/diary']">
+      <button mat-menu-item [routerLink]="['/patient/personal-notes']">
         <mat-icon svgIcon="diary"></mat-icon>
-        <span>Diary</span>
+        <span>Personal Notes</span>
       </button>
       <button mat-menu-item [routerLink]="['/patient/calendar']">
         <mat-icon svgIcon="calendar"></mat-icon>
@@ -49,7 +49,7 @@
         <mat-icon>home</mat-icon>
         <span>Main page</span>
       </button>
-      <button mat-menu-item [routerLink]="['/therapist/diary']">
+      <button mat-menu-item [routerLink]="['/therapist/personal-notes']">
         <mat-icon svgIcon="diary"></mat-icon>
         <span>Personal notes</span>
       </button>
@@ -80,7 +80,10 @@
             <button
               mat-icon-button
               class="close-btn"
-              *ngIf="role === 'patient'; else therapistControls"
+              *ngIf="
+                role === 'patient' || notification?.closeable;
+                else therapistControls
+              "
               (click)="closeNotification(notification.id)"
             >
               <mat-icon>close</mat-icon>

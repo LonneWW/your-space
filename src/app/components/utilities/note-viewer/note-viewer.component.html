@@ -5,11 +5,9 @@
   [role]="user!.role"
   (saveNote)="updateNote($event)"
   (deleteNote)="delete(note.id)"
-  [noteContentJSON]="note.content | json"
+  [noteContentJSON]="(note && note.content ? note.content : undefined) | json"
   (openHelpDialog)="toggleOverlayContainer = !toggleOverlayContainer"
 ></app-quill-text-editor>
-
-<mat-spinner class="spinner" [diameter]="50" *ngIf="saving"></mat-spinner>
 
 <app-overlay-container
   *ngIf="toggleOverlayContainer"

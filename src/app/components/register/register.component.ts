@@ -50,28 +50,30 @@ export class RegisterComponent implements OnDestroy {
   }
   public registerForm: FormGroup = new FormGroup(
     {
-      name: new FormControl<string>('Test', [
+      name: new FormControl<string>('', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(20),
       ]),
-      surname: new FormControl<string>('Testone', [
+      surname: new FormControl<string>('', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(20),
       ]),
-      email: new FormControl<string>('nu@va.it', [
+      email: new FormControl<string>('', [
         Validators.required,
         Validators.email,
+        Validators.maxLength(50),
       ]),
-      password: new FormControl<string>('IoSonoLaPasswordDiProva11!', [
+      password: new FormControl<string>('', [
         Validators.required,
         Validators.minLength(12),
+        Validators.maxLength(50),
         Validators.pattern(
           '^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#]).+$'
         ),
       ]),
-      confirmPassword: new FormControl<string>('IoSonoLaPasswordDiProva11!', [
+      confirmPassword: new FormControl<string>('', [
         Validators.required,
         Validators.minLength(12),
         Validators.pattern(
@@ -116,8 +118,9 @@ export class RegisterComponent implements OnDestroy {
         error: (e) => {
           console.error(e);
           this.snackbar.open(
-            e.error.message ||
-              'Something went wrong while browsing the application',
+            e.error.message
+              ? e.error.message
+              : 'Serverside error: something went wrong with your request.',
             'Ok'
           );
           this.registerForm.reset();

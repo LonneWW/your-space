@@ -62,7 +62,7 @@ export class PatientHttpService {
 
   dischargeTherapist(body: { patient_id: number; therapist_id: number }): any {
     this.auth.checkCredentials();
-    return this.http.put(this.url + '/patient/therapist-null', body);
+    return this.http.put(this.url + '/patient/unlink-therapist', body);
   }
 
   modifyNote(body: {

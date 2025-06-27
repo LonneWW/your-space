@@ -10,6 +10,7 @@ import { OverlayContainerComponent } from '../../utilities/overlay-container/ove
 import { ListOfAllTherapistsComponent } from '../list-of-all-therapists/list-of-all-therapists.component';
 import { UserDataService } from '../../../services/user-data.service';
 import { UserData } from '../../../interfaces/IUserData';
+import { PatientHttpService } from '../../../services/patient-http.service';
 
 @Component({
   selector: 'app-therapist-card',
@@ -28,6 +29,7 @@ import { UserData } from '../../../interfaces/IUserData';
 export class TherapistCardComponent implements OnInit, OnDestroy {
   constructor(
     private httpService: HttpService,
+    private pHttp: PatientHttpService,
     private userDataService: UserDataService,
     private cdr: ChangeDetectorRef,
     private _snackbar: MatSnackBar
@@ -38,13 +40,17 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     | undefined
     | null = null;
   protected therapistId: number | undefined | null = null;
-
+  protected user!: UserData;
   public toggleOverlayContainer: boolean = false;
 
   private destroy$: Subject<void> = new Subject<void>();
 
   //on init
   ngOnInit(): void {
+    //get user data
+    if (this.userDataService.currentUserData) {
+      this.user = this.userDataService.currentUserData;
+    }
     //get the therapist_id from the session storage
     let therapistIdString = sessionStorage.getItem('therapist_id');
     //change the type of the value from string to null/number
@@ -68,7 +74,9 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
             this.therapistId = undefined;
             this.therapist = undefined;
             this._snackbar.open(
-              "Serverside error: couldn't get therapist details.",
+              e.error.message
+                ? e.error.message
+                : 'Serverside error: something went wrong with your request.',
               'Ok'
             );
           },
@@ -92,6 +100,52 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
 
   openTherapistsList() {
     this.toggleOverlayContainer = true;
+  }
+
+  unlinkTherapist() {
+    const permission = confirm('Do you really wish to unlink your therapist?');
+    if (!permission) return;
+    if (!this.user?.id || !this.therapistId) {
+      this._snackbar.open(
+        'Something went wrong with your request. Please refresh the page and try again.',
+        'Ok'
+      );
+      return;
+    }
+    const body = { patient_id: this.user?.id, therapist_id: this.therapistId };
+    this.pHttp
+      .dischargeTherapist(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (r: any) => {
+          this.therapistId = null;
+          this.therapist = null;
+          this.user!.therapist_id = null;
+          let sessionData = {
+            id: JSON.stringify(this.user.id),
+            name: this.user.name,
+            surname: this.user.surname,
+            role: this.user.role as 'patient' | 'therapist',
+            therapist_id: JSON.stringify(null),
+          };
+          this.userDataService.saveSessionUser(sessionData);
+          this.userDataService.updateUserData(this.user);
+          this._snackbar.open(
+            'You have successfully unlink your therapist.',
+            'Ok',
+            { duration: 2500 }
+          );
+        },
+        error: (e: any) => {
+          console.error(e);
+          this._snackbar.open(
+            e.error.message
+              ? e.error.message
+              : 'Serverside error: something went wrong with your request.',
+            'Ok'
+          );
+        },
+      });
   }
 
   ngOnDestroy(): void {

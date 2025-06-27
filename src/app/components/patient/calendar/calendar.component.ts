@@ -113,7 +113,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
         error: (e: any) => {
           console.error(e);
           this._snackbar.open(
-            "Serverside error: couldn't get notes from database.",
+            e.error.message
+              ? e.error.message
+              : 'Serverside error: something went wrong with your request.',
             'Ok'
           );
         },
@@ -158,9 +160,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
               //if some error occurs, shows it in the console and notifies the user
               console.error(e);
               this._snackbar.open(
-                e.message
-                  ? e.message
-                  : "Serverside error: couldn't change note visibility",
+                e.error.message
+                  ? e.error.message
+                  : 'Serverside error: something went wrong with your request.',
                 'Ok'
               );
             },
@@ -211,9 +213,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
               //otherwise shows the error in the console and notifies the user
               console.error(e);
               this._snackbar.open(
-                e.message
-                  ? e.message
-                  : "Serverside error: couldn't delete note.",
+                e.error.message
+                  ? e.error.message
+                  : 'Serverside error: something went wrong with your request.',
                 'Ok'
               );
             },

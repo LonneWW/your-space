@@ -5,6 +5,6 @@
   <br />
   You can find and edit the notes created in the "calendar" section.
 </p>
-<app-note-viewer [note]="note"></app-note-viewer>
+<app-note-viewer [note]="note" *ngIf="note"></app-note-viewer>
 
 <mat-spinner class="spinner" [diameter]="50" *ngIf="saving"></mat-spinner>

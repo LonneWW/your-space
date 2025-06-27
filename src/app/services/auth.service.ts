@@ -64,13 +64,9 @@ export class AuthService {
   checkCredentials(): void {
     const sessionUserTString = this.userData.sessionStorageUser;
     const serviceUserTString = this.userData.currentUserData;
-    console.log(sessionUserTString);
-    console.log(serviceUserTString);
     const sessionUser = this.credentialsMatch.normalizeUser(sessionUserTString);
     const serviceUser = this.credentialsMatch.normalizeUser(serviceUserTString);
     const check = this.credentialsMatch.deepEqual(sessionUser, serviceUser);
-    console.log(sessionUser);
-    console.log(serviceUser);
     if (!check) {
       alert(
         'Error with session credentials. You will be reinderized at login.'

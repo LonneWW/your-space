@@ -38,7 +38,7 @@
     <p>
       When you set a page "shared" it will be accessible to him/her as well.
       <br />
-      You can change this page setting at any time. <br />
+      You can change this setting at any time. <br />
       You will also be able to unlink your therapist if necessary. With that,
       all access to previously shared pages will be lost and you will be able to
       select a new one. <br />
@@ -47,7 +47,9 @@
   <button
     *ngIf="therapistId !== 0"
     mat-flat-button
-    (click)="openTherapistsList()"
+    (click)="
+      therapistId && therapistId > 0 ? unlinkTherapist() : openTherapistsList()
+    "
     [ngClass]="[therapistId !== null ? 'unlink-btn' : 'select-btn']"
   >
     {{ therapistId !== null ? "Unlink your therapist" : "Select a therapist" }}
