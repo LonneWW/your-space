@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
   constructor(private http: HttpClient, private auth: AuthService) {}
-  private url: string = 'http://localhost:3000';
+  private url: string = environment.apiUrl;
 
   getPatient(id: Number): any {
     return this.http.get(this.url + '/patient/' + id);

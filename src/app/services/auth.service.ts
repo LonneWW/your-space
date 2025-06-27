@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserDataService } from './user-data.service';
 import { CredentialsMatchService } from './credentials-match.service';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,7 +15,7 @@ export class AuthService {
     private userData: UserDataService,
     private credentialsMatch: CredentialsMatchService
   ) {}
-  private url: string = 'http://localhost:3000';
+  private url: string = environment.apiUrl;
 
   registerUser(body: {
     name: string;

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class TherapistHttpService {
   constructor(private http: HttpClient, private auth: AuthService) {}
-  private url: string = 'http://localhost:3000';
+  private url: string = environment.apiUrl;
 
   getPatients(therapist_id: number) {
     return this.http.get(
