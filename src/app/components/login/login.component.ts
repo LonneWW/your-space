@@ -49,11 +49,8 @@ export class LoginComponent implements OnDestroy {
   }
 
   public loginForm: FormGroup = new FormGroup({
-    email: new FormControl<string>('nu@va.it', [
-      Validators.required,
-      Validators.email,
-    ]),
-    password: new FormControl<string>('IoSonoLaPasswordDiProva11!', [
+    email: new FormControl<string>('', [Validators.required, Validators.email]),
+    password: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(12),
     ]),
