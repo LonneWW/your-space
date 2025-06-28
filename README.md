@@ -162,7 +162,10 @@ Here, a small list:
     The security system is really simple and in all likelihood easily bypassed. I would have done better to insert some sort of auth token instead of doing a front-end credential check.
   </li>
   <li>
-I could have made the project even more modular. For example, creating a component for individual cards and making the "DiaryComponent" a utility component instead of also using it on the therapist side but leaving it in the patients section.
+    I could have made the project even more modular. For example, creating a component for individual cards and making the "DiaryComponent" a utility component instead of also using it on the therapist side but leaving it in the patients section.
+  </li>
+  <li>
+    Since I learned a lot during the creation of the application the code may be poorly organized or written.
   </li>
 </ol>
 
