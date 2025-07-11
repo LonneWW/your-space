@@ -111,7 +111,6 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
-          console.log(r);
           this.router.navigate(['patient/calendar']);
           this._snackbar.open('Note deleted successfully', 'Ok', {
             duration: 2500,

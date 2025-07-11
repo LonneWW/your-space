@@ -98,9 +98,7 @@ export class RegisterComponent implements OnDestroy, OnInit {
         next: (r: any) => {
           //if successfull, save the data locally and navigate to the main page (based on role)
           const data = r;
-          console.log(data);
           data.role = form.role;
-          console.log(data);
           let sessionData = {
             id: JSON.stringify(data.id),
             name: data.name,

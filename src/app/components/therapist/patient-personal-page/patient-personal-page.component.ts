@@ -130,7 +130,6 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     //save the data taken from the list-of-patients' navigateToUserPage
     this.patient = history.state?.data;
-    console.log(this.patient);
     let title;
     if (this.patient && this.patient.name && this.patient.surname) {
       title = `${this.patient.name} ${this.patient.surname}`;
@@ -140,7 +139,6 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
     this.titleService.setTitle('Your Space - ' + title + ' Page');
     //save user data locally
     this.user = this.userData.currentUserData;
-    console.log(this.user);
     //request all the notes shared by the patient
     this.tHttp
       .getPatientNotes(this.user?.id, this.patient?.id)

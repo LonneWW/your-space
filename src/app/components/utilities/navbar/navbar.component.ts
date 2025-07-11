@@ -60,7 +60,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.notifications = this.notifications.filter(
               (item) => item.id !== id
             );
-            console.log(this.notifications);
           },
           error: (e: any) => {
             console.log(e);
@@ -79,7 +78,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.notifications = this.notifications.filter(
               (item) => item.id !== id
             );
-            console.log(this.notifications);
           },
           error: (e: any) => {
             console.log(e);
@@ -195,7 +193,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
                   notification.closeable = true;
                 }
               }
-              console.log(this.notifications);
             },
             error: (e: any) => {
               console.log(e);

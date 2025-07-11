@@ -59,7 +59,6 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     const therapistIdString = this.userDataService.currentUserData?.therapist_id
       ? this.userDataService.currentUserData.therapist_id
       : this.userDataService.sessionStorageUser.therapist_id;
-    console.log(therapistIdString);
     //change the type of the value from string to null/number
     if (therapistIdString === 'null') {
       this.therapistId = null;
@@ -74,7 +73,6 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
-            console.log(r);
             this.therapist = r[0];
           },
           error: (e: any) => {
@@ -93,16 +91,13 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     //since therapist_id could be changed from outer sources, subscribe to the stream userData to keep the data and view updated
     this.userDataService.userData$.subscribe({
       next: (r: any) => {
-        console.log(r);
         if (r) {
           const data = r as UserData;
           const tp_id = data.therapist_id;
-          console.log(tp_id);
           if (tp_id === 'null' || tp_id === null) {
             this.therapistId = null;
           } else {
             this.therapistId = Number(tp_id);
-            console.log(this.therapistId);
           }
         }
         this.toggleOverlayContainer = false;

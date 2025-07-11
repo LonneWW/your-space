@@ -48,7 +48,6 @@ export class DiaryComponent implements OnInit, OnDestroy {
           .subscribe({
             next: (r: any) => {
               this.note = r[0];
-              console.log(this.note);
             },
             error: (e: any) => {
               console.error(e);
