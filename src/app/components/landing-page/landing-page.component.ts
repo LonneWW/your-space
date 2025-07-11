@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,7 +23,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss',
 })
-export class LandingPageComponent {
+export class LandingPageComponent implements OnInit {
   constructor(
     private clipboard: Clipboard,
     private _snackBar: MatSnackBar,
@@ -50,5 +50,9 @@ export class LandingPageComponent {
     this._snackBar.open(`"${text}" has been copied on your clipboard.`, 'Ok', {
       duration: 2500,
     });
+  }
+
+  ngOnInit(): void {
+    sessionStorage.clear();
   }
 }

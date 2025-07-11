@@ -15,6 +15,10 @@ export class TherapistHttpService {
     );
   }
 
+  getTherapist(id: Number): any {
+    return this.http.get(this.url + '/therapist/?therapist_id=' + id);
+  }
+
   getNotes(
     id: number,
     filters?: {

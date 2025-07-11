@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormGroup,
@@ -38,7 +38,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnDestroy {
+export class RegisterComponent implements OnDestroy, OnInit {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private authService: AuthService,
@@ -129,6 +129,10 @@ export class RegisterComponent implements OnDestroy {
           this.registerForm.reset();
         },
       });
+  }
+
+  ngOnInit(): void {
+    sessionStorage.clear();
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { NavbarComponent } from '../../utilities/navbar/navbar.component';
 import { UserDataService } from '../../../services/user-data.service';
+import { TherapistHttpService } from '../../../services/therapist-http.service';
 
 @Component({
   selector: 'app-therapist-main-page',
@@ -10,13 +11,26 @@ import { UserDataService } from '../../../services/user-data.service';
   styleUrl: './therapist-main-page.component.scss',
 })
 export class TherapistMainPageComponent implements OnInit {
-  constructor(private userDataService: UserDataService) {}
+  constructor(
+    private userDataService: UserDataService,
+    private tHttp: TherapistHttpService,
+    private router: Router
+  ) {}
   ngOnInit(): void {
-    if (!this.userDataService.currentUserData) {
-      const data = this.userDataService.sessionStorageUser;
-      if (data) {
-        this.userDataService.updateUserData(data);
-      }
+    const serviceUser = this.userDataService.currentUserData;
+    const sessionUser = this.userDataService.sessionStorageUser;
+    if (serviceUser?.id || sessionUser?.id) {
+      const id = serviceUser?.id ? serviceUser.id : sessionUser.id;
+      this.tHttp.getTherapist(id).subscribe({
+        next: (r: any) => {
+          this.userDataService.updateUserData(r[0]);
+          this.userDataService.saveSessionUser(r[0]);
+        },
+        error: (e: any) => {
+          sessionStorage.clear;
+          this.router.navigate(['/login']);
+        },
+      });
     }
   }
 }

@@ -51,8 +51,15 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     if (this.userDataService.currentUserData) {
       this.user = this.userDataService.currentUserData;
     }
+    if (this.userDataService.sessionStorageUser) {
+      this.user = this.userDataService.sessionStorageUser;
+    }
     //get the therapist_id from the session storage
-    let therapistIdString = sessionStorage.getItem('therapist_id');
+    // let therapistIdString = this.user.therapist_id;
+    const therapistIdString = this.userDataService.currentUserData?.therapist_id
+      ? this.userDataService.currentUserData.therapist_id
+      : this.userDataService.sessionStorageUser.therapist_id;
+    console.log(therapistIdString);
     //change the type of the value from string to null/number
     if (therapistIdString === 'null') {
       this.therapistId = null;
@@ -86,12 +93,17 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     //since therapist_id could be changed from outer sources, subscribe to the stream userData to keep the data and view updated
     this.userDataService.userData$.subscribe({
       next: (r: any) => {
-        const data = r as UserData;
-        const tp_id = data.therapist_id;
-        if (tp_id === 'null' || tp_id === null) {
-          this.therapistId = null;
-        } else {
-          this.therapistId = Number(tp_id);
+        console.log(r);
+        if (r) {
+          const data = r as UserData;
+          const tp_id = data.therapist_id;
+          console.log(tp_id);
+          if (tp_id === 'null' || tp_id === null) {
+            this.therapistId = null;
+          } else {
+            this.therapistId = Number(tp_id);
+            console.log(this.therapistId);
+          }
         }
         this.toggleOverlayContainer = false;
         this.cdr.detectChanges();

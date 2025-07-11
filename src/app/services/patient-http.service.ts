@@ -9,6 +9,10 @@ export class PatientHttpService {
   constructor(private http: HttpClient, private auth: AuthService) {}
   private url: string = environment.apiUrl;
 
+  getPatient(patient_id: number): any {
+    return this.http.get(this.url + '/patient/?patient_id=' + patient_id);
+  }
+
   getTherapist(id: number, patient_id: number): any {
     return this.http.get(
       this.url + '/patient/therapist/' + id + '?patient_id=' + patient_id

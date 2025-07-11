@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormGroup,
@@ -37,7 +37,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private authService: AuthService,
@@ -124,6 +124,10 @@ export class LoginComponent implements OnDestroy {
           }
         },
       });
+  }
+
+  ngOnInit(): void {
+    sessionStorage.clear();
   }
 
   ngOnDestroy(): void {
