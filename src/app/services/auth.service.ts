@@ -46,15 +46,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    const id = sessionStorage.getItem('id');
-    const name = sessionStorage.getItem('name');
-    const role = sessionStorage.getItem('role');
-    const surname = sessionStorage.getItem('surname');
-    return this.http.get(
-      this.url +
-        '/auth?' +
-        `id=${id}&name=${name}&surname=${surname}&role=${role}`
-    );
+    return this.http.get(this.url + '/auth/verify-session');
   }
 
   logout() {

@@ -12,6 +12,7 @@ import { UserDataService } from '../../../services/user-data.service';
 import { PatientHttpService } from '../../../services/patient-http.service';
 import { TherapistHttpService } from '../../../services/therapist-http.service';
 import { OverlayContainerComponent } from '../overlay-container/overlay-container.component';
+import { UserData } from '../../../interfaces/IUserData';
 @Component({
   selector: 'app-navbar',
   imports: [
@@ -37,6 +38,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   protected role!: string;
+  protected user!: UserData;
   public notifications: any[] = [];
   public toggleOverlayContainer: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
@@ -48,10 +50,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   //deletes the notification based on the user role
-  closeNotification(id: number, role: string = 'patient') {
-    if (role == 'patient') {
+  closeNotification(id: number) {
+    if (this.role == 'patient') {
       this.pHttp
-        .deleteNotification(id)
+        .deleteNotification(id, this.user.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
@@ -70,7 +72,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         });
     } else {
       this.tHttp
-        .deleteNotification(id)
+        .deleteNotification(id, this.user.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
@@ -104,7 +106,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           this._snackbar.open('Patient accepted successfully', 'Ok', {
             duration: 2500,
           });
-          this.closeNotification(notificationId, 'therapist');
+          this.closeNotification(notificationId);
         },
         error: (e: any) => {
           console.log(e);
@@ -125,7 +127,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (r: any) => {
           this._snackbar.open(r.message, 'Ok', { duration: 2500 });
-          this.closeNotification(notificationId, 'therapist');
+          this.closeNotification(notificationId);
         },
         error: (e: any) => {
           console.log(e);
@@ -142,13 +144,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
   //on init
   ngOnInit(): void {
     //saves user data locally
-    const user = this.userData.currentUserData;
-    if (user) {
-      this.role = user.role;
+    if (this.userData.currentUserData) {
+      this.user = this.userData.currentUserData;
+    } else if (this.userData.sessionStorageUser) {
+      this.user = this.userData.sessionStorageUser;
+    }
+    if (this.user) {
+      this.role = this.user.role;
       //get notifications based on role
       if (this.role == 'patient') {
         this.pHttp
-          .getNotifications(user.id)
+          .getNotifications(this.user.id)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (r: any) => {
@@ -170,7 +176,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           });
       } else if (this.role == 'therapist') {
         this.tHttp
-          .getNotifications(user.id)
+          .getNotifications(this.user.id)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: (r: any) => {

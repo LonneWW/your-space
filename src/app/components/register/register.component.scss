@@ -1,0 +1,21 @@
+.nav-btns-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media only screen and (min-width: 1024px) {
+  .nav-btn {
+    font-size: 2rem;
+    padding: 1.5rem 2rem;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .nav-btn {
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+  }
+}

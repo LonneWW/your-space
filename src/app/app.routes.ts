@@ -31,7 +31,6 @@ export const routes: Routes = [
   {
     path: 'therapist',
     canActivate: [isAuthenticatedGuard],
-    // canDeactivate: [confirmChangePageGuard],
     component: TherapistMainPageComponent,
     children: [
       { path: '', component: ListOfTherapistFeaturesComponent },
@@ -43,7 +42,6 @@ export const routes: Routes = [
   {
     path: 'patient',
     canActivate: [isAuthenticatedGuard],
-    // canDeactivate: [confirmChangePageGuard],
     component: PatientMainPageComponent,
     children: [
       { path: '', component: ListOfPatientFeaturesComponent },
@@ -53,7 +51,6 @@ export const routes: Routes = [
       {
         path: 'daily-note',
         component: DailyNoteComponent,
-        // canDeactivate: [confirmChangePageGuard],
       },
       { path: 'note/:id', component: NoteViewerComponent },
     ],

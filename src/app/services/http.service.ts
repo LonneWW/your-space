@@ -18,12 +18,9 @@ export class HttpService {
     return this.http.get(this.url + '/therapist/' + id);
   }
 
-  getAllTherapists(): any {
-    return this.http.get(this.url + '/patient/therapists');
-  }
-
-  selectTherapist(body: { patient_id: number; therapist_id: number }): any {
-    this.auth.checkCredentials();
-    return this.http.put(this.url + '/patient/therapist', body);
+  getAllTherapists(patient_id: number): any {
+    return this.http.get(
+      this.url + '/patient/therapists?patient_id=' + patient_id
+    );
   }
 }

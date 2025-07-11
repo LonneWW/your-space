@@ -121,10 +121,14 @@ export class TherapistHttpService {
     );
   }
 
-  deleteNotification(notification_id: number) {
+  deleteNotification(notification_id: number, therapist_id: number) {
     this.auth.checkCredentials();
     return this.http.delete(
-      this.url + '/therapist/notifications?notification_id=' + notification_id
+      this.url +
+        '/therapist/notifications?notification_id=' +
+        notification_id +
+        '&therapist_id=' +
+        therapist_id
     );
   }
 }

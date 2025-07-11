@@ -62,11 +62,12 @@ export class TherapistCardComponent implements OnInit, OnDestroy {
     //if value is a number and not 0 (representing a pending state of the request to a therapist)
     if (this.therapistId && this.therapistId > 0) {
       //get the therapist data
-      this.httpService
-        .getTherapist(this.therapistId)
+      this.pHttp
+        .getTherapist(this.therapistId, this.user.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (r: any) => {
+            console.log(r);
             this.therapist = r[0];
           },
           error: (e: any) => {

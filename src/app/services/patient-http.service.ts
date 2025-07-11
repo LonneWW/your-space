@@ -9,6 +9,12 @@ export class PatientHttpService {
   constructor(private http: HttpClient, private auth: AuthService) {}
   private url: string = environment.apiUrl;
 
+  getTherapist(id: number, patient_id: number): any {
+    return this.http.get(
+      this.url + '/patient/therapist/' + id + '?patient_id=' + patient_id
+    );
+  }
+
   getNotes(
     id: number,
     filters?: {
@@ -58,7 +64,7 @@ export class PatientHttpService {
 
   selectTherapist(body: { patient_id: number; therapist_id: number }): any {
     this.auth.checkCredentials();
-    return this.http.put(this.url + '/patient/therapist', body);
+    return this.http.put(this.url + '/patient/select-therapist', body);
   }
 
   dischargeTherapist(body: { patient_id: number; therapist_id: number }): any {
@@ -97,10 +103,14 @@ export class PatientHttpService {
     );
   }
 
-  deleteNotification(notification_id: number): any {
+  deleteNotification(notification_id: number, patient_id: number): any {
     this.auth.checkCredentials();
     return this.http.delete(
-      this.url + '/patient/notifications?notification_id=' + notification_id
+      this.url +
+        '/patient/notifications?notification_id=' +
+        notification_id +
+        '&patient_id=' +
+        patient_id
     );
   }
 }

@@ -10,6 +10,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { LoaderInterceptor } from './interceptors/loader.interceptor';
+import { CredentialsInterceptor } from './interceptors/credentials-interceptor.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
@@ -21,5 +22,10 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(BrowserAnimationsModule),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CredentialsInterceptor,
+      multi: true,
+    },
   ],
 };

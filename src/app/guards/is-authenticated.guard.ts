@@ -31,14 +31,16 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
         return logout();
       }
     }
+    console.log('call to auth/verify-token');
     return authService.isLoggedIn().pipe(
       map((r) => {
+        console.log(r);
         return true;
       }),
       catchError((error) => {
         console.error(error);
-        alert(error.message);
-        authService.logout();
+        // alert(error.message);
+        logout();
         return of(false);
       })
     );

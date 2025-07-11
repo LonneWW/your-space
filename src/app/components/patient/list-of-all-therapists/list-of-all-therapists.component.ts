@@ -8,6 +8,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HttpService } from '../../../services/http.service';
 import { UserDataService } from '../../../services/user-data.service';
 import { UserData } from '../../../interfaces/IUserData';
+import { PatientHttpService } from '../../../services/patient-http.service';
 @Component({
   selector: 'app-list-of-all-therapists',
   imports: [
@@ -23,6 +24,7 @@ import { UserData } from '../../../interfaces/IUserData';
 export class ListOfAllTherapistsComponent implements OnInit {
   constructor(
     private http: HttpService,
+    private pHttp: PatientHttpService,
     private snackbar: MatSnackBar,
     private userDataService: UserDataService
   ) {}
@@ -34,8 +36,12 @@ export class ListOfAllTherapistsComponent implements OnInit {
   //on init
   ngOnInit(): void {
     //get the list of all therapists
+    let user = this.userDataService.currentUserData;
+    if (!user) {
+      user = this.userDataService.sessionStorageUser;
+    }
     this.http
-      .getAllTherapists()
+      .getAllTherapists(user!.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (r: any) => {
@@ -64,7 +70,7 @@ export class ListOfAllTherapistsComponent implements OnInit {
     //prepare the body for the request
     const body = { patient_id: patient_id, therapist_id: therapist_id };
     //make the request
-    this.http
+    this.pHttp
       .selectTherapist(body)
       .pipe(takeUntil(this.destroy$))
       .subscribe({

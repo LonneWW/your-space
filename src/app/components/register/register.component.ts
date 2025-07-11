@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +25,7 @@ import { Title } from '@angular/platform-browser';
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatIconModule,
@@ -96,8 +97,10 @@ export class RegisterComponent implements OnDestroy {
       .subscribe({
         next: (r: any) => {
           //if successfull, save the data locally and navigate to the main page (based on role)
-          const data = r[0];
+          const data = r;
+          console.log(data);
           data.role = form.role;
+          console.log(data);
           let sessionData = {
             id: JSON.stringify(data.id),
             name: data.name,
