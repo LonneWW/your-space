@@ -138,7 +138,16 @@ export class PatientPersonalPageComponent implements OnInit, OnDestroy {
     }
     this.titleService.setTitle('Your Space - ' + title + ' Page');
     //save user data locally
-    this.user = this.userData.currentUserData;
+    this.user = this.userData.currentUserData
+      ? this.userData.currentUserData
+      : this.userData.sessionStorageUser;
+    if (this.userData.currentUserData) {
+      this.user = this.userData.currentUserData;
+      this.userData.saveSessionUser(this.user);
+    } else if (this.userData.sessionStorageUser) {
+      this.user = this.userData.sessionStorageUser;
+      this.userData.updateUserData(this.user);
+    }
     //request all the notes shared by the patient
     this.tHttp
       .getPatientNotes(this.user?.id, this.patient?.id)

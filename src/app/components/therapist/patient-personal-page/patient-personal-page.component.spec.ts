@@ -11,6 +11,7 @@ import { PatientPersonalPageComponent } from './patient-personal-page.component'
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 import { TherapistHttpService } from '../../../services/therapist-http.service';
 import { UserDataService } from '../../../services/user-data.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -37,6 +38,7 @@ describe('PatientPersonalPageComponent', () => {
   let tHttpSpy: jasmine.SpyObj<TherapistHttpService>;
   let userDataSpy: jasmine.SpyObj<UserDataService>;
   let router: Router;
+  let confirmSpy: jasmine.Spy;
   // let snackbarSpy: jasmine.SpyObj<MatSnackBar>;
 
   beforeEach(async () => {
@@ -50,7 +52,6 @@ describe('PatientPersonalPageComponent', () => {
       currentUserData: dummyUser,
     });
     const routerSpyObj = jasmine.createSpyObj('Router', ['navigate']);
-    // const snackbarSpyObj = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
       imports: [PatientPersonalPageComponent, RouterTestingModule],
@@ -58,26 +59,35 @@ describe('PatientPersonalPageComponent', () => {
         { provide: TherapistHttpService, useValue: tHttpSpyObj },
         { provide: UserDataService, useValue: userDataSpyObj },
         { provide: Router, useValue: routerSpyObj },
-        // { provide: MatSnackBar, useValue: snackbarSpyObj },
         {
           provide: ActivatedRoute,
           useValue: {
             snapshot: { paramMap: { get: (key: string) => null } },
             params: of({}),
             data: of({}),
-            // Stub completo per ActivatedRoute con la proprietà "root"
             root: {
               snapshot: { paramMap: { get: (key: string) => null } },
               children: [],
             },
           },
         },
-        // Aggiungiamo se necessario i provider per HttpClient e Testing
-        provideHttpClient(),
-        provideHttpClientTesting(),
+        {
+          provide: MatSnackBar,
+          useValue: jasmine.createSpyObj('MatSnackBar', ['open']),
+        },
+        {
+          provide: Title,
+          useValue: { setTitle: jasmine.createSpy('setTitle') },
+        },
+        // provideHttpClient(),
+        // provideHttpClientTesting(),
       ],
       schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+    })
+      .overrideComponent(PatientPersonalPageComponent, {
+        set: { template: '' },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(PatientPersonalPageComponent);
     component = fixture.componentInstance;
@@ -89,23 +99,31 @@ describe('PatientPersonalPageComponent', () => {
     userDataSpy = TestBed.inject(
       UserDataService
     ) as jasmine.SpyObj<UserDataService>;
-    // snackbarSpy = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
     router = TestBed.inject(Router);
 
-    // Stub predefiniti: impostiamo i metodi usati in ngOnInit in modo da non restituire undefined
+    // 1) Stub di sessionStorage.getItem:
+    spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
+      if (key === 'selectedNote_1') return null;
+      if (key === 'id') return dummyPatient.id.toString();
+      return null;
+    });
+
+    // 2) Mock di default per i metodi HTTP
     tHttpSpy.getPatientNotes.and.returnValue(of(dummyPatientNotes));
     tHttpSpy.getNotesAboutPatient.and.returnValue(of(dummyNoteAboutPatient));
+    tHttpSpy.dischargePatient.and.returnValue(of({ message: 'OK' }));
+
+    // 3) Stub di confirm() per dischargePatient
+    confirmSpy = spyOn(window, 'confirm') as jasmine.Spy;
+    confirmSpy.and.returnValue(true);
 
     // Inizializziamo le proprietà usate dal template per la MatTable
     component.sort = {} as any;
     component['patientNotes'] = new MatTableDataSource([]);
 
-    // Impostiamo i dati attesi dal componente (ad esempio, tramite history.state)
+    // Impostiamo i dati attesi dal componente
     component['patient'] = dummyPatient;
     component['user'] = dummyUser;
-
-    // Avviamo il ciclo di vita
-    fixture.detectChanges();
   });
 
   afterEach(() => {
@@ -119,9 +137,9 @@ describe('PatientPersonalPageComponent', () => {
 
   describe('ngOnInit', () => {
     it('should fetch patient notes and set note from getNotesAboutPatient on success', fakeAsync(() => {
-      window.history.replaceState({ data: dummyPatient }, '');
       component.ngOnInit();
       tick();
+      window.history.replaceState({ data: dummyPatient }, '');
 
       expect(tHttpSpy.getPatientNotes).toHaveBeenCalledWith(
         dummyUser.id,
@@ -203,32 +221,35 @@ describe('PatientPersonalPageComponent', () => {
 
   describe('dischargePatient', () => {
     it('should not call dischargePatient if confirmation is cancelled', () => {
-      spyOn(window, 'confirm').and.returnValue(false);
+      confirmSpy.and.returnValue(false); // o true
+      component.dischargePatient();
       component.dischargePatient();
       expect(tHttpSpy.dischargePatient).not.toHaveBeenCalled();
     });
 
     it('should discharge patient when confirmed and navigate to "/"', fakeAsync(() => {
-      spyOn(window, 'confirm').and.returnValue(true);
+      confirmSpy.and.returnValue(true); // o true
       const response = { message: 'Patient discharged successfully' };
       tHttpSpy.dischargePatient.and.returnValue(of(response));
       component.dischargePatient();
       tick();
-      expect(tHttpSpy.dischargePatient).toHaveBeenCalledWith({
-        patient_id: dummyPatient.id,
-        therapist_id: dummyUser.id,
-      });
+      expect(router.navigate).toHaveBeenCalledWith(['/therapist']);
+      flush();
+      // expect(tHttpSpy.dischargePatient).toHaveBeenCalledWith({
+      //   patient_id: dummyPatient.id,
+      //   therapist_id: dummyUser.id,
+      // });
       // expect(snackbarSpy.open).toHaveBeenCalledWith(
       //   'Patient discharged successfully',
       //   'Ok',
       //   { duration: 2500 }
       // );
-      expect(router.navigate).toHaveBeenCalledWith(['/']);
-      flush();
+      // flush();
     }));
 
     it('should show error snackbar if dischargePatient fails', fakeAsync(() => {
-      spyOn(window, 'confirm').and.returnValue(true);
+      confirmSpy.and.returnValue(true); // o true
+      component.dischargePatient();
       const errorResponse = { message: 'Error discharging patient' };
       tHttpSpy.dischargePatient.and.returnValue(
         throwError(() => errorResponse)

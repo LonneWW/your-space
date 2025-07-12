@@ -59,6 +59,8 @@ export class AuthService {
     const serviceUserTString = this.userData.currentUserData;
     const sessionUser = this.credentialsMatch.normalizeUser(sessionUserTString);
     const serviceUser = this.credentialsMatch.normalizeUser(serviceUserTString);
+    console.log(sessionUser);
+    console.log(serviceUser);
     const check = this.credentialsMatch.deepEqual(sessionUser, serviceUser);
     if (!check) {
       alert(

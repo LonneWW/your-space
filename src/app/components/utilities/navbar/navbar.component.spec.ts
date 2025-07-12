@@ -69,7 +69,8 @@ describe('NavbarComponent', () => {
     therapistHttpSpy.getNotifications.and.returnValue(of([]));
 
     fixture.detectChanges();
-
+    component.user = { id: 1, role: 'patient', name: '', surname: '' };
+    component.role = 'patient';
     // Iniezione degli spy tramite TestBed
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     userDataServiceSpy = TestBed.inject(
@@ -134,25 +135,34 @@ describe('NavbarComponent', () => {
 
   describe('closeNotification', () => {
     it('should call PatientHttpService.deleteNotification when role is patient', fakeAsync(() => {
+      // const testId = 1;
       pHttpSpy.deleteNotification.and.returnValue(of({ success: true }));
       component.notifications = [
-        { id: 101, content: 'Notification', patient_id: 1 },
+        { id: 101, content: 'Notification', patient_id: component.user.id },
       ];
-      component.closeNotification(101, 'patient');
+      component.closeNotification(101);
+      component.closeNotification(101);
       tick();
-      expect(pHttpSpy.deleteNotification).toHaveBeenCalledWith(101);
+      expect(pHttpSpy.deleteNotification).toHaveBeenCalledWith(
+        101,
+        component.user.id
+      );
       expect(component.notifications.length).toBe(0);
       flush();
     }));
 
     it('should call TherapistHttpService.deleteNotification when role is therapist', fakeAsync(() => {
+      component.role = 'therapist';
       tHttpSpy.deleteNotification.and.returnValue(of({ success: true }));
       component.notifications = [
-        { id: 102, content: 'Notification', patient_id: 1 },
+        { id: 102, content: 'Notification', patient_id: component.user.id },
       ];
-      component.closeNotification(102, 'therapist');
+      component.closeNotification(102);
       tick();
-      expect(tHttpSpy.deleteNotification).toHaveBeenCalledWith(102);
+      expect(tHttpSpy.deleteNotification).toHaveBeenCalledWith(
+        102,
+        component.user.id
+      );
       expect(component.notifications.length).toBe(0);
       flush();
     }));
@@ -160,16 +170,25 @@ describe('NavbarComponent', () => {
 
   describe('acceptPatient and rejectPatient', () => {
     it('should accept a patient and then delete the related notification', fakeAsync(() => {
+      const patientId = 10,
+        therapistId = 20,
+        notifId = 105;
+      component.user.id = therapistId;
+      component.role = 'therapist';
+      component.notifications = [{ id: notifId }];
       tHttpSpy.acceptPatient.and.returnValue(of({ success: true }));
       tHttpSpy.deleteNotification.and.returnValue(of({ success: true }));
-      component.acceptPatient(10, 20, 105);
+      component.acceptPatient(patientId, therapistId, notifId);
       tick();
       expect(tHttpSpy.acceptPatient).toHaveBeenCalledWith({
         patient_id: 10,
         therapist_id: 20,
       });
       tick();
-      expect(tHttpSpy.deleteNotification).toHaveBeenCalled();
+      expect(tHttpSpy.deleteNotification).toHaveBeenCalledWith(
+        notifId,
+        therapistId
+      );
       // expect(snackBarSpy.open).toHaveBeenCalledWith(
       //   'Patient accepted successfully',
       //   'Ok',
@@ -179,18 +198,29 @@ describe('NavbarComponent', () => {
     }));
 
     it('should reject a patient and then delete the related notification', fakeAsync(() => {
-      tHttpSpy.dischargePatient.and.returnValue(
-        of({ message: 'Patient discharged' })
-      );
+      component.user = {
+        id: 1,
+        role: 'therapist',
+        name: 'Sandro',
+        surname: 'Bullock',
+      };
+      component.role = 'therapist';
+      const notifId = 100;
+      const patientId = 5;
+      component.notifications = [{ id: notifId }];
+      tHttpSpy.dischargePatient.and.returnValue(of({ success: true }));
       tHttpSpy.deleteNotification.and.returnValue(of({ success: true }));
-      component.rejectPatient(30, 40, 106);
+      component.rejectPatient(patientId, component.user.id, notifId);
       tick();
       expect(tHttpSpy.dischargePatient).toHaveBeenCalledWith({
-        patient_id: 30,
-        therapist_id: 40,
+        patient_id: 5,
+        therapist_id: component.user.id,
       });
       tick();
-      expect(tHttpSpy.deleteNotification).toHaveBeenCalled();
+      expect(tHttpSpy.deleteNotification).toHaveBeenCalledWith(
+        notifId,
+        component.user.id
+      );
       // expect(snackBarSpy.open).toHaveBeenCalledWith(
       //   'Patient discharged',
       //   'Ok',

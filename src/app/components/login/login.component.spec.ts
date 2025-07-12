@@ -12,6 +12,9 @@ import { CredentialsMatchService } from '../../services/credentials-match.servic
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -37,19 +40,47 @@ describe('LoginComponent', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      imports: [LoginComponent, RouterTestingModule],
-      providers: [
-        { provide: AuthService, useValue: authSpy },
-        { provide: UserDataService, useValue: userDataSpy },
-        { provide: Router, useValue: rSpy },
-        // { provide: MatSnackBar, useValue: snackSpy },
-        { provide: CredentialsMatchService, useValue: credSpy },
+      imports: [
+        LoginComponent,
+        RouterTestingModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatSnackBarModule,
       ],
-    }).compileComponents();
+      providers: [
+        {
+          provide: AuthService,
+          useValue: jasmine.createSpyObj('AuthService', ['loginUser']),
+        },
+        {
+          provide: UserDataService,
+          useValue: jasmine.createSpyObj('UserDataService', [
+            'saveSessionUser',
+            'updateUserData',
+          ]),
+        },
+        {
+          provide: Router,
+          useValue: jasmine.createSpyObj('Router', ['navigate']),
+        },
+        {
+          provide: MatSnackBar,
+          useValue: jasmine.createSpyObj('MatSnackBar', ['open']),
+        },
+        {
+          provide: Title,
+          useValue: { setTitle: jasmine.createSpy('setTitle') },
+        },
+      ],
+    })
+      .overrideComponent(LoginComponent, {
+        set: { template: '' },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-
+    fixture.detectChanges();
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     userDataServiceSpy = TestBed.inject(
       UserDataService

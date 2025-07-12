@@ -83,18 +83,16 @@ describe('TherapistHttpService', () => {
         expect(response).toEqual(mockResponse);
       });
 
-      // Verifica che l'URL contenga tutti i parametri, codificati correttamente
-      const req = httpTestingController.expectOne((request) => {
-        return (
-          request.url === 'http://localhost:3000/therapist/notes' &&
-          request.params.get('therapist_id') === therapistId.toString() &&
-          request.params.get('note_id') === filters.note_id.toString() &&
-          request.params.get('title') === filters.title &&
-          request.params.get('tag') === filters.tag &&
-          request.params.get('dateFrom') === filters.dateFrom.toString() &&
-          request.params.get('dateTo') === filters.dateTo.toString()
-        );
-      });
+      // Verifica l'URL completo generato
+      const expectedUrlWithParams =
+        `http://localhost:3000/therapist/notes` +
+        `?therapist_id=${therapistId}` +
+        `&note_id=${filters.note_id}` +
+        `&title=${filters.title}` +
+        `&tag=${filters.tag}` +
+        `&dateFrom=${filters.dateFrom}` +
+        `&dateTo=${filters.dateTo}`;
+      const req = httpTestingController.expectOne(expectedUrlWithParams);
       expect(req.request.method).toBe('GET');
       req.flush(mockResponse);
     });
@@ -274,14 +272,20 @@ describe('TherapistHttpService', () => {
 
   describe('deleteNotification', () => {
     it('should call checkCredentials and DELETE a notification', () => {
+      const testId = 5;
       const notificationId = 21;
       const mockResponse = { success: true };
 
-      service.deleteNotification(notificationId).subscribe((response) => {
-        expect(response).toEqual(mockResponse);
-      });
+      service
+        .deleteNotification(notificationId, testId)
+        .subscribe((response) => {
+          expect(response).toEqual(mockResponse);
+        });
       expect(authServiceSpy.checkCredentials).toHaveBeenCalled();
-      const expectedUrl = `http://localhost:3000/therapist/notifications?notification_id=${notificationId}`;
+      const expectedUrl =
+        `http://localhost:3000/therapist/notifications` +
+        `?notification_id=${notificationId}` +
+        `&therapist_id=${testId}`;
       const req = httpTestingController.expectOne(expectedUrl);
       expect(req.request.method).toBe('DELETE');
       req.flush(mockResponse);

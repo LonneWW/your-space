@@ -75,40 +75,20 @@ describe('HttpService', () => {
 
   describe('getAllTherapists', () => {
     it('should call the correct URL using GET', () => {
+      const testId = 5;
       const mockResponse = [
         { id: 1, name: 'Therapist 1' },
         { id: 2, name: 'Therapist 2' },
       ];
 
-      service.getAllTherapists().subscribe((response: any) => {
+      service.getAllTherapists(testId).subscribe((response: any) => {
         expect(response).toEqual(mockResponse);
       });
 
       const req = httpTestingController.expectOne(
-        'http://localhost:3000/patient/therapists'
+        `http://localhost:3000/patient/therapists?patient_id=${testId}`
       );
       expect(req.request.method).toEqual('GET');
-      req.flush(mockResponse);
-    });
-  });
-
-  describe('selectTherapist', () => {
-    it('should call checkCredentials and then PUT with the correct body', () => {
-      const body = { patient_id: 3, therapist_id: 8 };
-      const mockResponse = { success: true };
-
-      service.selectTherapist(body).subscribe((response: any) => {
-        expect(response).toEqual(mockResponse);
-      });
-
-      // Verifica che il metodo checkCredentials sia stato invocato
-      expect(authServiceSpy.checkCredentials).toHaveBeenCalled();
-
-      const req = httpTestingController.expectOne(
-        'http://localhost:3000/patient/therapist'
-      );
-      expect(req.request.method).toEqual('PUT');
-      expect(req.request.body).toEqual(body);
       req.flush(mockResponse);
     });
   });

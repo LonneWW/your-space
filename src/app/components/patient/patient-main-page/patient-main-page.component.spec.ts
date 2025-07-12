@@ -1,54 +1,65 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpRequest } from '@angular/common/http';
+import { of, throwError } from 'rxjs';
 import { PatientMainPageComponent } from './patient-main-page.component';
 import { UserDataService } from '../../../services/user-data.service';
+import { PatientHttpService } from '../../../services/patient-http.service';
+import { Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
+import { NavbarComponent } from '../../utilities/navbar/navbar.component';
+import { RouterOutlet } from '@angular/router';
+import { UserData } from '../../../interfaces/IUserData';
+
 describe('PatientMainPageComponent', () => {
   let component: PatientMainPageComponent;
   let fixture: ComponentFixture<PatientMainPageComponent>;
-  let userDataServiceSpy: jasmine.SpyObj<UserDataService>;
+  let userDataSpy: jasmine.SpyObj<UserDataService>;
+  let pHttpSpy: jasmine.SpyObj<PatientHttpService>;
+  let routerSpy: jasmine.SpyObj<Router>;
+
+  const fakeSessionUser = {
+    id: 1,
+    name: 'Test',
+    surname: 'User',
+    role: 'patient',
+    therapist_id: 2,
+  };
 
   beforeEach(async () => {
-    // Creiamo uno spy per UserDataService.
-    // Configuriamo le proprietà iniziali:
-    // - currentUserData inizialmente nulla (per simulare il caso in cui non è stato impostato)
-    // - sessionStorageUser restituisce un oggetto utente fittizio.
-    const userDataSpy = jasmine.createSpyObj(
+    userDataSpy = jasmine.createSpyObj(
       'UserDataService',
-      ['updateUserData'],
+      ['updateUserData', 'saveSessionUser'],
       {
         currentUserData: null,
-        sessionStorageUser: {
-          id: 1,
-          name: 'Test',
-          surname: 'User',
-          role: 'patient',
-          therapist_id: 2,
-        },
+        sessionStorageUser: fakeSessionUser,
       }
     );
+    pHttpSpy = jasmine.createSpyObj('PatientHttpService', [
+      'getPatient',
+      'getNotifications',
+    ]);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      // Dal momento che il componente è standalone e ha gli import dichiarati in metadata,
-      // possiamo importarlo direttamente.
       imports: [PatientMainPageComponent],
       providers: [
         { provide: UserDataService, useValue: userDataSpy },
+        { provide: PatientHttpService, useValue: pHttpSpy },
+        { provide: Router, useValue: routerSpy },
         {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
               paramMap: {
                 get: (key: string) => {
-                  // Qui puoi restituire valori specifici per i parametri se richiesto, oppure null
                   return null;
                 },
               },
             },
           },
         },
-        provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
       ],
@@ -56,47 +67,52 @@ describe('PatientMainPageComponent', () => {
 
     fixture = TestBed.createComponent(PatientMainPageComponent);
     component = fixture.componentInstance;
-    userDataServiceSpy = TestBed.inject(
-      UserDataService
-    ) as jasmine.SpyObj<UserDataService>;
+
+    // default stub per evitare subscribe su undefined
+    pHttpSpy.getPatient.and.returnValue(of([]));
+    pHttpSpy.getNotifications.and.returnValue(of([]));
   });
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call updateUserData on init if currentUserData is null and sessionStorageUser exists', () => {
-    // In questo scenario, currentUserData è null e sessionStorageUser restituisce un oggetto.
-    fixture.detectChanges(); // Chiama ngOnInit()
-    expect(userDataServiceSpy.updateUserData).toHaveBeenCalledWith(
-      userDataServiceSpy.sessionStorageUser
+  it('should call getPatient and update/save user on successful response', () => {
+    const backendResponse = [
+      {
+        id: 1,
+        name: 'Test',
+        surname: 'User',
+        role: 'patient',
+        therapist_id: 2,
+      } as UserData,
+    ];
+    pHttpSpy.getPatient.and.returnValue(of(backendResponse));
+
+    fixture.detectChanges(); // ngOnInit()
+
+    expect(pHttpSpy.getPatient).toHaveBeenCalledWith(1);
+    expect(userDataSpy.updateUserData).toHaveBeenCalledWith(backendResponse[0]);
+    expect(userDataSpy.saveSessionUser).toHaveBeenCalledWith(
+      backendResponse[0] as any
     );
   });
 
-  it('should not call updateUserData on init if currentUserData is already set', () => {
-    // Simuliamo che currentUserData esista già.
-    Object.defineProperty(userDataServiceSpy, 'currentUserData', {
-      get: () => ({
-        id: 2,
-        name: 'Existing',
-        surname: 'User',
-        role: 'patient',
-        therapist_id: 3,
-      }),
-    });
+  it('should clear sessionStorage and navigate to /login on error', () => {
+    pHttpSpy.getPatient.and.returnValue(throwError(() => new Error('fail')));
+    spyOn(sessionStorage, 'clear');
 
-    // Azzeriamo eventuali chiamate pregresse
-    userDataServiceSpy.updateUserData.calls.reset();
-    fixture.detectChanges();
-    expect(userDataServiceSpy.updateUserData).not.toHaveBeenCalled();
+    fixture.detectChanges(); // ngOnInit()
+
+    expect(sessionStorage.clear).toHaveBeenCalled();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
   });
 
-  it('should render both app-navbar and router-outlet in the template', () => {
+  it('should render <app-navbar> and <router-outlet> in template', () => {
+    // non serve ngOnInit qui
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    // Verifichiamo che l'elemento <app-navbar> sia presente.
-    expect(compiled.querySelector('app-navbar')).toBeTruthy();
-    // Verifichiamo che l'elemento <router-outlet> sia presente.
-    expect(compiled.querySelector('router-outlet')).toBeTruthy();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('app-navbar')).toBeTruthy();
+    expect(el.querySelector('router-outlet')).toBeTruthy();
   });
 });

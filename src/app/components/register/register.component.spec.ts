@@ -12,6 +12,10 @@ import { UserDataService } from '../../services/user-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Title } from '@angular/platform-browser';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -33,27 +37,42 @@ describe('RegisterComponent', () => {
     // const snackSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
-      // Utilizziamo il componente standalone e il RouterTestingModule.
-      imports: [RegisterComponent, RouterTestingModule],
+      imports: [
+        RegisterComponent,
+        RouterTestingModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatSnackBarModule,
+      ],
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: UserDataService, useValue: userDataSpy },
         { provide: Router, useValue: rSpy },
-        // { provide: MatSnackBar, useValue: snackSpy },
+        {
+          provide: MatSnackBar,
+          useValue: jasmine.createSpyObj('MatSnackBar', ['open']),
+        },
+        {
+          provide: Title,
+          useValue: { setTitle: jasmine.createSpy('setTitle') },
+        },
       ],
-    }).compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideComponent(RegisterComponent, {
+        set: { template: '' },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
-
+    fixture.detectChanges();
     authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     userDataServiceSpy = TestBed.inject(
       UserDataService
     ) as jasmine.SpyObj<UserDataService>;
     routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     // snackBarSpy = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
-
-    fixture.detectChanges();
   });
 
   it('should create the component', () => {
@@ -106,9 +125,12 @@ describe('RegisterComponent', () => {
         role: 'therapist',
       });
 
-      const mockResponse = [
-        { id: 20, name: 'Alice', surname: 'Smith', therapist_id: 0 },
-      ];
+      const mockResponse = {
+        id: 20,
+        name: 'Alice',
+        surname: 'Smith',
+        therapist_id: 0,
+      };
       authServiceSpy.registerUser.and.returnValue(of(mockResponse));
 
       component.registerUser();

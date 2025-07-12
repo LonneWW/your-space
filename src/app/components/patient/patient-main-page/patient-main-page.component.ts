@@ -23,11 +23,13 @@ export class PatientMainPageComponent implements OnInit {
       const id = serviceUser?.id ? serviceUser.id : sessionUser.id;
       this.pHttp.getPatient(id).subscribe({
         next: (r: any) => {
-          this.userDataService.updateUserData(r[0]);
-          this.userDataService.saveSessionUser(r[0]);
+          const data = r[0];
+          data.role = 'patient';
+          this.userDataService.updateUserData(data);
+          this.userDataService.saveSessionUser(data);
         },
         error: (e: any) => {
-          sessionStorage.clear;
+          sessionStorage.clear();
           this.router.navigate(['/login']);
         },
       });

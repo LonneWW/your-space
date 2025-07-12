@@ -23,8 +23,10 @@ export class TherapistMainPageComponent implements OnInit {
       const id = serviceUser?.id ? serviceUser.id : sessionUser.id;
       this.tHttp.getTherapist(id).subscribe({
         next: (r: any) => {
-          this.userDataService.updateUserData(r[0]);
-          this.userDataService.saveSessionUser(r[0]);
+          const data = r[0];
+          data.role = 'therapist';
+          this.userDataService.updateUserData(data);
+          this.userDataService.saveSessionUser(data);
         },
         error: (e: any) => {
           sessionStorage.clear;

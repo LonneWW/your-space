@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListOfTherapistFeaturesComponent } from './list-of-features.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { By } from '@angular/platform-browser';
 
 describe('ListOfTherapistFeaturesComponent', () => {
   let component: ListOfTherapistFeaturesComponent;
@@ -11,7 +13,12 @@ describe('ListOfTherapistFeaturesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ListOfTherapistFeaturesComponent, RouterTestingModule],
+      imports: [
+        RouterTestingModule,
+        MatIconModule,
+        MatCardModule,
+        ListOfTherapistFeaturesComponent,
+      ],
       providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 

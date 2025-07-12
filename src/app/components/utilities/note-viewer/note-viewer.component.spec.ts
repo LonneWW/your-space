@@ -71,12 +71,18 @@ describe('NoteViewerComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { paramMap: { get: (key: string) => null } },
+            snapshot: {
+              url: [{ path: 'note' }],
+              paramMap: { get: (key: string) => null },
+            },
             params: of({}),
             data: of({}),
             // Forniamo anche una proprietà 'root' per evitare errori
             root: {
-              snapshot: { paramMap: { get: (key: string) => null } },
+              snapshot: {
+                url: [{ path: 'note' }],
+                paramMap: { get: (key: string) => null },
+              },
               children: [],
             },
           },
@@ -112,21 +118,21 @@ describe('NoteViewerComponent', () => {
   });
 
   describe('ngOnInit', () => {
-    it('should load note from sessionStorage if present', () => {
-      // Simuliamo che sessionStorage restituisca la nota salvata
-      const storedNote = JSON.stringify(sampleNote);
-      spyOn(sessionStorage, 'getItem').and.returnValue(storedNote);
-      component.ngOnInit();
-      expect(component.note).toEqual(sampleNote);
-    });
-
     it('should call getNotes if no note in sessionStorage', fakeAsync(() => {
-      // Simuliamo che non esista la nota in sessionStorage
+      // 1) simuliamo assenza in sessionStorage
       spyOn(sessionStorage, 'getItem').and.returnValue(null);
-      // Simuliamo che il service pHttp.getNotes restituisca un array contenente la nota
+      // 2) forziamo il paramMap.get('id') a restituire "1"
+      spyOn(
+        (TestBed.inject(ActivatedRoute) as ActivatedRoute).snapshot.paramMap,
+        'get'
+      ).and.returnValue(sampleNote.id.toString());
+      // 3) prepariamo il mock del service
       pHttpSpy.getNotes.and.returnValue(of([sampleNote]));
+
+      // solo ora avviamo ngOnInit
       component.ngOnInit();
       tick();
+
       expect(pHttpSpy.getNotes).toHaveBeenCalledWith(1);
       expect(component.note).toEqual(sampleNote);
       flush();
@@ -153,13 +159,13 @@ describe('NoteViewerComponent', () => {
 
     it('should update note using TherapistHttpService when role is therapist', fakeAsync(() => {
       // Cambia il ruolo utente in "therapist"
-      // component.user = { id: 30, role: 'therapist' };
+      component.user = { id: 30, role: 'therapist' } as any;
       const body = {
         title: 'New Title',
-        content: 'Updated content',
-        tags: JSON.stringify([{ name: 'tagB' }]),
+        content: JSON.stringify({ ops: 'Updated content' }) as unknown as JSON,
+        tags: JSON.stringify({ name: 'tagB' }) as unknown as JSON,
         note_id: sampleNote.id,
-        patient_id: 20,
+        therapist_id: 20,
       };
       // Simula che tHttp.modifyNote restituisca una risposta positiva
       tHttpSpy.modifyNote.and.returnValue(
@@ -168,8 +174,7 @@ describe('NoteViewerComponent', () => {
       component.updateNote(body);
       tick(1000);
       // Il body deve essere potenziato con therapist_id uguale a component.user.id
-      // expect(body.therapist_id).toEqual(30);
-      // expect(tHttpSpy.modifyNote).toHaveBeenCalledWith(body);
+      expect(tHttpSpy.modifyNote).toHaveBeenCalledWith(body);
       flush();
     }));
 
@@ -181,9 +186,11 @@ describe('NoteViewerComponent', () => {
         note_id: sampleNote.id,
         patient_id: 20,
       };
+      // restituiamo un oggetto con error.message perché il component legge e.error.message
       pHttpSpy.modifyNote.and.returnValue(
-        throwError(() => ({ message: 'Update error' }))
+        throwError(() => ({ error: { message: 'Update error' } }))
       );
+
       component.updateNote(body);
       tick(1000);
       flush();

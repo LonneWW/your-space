@@ -40,7 +40,7 @@ export class NoteViewerComponent implements OnInit, OnDestroy {
     private _snackbar: MatSnackBar
   ) {}
 
-  protected user: any;
+  public user: any;
   @Input() note!: Note;
 
   protected tagsArray: string[] = [];

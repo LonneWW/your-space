@@ -108,7 +108,7 @@ describe('ListOfPatientsComponent', () => {
 
     it('should show a snackbar error if getPatients fails', fakeAsync(() => {
       const errorResponse = {
-        error: { message: 'Could not retrieve patients.' },
+        error: { message: "Serverside error: couldn't get any patient." },
       };
       tHttpSpy.getPatients.and.returnValue(throwError(() => errorResponse));
       component.ngOnInit();

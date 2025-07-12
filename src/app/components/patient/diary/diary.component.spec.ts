@@ -98,6 +98,7 @@ describe('DiaryComponent', () => {
     userDataSpy = TestBed.inject(
       UserDataService
     ) as jasmine.SpyObj<UserDataService>;
+    spyOn(sessionStorage, 'getItem').and.returnValue(null);
     // snackbarSpy = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
   });
 
@@ -109,34 +110,16 @@ describe('DiaryComponent', () => {
 
   describe('ngOnInit - Patient branch', () => {
     it('should assign note from PatientHttpService.getNotes on success', fakeAsync(() => {
-      // Impostiamo l'utente come patient (già impostato dallo spy)
       const noteResponse = [sampleNotePatient];
       pHttpSpy.getNotes.and.returnValue(of(noteResponse));
 
-      fixture.detectChanges();
-      component.ngOnInit();
+      component.ngOnInit(); // ngOnInit gira con sessionStorage.getItem() → null
       tick();
 
       expect(pHttpSpy.getNotes).toHaveBeenCalledWith(10, { note_id: 1 });
       expect(component.note).toEqual(sampleNotePatient);
       flush();
     }));
-
-    // it('should show snackbar error if PatientHttpService.getNotes fails', fakeAsync(() => {
-    //   pHttpSpy.getNotes.and.returnValue(
-    //     throwError(() => ({ message: 'Get note error' }))
-    //   );
-
-    //   fixture.detectChanges();
-    //   component.ngOnInit();
-    //   tick();
-
-    //   expect(snackbarSpy.open).toHaveBeenCalledWith(
-    //     'Serverside error: unable to save note.',
-    //     'Ok'
-    //   );
-    //   flush();
-    // }));
   });
 
   describe('ngOnInit - Therapist branch', () => {
@@ -154,7 +137,6 @@ describe('DiaryComponent', () => {
       const noteResponse = [sampleNoteTherapist];
       tHttpSpy.getNotes.and.returnValue(of(noteResponse));
 
-      fixture.detectChanges();
       component.ngOnInit();
       tick();
 
@@ -162,30 +144,5 @@ describe('DiaryComponent', () => {
       expect(component.note).toEqual(sampleNoteTherapist);
       flush();
     }));
-
-    // it('should show snackbar error if TherapistHttpService.getNotes fails', fakeAsync(() => {
-    //   Object.defineProperty(userDataSpy, 'currentUserData', {
-    //     get: () => ({
-    //       id: 20,
-    //       role: 'therapist',
-    //       name: 'Therapist',
-    //       surname: 'Zero',
-    //     }),
-    //   });
-
-    //   tHttpSpy.getNotes.and.returnValue(
-    //     throwError(() => ({ message: 'Therapist get note error' }))
-    //   );
-
-    //   fixture.detectChanges();
-    //   component.ngOnInit();
-    //   tick();
-
-    //   expect(snackbarSpy.open).toHaveBeenCalledWith(
-    //     'Serverside error: unable to save note.',
-    //     'Ok'
-    //   );
-    //   flush();
-    // }));
   });
 });

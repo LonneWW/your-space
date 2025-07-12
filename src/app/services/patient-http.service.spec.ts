@@ -154,7 +154,7 @@ describe('PatientHttpService', () => {
       });
 
       expect(authServiceSpy.checkCredentials).toHaveBeenCalled();
-      const expectedUrl = `http://localhost:3000/patient/therapist`;
+      const expectedUrl = `http://localhost:3000/patient/select-therapist`;
       const req = httpTestingController.expectOne(expectedUrl);
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(body);
@@ -172,7 +172,7 @@ describe('PatientHttpService', () => {
       });
 
       expect(authServiceSpy.checkCredentials).toHaveBeenCalled();
-      const expectedUrl = `http://localhost:3000/patient/therapist-null`;
+      const expectedUrl = `http://localhost:3000/patient/unlink-therapist`;
       const req = httpTestingController.expectOne(expectedUrl);
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(body);
@@ -248,15 +248,18 @@ describe('PatientHttpService', () => {
 
   describe('deleteNotification', () => {
     it('should call checkCredentials and DELETE the notification', () => {
+      const testId = 5;
       const notificationId = 16;
       const mockResponse = { success: true };
 
-      service.deleteNotification(notificationId).subscribe((response: any) => {
-        expect(response).toEqual(mockResponse);
-      });
+      service
+        .deleteNotification(notificationId, testId)
+        .subscribe((response: any) => {
+          expect(response).toEqual(mockResponse);
+        });
 
       expect(authServiceSpy.checkCredentials).toHaveBeenCalled();
-      const expectedUrl = `http://localhost:3000/patient/notifications?notification_id=${notificationId}`;
+      const expectedUrl = `http://localhost:3000/patient/notifications?notification_id=${notificationId}&patient_id=${testId}`;
       const req = httpTestingController.expectOne(expectedUrl);
       expect(req.request.method).toBe('DELETE');
       req.flush(mockResponse);

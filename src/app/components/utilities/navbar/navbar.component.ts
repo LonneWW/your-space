@@ -37,8 +37,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private _snackbar: MatSnackBar
   ) {}
 
-  protected role!: string;
-  protected user!: UserData;
+  public role!: string;
+  public user!: UserData;
   public notifications: any[] = [];
   public toggleOverlayContainer: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();

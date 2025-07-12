@@ -17,7 +17,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
   selector: 'app-search-bar',
   providers: [provideNativeDateAdapter(), DatePipe],
   imports: [
-    JsonPipe,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,

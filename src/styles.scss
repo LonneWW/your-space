@@ -611,13 +611,19 @@ body {
   }
 
   .mat-dialog-actions button {
-    background-color: darken($background-primary-color, 10%);
+    background-color: color.scale(
+      $color: $background-primary-color,
+      $lightness: -10%
+    );
     color: $primary-color !important;
     transition: background-color 0.3s ease;
   }
 
   .mat-dialog-actions button:hover {
-    background-color: darken($background-primary-color, 5%);
+    background-color: color.scale(
+      $color: $background-primary-color,
+      $lightness: -5%
+    );
   }
 
   //Quill text editor classes
@@ -661,25 +667,6 @@ body {
 
 //styles
 body {
-  // p {
-  //   font-size: 1.2rem;
-  // }
-
-  // h1 {
-  //   font-size: 6.5rem;
-  //   text-align: center;
-  // }
-
-  // h3 {
-  //   font-size: 4rem;
-  // }
-
-  // h4 {
-  //   font-size: 1.8rem;
-  //   min-height: 58px;
-  //   text-align: center;
-  // }
-
   .two-lined-text {
     overflow: hidden;
     text-overflow: ellipsis;

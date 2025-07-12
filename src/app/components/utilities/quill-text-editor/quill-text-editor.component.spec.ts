@@ -70,41 +70,30 @@ describe('QuillTextEditorComponent', () => {
   });
 
   it('should remove a tag using removeTag()', () => {
-    // Prepariamo lo scenario aggiungendo un tag
-    component.tagsArray = ['tagToRemove'];
-    component.tags.update((tags) => [...tags, { name: 'tagToRemove' }]);
-    expect(component.tags()).toContain(
-      jasmine.objectContaining({ name: 'tagToRemove' })
-    );
+    // Prepariamo lo scenario aggiungendo un tag e tenendo il suo riferimento
+    const tagToRemove = { name: 'tagToRemove' };
+    component.tagsArray = [tagToRemove.name];
+    component.tags.update((tags) => [...tags, tagToRemove]);
+    expect(component.tags()).toContain(tagToRemove);
 
-    // Rimuoviamo il tag
-    component.removeTag({ name: 'tagToRemove' });
-    // Controlliamo che il tag non sia più presente
-    expect(component.tagsArray).not.toContain('tagToRemove');
-    expect(component.tags()).not.toContain(
-      jasmine.objectContaining({ name: 'tagToRemove' })
-    );
-
-    // Verifichiamo che LiveAnnouncer sia stato chiamato – recuperiamo il provider
+    // Rimuoviamo usando *lo stesso* oggetto
+    component.removeTag(tagToRemove);
+    expect(component.tagsArray).not.toContain(tagToRemove.name);
+    expect(component.tags()).not.toContain(tagToRemove);
   });
 
   it('should edit a tag using editTag()', () => {
-    // Impostiamo un tag iniziale
-    component.tags.update((tags) => [...tags, { name: 'oldTag' }]);
-    expect(component.tags()).toContain(
-      jasmine.objectContaining({ name: 'oldTag' })
-    );
+    // Impostiamo un tag iniziale e teniamo il riferimento
+    const oldTag = { name: 'oldTag' };
+    component.tags.update((tags) => [...tags, oldTag]);
+    expect(component.tags()).toContain(oldTag);
 
-    // Simuliamo l'evento di editing: se il nuovo valore è "editedTag"
+    // Simuliamo l'editing su *quell* oggetto
     const event = { value: 'editedTag' } as any;
-    component.editTag({ name: 'oldTag' }, event);
-    // Ora il tag "oldTag" deve essere modificato in "editedTag"
-    expect(component.tags()).toContain(
-      jasmine.objectContaining({ name: 'editedTag' })
-    );
-    expect(component.tags()).not.toContain(
-      jasmine.objectContaining({ name: 'oldTag' })
-    );
+    component.editTag(oldTag, event);
+    // l'oggetto oldTag è stato aggiornato in place
+    expect(oldTag.name).toBe('editedTag');
+    expect(component.tags()).toContain(oldTag);
   });
 
   it('should emit saveNote event with correct body on save()', () => {

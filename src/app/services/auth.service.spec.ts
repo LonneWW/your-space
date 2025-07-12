@@ -77,25 +77,9 @@ describe('AuthService', () => {
   });
 
   it('should call isLoggedIn with the correct query string', () => {
-    spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
-      switch (key) {
-        case 'id':
-          return '1';
-        case 'name':
-          return 'Mario';
-        case 'surname':
-          return 'Rossi';
-        case 'role':
-          return 'patient';
-        default:
-          return null;
-      }
-    });
-
+    // Il metodo isLoggedIn() chiama GET /auth/verify-session
     service.isLoggedIn().subscribe();
-    const req = httpMock.expectOne(
-      'http://localhost:3000/auth?id=1&name=Mario&surname=Rossi&role=patient'
-    );
+    const req = httpMock.expectOne('http://localhost:3000/auth/verify-session');
     expect(req.request.method).toBe('GET');
     req.flush({});
   });

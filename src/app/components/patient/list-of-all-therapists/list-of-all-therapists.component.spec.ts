@@ -7,8 +7,11 @@ import {
 } from '@angular/core/testing';
 import { ListOfAllTherapistsComponent } from './list-of-all-therapists.component';
 import { HttpService } from '../../../services/http.service';
+import { PatientHttpService } from '../../../services/patient-http.service';
 import { UserDataService } from '../../../services/user-data.service';
 // import { MatSnackBar } from '@angular/material/snack-bar';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -18,6 +21,7 @@ describe('ListOfAllTherapistsComponent', () => {
   let fixture: ComponentFixture<ListOfAllTherapistsComponent>;
 
   let httpSpy: jasmine.SpyObj<HttpService>;
+  let PatientHttpSpy: jasmine.SpyObj<PatientHttpService>;
   let userDataServiceSpy: jasmine.SpyObj<UserDataService>;
   // let snackbarSpy: jasmine.SpyObj<MatSnackBar>;
   let routerSpy: jasmine.SpyObj<Router>;
@@ -31,10 +35,12 @@ describe('ListOfAllTherapistsComponent', () => {
   beforeEach(async () => {
     const httpSpyObj = jasmine.createSpyObj('HttpService', [
       'getAllTherapists',
+    ]);
+    const PatientHttpSpyObj = jasmine.createSpyObj('HttpService', [
       'selectTherapist',
     ]);
     httpSpyObj.getAllTherapists.and.returnValue(of(therapistsMock));
-    httpSpyObj.selectTherapist.and.returnValue(
+    PatientHttpSpyObj.selectTherapist.and.returnValue(
       of({ message: 'Default message' })
     );
     const userDataSpyObj = jasmine.createSpyObj(
@@ -58,8 +64,11 @@ describe('ListOfAllTherapistsComponent', () => {
       providers: [
         { provide: HttpService, useValue: httpSpyObj },
         { provide: UserDataService, useValue: userDataSpyObj },
+        { provide: PatientHttpService, useValue: PatientHttpSpyObj },
         // { provide: MatSnackBar, useValue: snackbarSpyObj },
         { provide: Router, useValue: routerSpyObj },
+        provideHttpClient(),
+        provideHttpClientTesting(),
       ],
     }).compileComponents();
 
@@ -67,6 +76,9 @@ describe('ListOfAllTherapistsComponent', () => {
     component = fixture.componentInstance;
 
     httpSpy = TestBed.inject(HttpService) as jasmine.SpyObj<HttpService>;
+    PatientHttpSpy = TestBed.inject(
+      PatientHttpService
+    ) as jasmine.SpyObj<PatientHttpService>;
     userDataServiceSpy = TestBed.inject(
       UserDataService
     ) as jasmine.SpyObj<UserDataService>;
@@ -110,7 +122,7 @@ describe('ListOfAllTherapistsComponent', () => {
     it('should not proceed if user does not confirm', () => {
       spyOn(window, 'confirm').and.returnValue(false);
       component.selectTherapist(therapistId);
-      expect(httpSpy.selectTherapist).not.toHaveBeenCalled();
+      expect(PatientHttpSpy.selectTherapist).not.toHaveBeenCalled();
     });
 
     it('should select therapist when confirmed', fakeAsync(() => {
@@ -123,12 +135,12 @@ describe('ListOfAllTherapistsComponent', () => {
       });
       // Simula che la chiamata selectTherapist abbia successo
       const response = { message: 'Therapist selected successfully' };
-      httpSpy.selectTherapist.and.returnValue(of(response));
+      PatientHttpSpy.selectTherapist.and.returnValue(of(response));
 
       component.selectTherapist(therapistId);
       tick();
       // Verifica che la funzione sia stata chiamata con il body atteso:
-      expect(httpSpy.selectTherapist).toHaveBeenCalledWith(body);
+      expect(PatientHttpSpy.selectTherapist).toHaveBeenCalledWith(body);
 
       // Simuliamo il comportamento in caso di successo: il codice aggiorna i dati utente
       // Impostiamo un dato di esempio su currentUserData
@@ -149,7 +161,9 @@ describe('ListOfAllTherapistsComponent', () => {
       spyOn(sessionStorage, 'getItem').and.returnValue('10');
 
       const errorResponse = { error: { message: 'Selection failed' } };
-      httpSpy.selectTherapist.and.returnValue(throwError(() => errorResponse));
+      PatientHttpSpy.selectTherapist.and.returnValue(
+        throwError(() => errorResponse)
+      );
 
       component.selectTherapist(therapistId);
       tick();
